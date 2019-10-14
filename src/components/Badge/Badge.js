@@ -33,6 +33,9 @@ class Badge extends Component {
                 <div className="badge-summary jumbotron">
                     <div className="container-fluid text-left">
                         <div className="row">
+                            <div className="badge-sidebar offset-sm-0 offset-md-1 offset-lg-2">
+                                <img className="badge-image img-fluid" src={this.state.badgeData.image} alt="This is a badge"/>                    
+                            </div>
                             <div className="col-4 offset-4">
                                 <h1>{this.state.badgeData.name}</h1>
                             </div>
@@ -46,20 +49,8 @@ class Badge extends Component {
                             </div>
                         </div>                    
                     </div>
-                </div>
-                {/* <div className="badge-container">
-                    <div className="badge-sidebar">
-                        <img src={this.state.badgeData.image} alt="This is a badge" className="badgeimage"/>
-                    </div>
-                    <dl>
-                        <div className="issued-by"></div>
-                        <dt className="issued-on"></dt>
-                        <dd className="issue-date"></dd>
-                        <dt className="awarded-to"></dt>
-                        <dd className="awardee"></dd>
-                    </dl>
-                </div> */}                
-                <div className=" container-fluid">
+                </div>              
+                <div className=" container-fluid">  
                     <div className="row">
                         <div className="col-10 offset-4 text-left">
                         <h3>Criteria</h3>
