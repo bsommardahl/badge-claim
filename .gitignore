@@ -11,10 +11,10 @@ node_modules
 /coverage
 
 #Env Vars
-/backend/.env
+.env
 
 # production
-/src/client/build
+/client/build
 
 # misc
 .DS_Store

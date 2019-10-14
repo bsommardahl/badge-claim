@@ -20,7 +20,7 @@ app.get("*", (req, res) => {
 app.use(cors())
 
 
-const PORT = 3001
+const PORT = envs.PORT || 3001
 
 app.get('/', (req, res) => {
     res.send(`This is the badge claim api: ${process.env.PORT}`)
