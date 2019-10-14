@@ -9,7 +9,7 @@ class App extends Component {
         <Router>
           <div className="App">
             <Switch>
-              <Route path='/badge/:badge_token' component={BadgeContainer}/>
+              <Route path='/badgeid/:badge_token' component={BadgeContainer}/>
             </Switch>
           </div>
         </Router>
