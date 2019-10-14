@@ -1,0 +1,14 @@
+.jumbotron {
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
+
+.claim-badge-button {
+    background-color: #525dc7;
+    border-color: #525dc7;
+}
+
+.claim-badge-button:hover {
+    background-color: #5c67e0;
+    border-color: #5c67e0;
+}

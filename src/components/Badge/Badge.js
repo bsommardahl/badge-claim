@@ -29,16 +29,25 @@ class Badge extends Component {
     }
     render () {        
         return (
-            <div className="badge-contaier">
-                {/* <p className="badge-message">this is the badge container for badge {this.state.badgeToken}</p>  */}
-
-                <div className="badge-summary">
-                    <h1>{this.state.badgeData.name}</h1>
-                    <div className="claim-badge-button-container">
-                        <button className="claim-badge-button">Claim badge</button>  
-                    </div>                  
+            <div className="badge-container">
+                <div className="badge-summary jumbotron">
+                    <div className="container-fluid text-left">
+                        <div className="row">
+                            <div className="col-4 offset-4">
+                                <h1>{this.state.badgeData.name}</h1>
+                            </div>
+                            <div className="col-2" align="center">
+                                <p>
+                                    <a href="/" className="btn btn-primary claim-badge-button btn-lg">Claim badge</a>
+                                </p>
+                            </div>
+                            <div className="badge-summary-container col-4 offset-4">
+                                <p className="description">{this.state.badgeData.description}</p>
+                            </div>
+                        </div>                    
+                    </div>
                 </div>
-                <div className="badge-container">
+                {/* <div className="badge-container">
                     <div className="badge-sidebar">
                         <img src={this.state.badgeData.image} alt="This is a badge" className="badgeimage"/>
                     </div>
@@ -49,19 +58,15 @@ class Badge extends Component {
                         <dt className="awarded-to"></dt>
                         <dd className="awardee"></dd>
                     </dl>
-                    <div className="badge-summary-container">
-                        <p className="description">{this.state.badgeData.description}</p>
-                    </div>
-                </div>
-                <div className="badge-description">
-                    <h2>{this.state.badgeData.description}</h2>
-                </div>
-                <div className="badge-info-container">
-                    <section className="criteria">
+                </div> */}                
+                <div className=" container-fluid">
+                    <div className="row">
+                        <div className="col-10 offset-4 text-left">
                         <h3>Criteria</h3>
-                        <p>{this.state.badgeData.criteriaNarrrative}</p>
+                        <p>{this.state.badgeData.criteriaNarrative}</p>
                         <a href={this.state.badgeData.criteriaUrl} className="criteria-url-link">View external Criteria URL</a>
-                    </section>
+                        </div>
+                    </div>                    
                 </div>
             </div>
         )
