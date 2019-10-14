@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Badge from './components/Badge/Badge';
+import BadgeContainer from './containers/BadgeContainer';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 class App extends Component {
@@ -9,7 +9,7 @@ class App extends Component {
         <Router>
           <div className="App">
             <Switch>
-              <Route path='/badge/:badge_token' component={Badge}/>
+              <Route path='/badge/:badge_token' component={BadgeContainer}/>
             </Switch>
           </div>
         </Router>
