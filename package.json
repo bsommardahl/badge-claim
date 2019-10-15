@@ -8,12 +8,11 @@
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
-    "negotiator": "^0.6.2"
+    "negotiator": "^0.6.2",
+    "react-scripts": "^3.2.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \\\"Error: no test specified\\\" && exit 1",
-    "build": "npm install && npm run build --prefix client",
     "start": "node server.js"
   },
   "author": "",
