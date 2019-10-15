@@ -8,15 +8,14 @@
     max-width: 330px;
     padding: 15px;
     margin: auto;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
 }
 
 .badge-icon {
     margin: 0px 25%;
 }
 
-#badgeId {
-    margin-top: 1rem;
-}
 .search-button {
     background-color: #525dc7;
     border-color: #525dc7;

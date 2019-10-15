@@ -25,18 +25,13 @@ class BadgeContainer extends Component {
             modalIsOpen: false
         }
         this.openModal = this.openModal.bind(this);
-        this.afterOpenModal = this.afterOpenModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
     }
 
     openModal(e) {
         e.preventDefault();
         this.setState({ modalIsOpen: true });
-    }
-
-    afterOpenModal() {
-        this.subtitle.style.color = '#f00';
-    }
+    }    
 
     closeModal() {
         this.setState({ modalIsOpen: false });
@@ -71,17 +66,16 @@ class BadgeContainer extends Component {
         return (
             <div>
                 <Modal
-                    isOpen={this.state.modalIsOpen}
-                    onAfterOpen={this.afterOpenModal}
+                    isOpen={this.state.modalIsOpen}                    
                     onRequestClose={this.closeModal}
                     style={customStyles}
                     contentLabel="Example Modal"
                 >
-                    <h2 ref={subtitle => this.subtitle = subtitle}>Claim this badge</h2>
+                    <h1 className="h3 mb-3 font-weight-normal" ref={subtitle => this.subtitle = subtitle}>Claim this badge</h1>
                     <form onSubmit={this.sendClaimEmail}>
                         <p>Badge Owner Text</p>
-                        <input onChange={this.handleEmailChange} type="text" placeholder="Email Address" />
-                        <button>Claim Badge</button>
+                        <input onChange={this.handleEmailChange} type="text" className="form-control mb-3" placeholder="Email Address" />
+                        <button className="btn btn-lg btn-primary btn-block search-button">Claim Badge</button>
                     </form>
                 </Modal>
                 <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal}/>
