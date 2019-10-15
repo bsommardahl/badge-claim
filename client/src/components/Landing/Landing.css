@@ -1,0 +1,28 @@
+.form-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+.form-badge-search {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.badge-icon {
+    margin: 0px 25%;
+}
+
+#badgeId {
+    margin-top: 1rem;
+}
+.search-button {
+    background-color: #525dc7;
+    border-color: #525dc7;
+}
+
+.search-button:hover {
+    background-color: #5c67e0;
+    border-color: #5c67e0;
+}
