@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import BadgeContainer from './containers/BadgeContainer';
-import Landing from './components/Landing/Landing';
+import LandingContainer from './containers/LandingContainer';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
         <Router>
           <div className="App">
             <Switch>
-              <Route path='/' exact render={(props) => <Landing {...props} handleBadgeInputChange={this.handleBadgeInputChange} handleSearchBadgeSubmit={this.handleSearchBadgeSubmit} />} />
+              <Route exact path='/' component={LandingContainer} />
               <Route path='/badgeid/:badge_token' component={BadgeContainer}/>
             </Switch>
           </div>
