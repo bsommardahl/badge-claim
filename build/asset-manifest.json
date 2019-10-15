@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a25c1f29.chunk.css",
+    "main.js": "/static/js/main.c9da3ba4.chunk.js",
+    "main.js.map": "/static/js/main.c9da3ba4.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.40beef79.js",
+    "runtime-main.js.map": "/static/js/runtime-main.40beef79.js.map",
+    "static/css/2.0624914a.chunk.css": "/static/css/2.0624914a.chunk.css",
+    "static/js/2.61bc21ac.chunk.js": "/static/js/2.61bc21ac.chunk.js",
+    "static/js/2.61bc21ac.chunk.js.map": "/static/js/2.61bc21ac.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.bcee7ae8c54b08cdc2a65840161fa932.js": "/precache-manifest.bcee7ae8c54b08cdc2a65840161fa932.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.0624914a.chunk.css.map": "/static/css/2.0624914a.chunk.css.map",
+    "static/css/main.a25c1f29.chunk.css.map": "/static/css/main.a25c1f29.chunk.css.map",
+    "static/media/badgeIcon.png": "/static/media/badgeIcon.bf081ef7.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.40beef79.js",
+    "static/css/2.0624914a.chunk.css",
+    "static/js/2.61bc21ac.chunk.js",
+    "static/css/main.a25c1f29.chunk.css",
+    "static/js/main.c9da3ba4.chunk.js"
+  ]
+}
