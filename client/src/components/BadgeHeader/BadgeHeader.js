@@ -13,7 +13,7 @@ const BadgeHeader = props =>
                 </div>
                 <div className="col-2" align="center">
                     <p>
-                        <a href="/" className="btn btn-primary claim-badge-button btn-lg">Claim badge</a>
+                        <a href="" onClick={props.openModal} className="btn btn-primary claim-badge-button btn-lg">Claim badge</a>
                     </p>
                 </div>
                 <div className="badge-summary-container col-4 offset-4">
