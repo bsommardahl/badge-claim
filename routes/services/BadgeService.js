@@ -5,13 +5,15 @@ const { USER, PASSWORD } = require('../../config')
 const getBadgeData = async(badgeToken) =>  {
     let response;
     let userAuthData;
+    const data = `username=${encodeURIComponent(USER)}&password=${encodeURIComponent(PASSWORD)}`;
+    console.log(data);
     await axios({
         headers: { 
             'content-type': 'application/x-www-form-urlencoded' 
         },       
         method: 'post',
         url: 'https://api.badgr.io/o/token',
-        data:`username=${USER}&password=${PASSWORD}`
+        data
     }).then(res => {
         userAuthData = res.data;
     }).catch(err => {
