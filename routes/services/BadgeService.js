@@ -1,26 +1,11 @@
 const axios = require('axios');
-const { USER, PASSWORD } = require('../../config')
 
-
-const getBadgeData = async(badgeToken) =>  {
+const getBadgeData = async(badgeToken, authToken) =>  {
     let response;
-    let userAuthData;
-    const data = `username=${encodeURIComponent(USER)}&password=${encodeURIComponent(PASSWORD)}`;    
-    await axios({
-        headers: { 
-            'content-type': 'application/x-www-form-urlencoded' 
-        },       
-        method: 'post',
-        url: 'https://api.badgr.io/o/token',
-        data
-    }).then(res => {
-        userAuthData = res.data;
-    }).catch(err => {
-        console.log(err)
-    })
+        
     await axios({
         headers: {
-            'Authorization': `Bearer ${userAuthData.access_token}`
+            'Authorization': `Bearer ${authToken}`
         },
         method: 'get',
         url: `/badgeclasses/${badgeToken}`,

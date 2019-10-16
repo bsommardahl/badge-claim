@@ -3,19 +3,32 @@ const { PRIVATE_KEY, DOMAIN, BADGE_OWNER_EMAIL } = require('../../config');
 let Mailgun = require('mailgun-js');
 
 
-const sendEmail = async(claimantEmail) =>  {
+const sendEmail = async(data, authToken) =>  {
     mailgun = new Mailgun({apiKey: PRIVATE_KEY, domain: DOMAIN});
     
     let response;
     
-    let data = {
-          from: claimantEmail,
+    let email = {
+          from: data.email,
           to: BADGE_OWNER_EMAIL,
-          subject: 'Claiming badge: <badge>',
-          html: 'Hello, <br> We have a request from '+ claimantEmail +' to claim the “Client Relator I” badge. Please check any evidence submitted and click the link below to award this badge.<br>         <a href= "https://hairy-melon.herokuapp.com/award/B_iL8XNWQzmY3atNem0QMw?token=4kjh589efds3hkjhs98d79823754hksjdk23423" > App </a> <br>Thanks,<br>Badge Claim System'
+          subject: 'Claiming badge',
+          html: `Hello, 
+          <br><br>
+          
+          We have a request from ${data.email} to claim the ${data.badgeName} badge. Please check any evidence submitted and click the link below to award this badge.
+          
+          <br><br>
+          
+          <a href= "http://localhost:3001/award/${data.badgeToken}?token=${authToken}&email=${data.email}" > App </a> 
+          <br><br>
+
+          Thanks,
+          <br><br>
+
+          Badge Claim System`
         }
     
-        await mailgun.messages().send(data, function (err, body) {            
+        await mailgun.messages().send(email, function (err, body) {            
             if (err) {                
                 console.log("got an error: ", err);
                 response = err;
