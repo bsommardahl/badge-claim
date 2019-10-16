@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const badgeController = require('./routes/controllers/BadgeController')
 const sendEmailController = require('./routes/controllers/SendEmailController')
+const awardBadgeController = require('./routes/controllers/AwardBadgeController')
 
 axios.defaults.baseURL = envs.BASE_URL
 
@@ -18,6 +19,8 @@ app.use(express.static(path.join(__dirname, "build")));
 app.use('/api/badge', badgeController);
 
 app.use('/api/email', sendEmailController);
+
+app.use('/api/award', awardBadgeController);
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname , "build", "index.html"));
