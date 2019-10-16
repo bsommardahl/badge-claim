@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const _ = require('lodash/each')
 const result = dotenv.config();
 
 let envs;
@@ -7,9 +8,7 @@ if (!('error' in result)) {
   envs = result.parsed;
 } else {
   envs = {};
-  for(const [key, value] of process.env) {
-      envs[key] = value
-  }
+  _.each(process.env, (value, key) => envs[key] = value);
 }
 console.log(envs)
 
