@@ -1,0 +1,15 @@
+.award-section {
+    background-color: #e9ecef;
+    border: solid 1px #c5cace;
+    border-radius: 4px;
+}
+
+.award-badge-button {
+    background-color: #525dc7;
+    border-color: #525dc7;
+}
+
+.award-badge-button:hover {
+    background-color: #5c67e0;
+    border-color: #5c67e0;
+}

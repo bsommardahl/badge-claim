@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import BadgeHeader from '../components/BadgeHeader/BadgeHeader';
 import BadgeContent from '../components/BadgeContent/BadgeContent';
 import Modal from 'react-modal';
@@ -45,10 +46,15 @@ class BadgeContainer extends Component {
         e.preventDefault()
         await axios.
             post(
-                `/email`, {email: this.state.email}
+                `/email`, {
+                    email: this.state.email,
+                    badgeToken: this.state.badgeToken,
+                    badgeName: this.state.badgeData.badgeName                    
+                }
             )
             .then(res => {
-                console.log(res)
+                console.log('display success toast')
+                this.props.history.push('/')
             })
             .catch(err => {
                 console.log(err)
@@ -89,14 +95,11 @@ class BadgeContainer extends Component {
                     </form>
                 </Modal>
                 <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal}/>
-
-                <div className="container-fluid">
-                    <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
-                </div>
+                <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
             </div>
         )
         
     }
 }
 
-export default BadgeContainer;
+export default withRouter(BadgeContainer);

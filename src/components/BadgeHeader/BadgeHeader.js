@@ -8,10 +8,10 @@ const BadgeHeader = props =>
                 <div className="badge-sidebar offset-sm-0 offset-md-1 offset-lg-2">
                     <img className="badge-image img-fluid" src={props.imageSource} alt="This is a badge"/>                    
                 </div>
-                <div className="col-4 offset-4">
+                <div className="col-3 offset-4">
                     <h1>{props.badgeName}</h1>
                 </div>
-                <div className="col-2" align="center">
+                <div className={props.buttonClass || "col-2"} align="right">
                     <p>
                         <a href="" onClick={props.openModal} className="btn btn-primary claim-badge-button btn-lg">Claim badge</a>
                     </p>
