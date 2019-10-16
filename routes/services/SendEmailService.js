@@ -19,7 +19,7 @@ const sendEmail = async(data, authToken) =>  {
           
           <br><br>
           
-          <a href= "http://localhost:3001/award/${data.badgeToken}?token=${authToken}&email=${data.email}" > App </a> 
+          <a href= "https://badge-claim.herokuapp.com/award/${data.badgeToken}?token=${authToken}&email=${data.email}" > App </a> 
           <br><br>
 
           Thanks,
