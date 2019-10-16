@@ -5,8 +5,7 @@ const { USER, PASSWORD } = require('../../config')
 const getBadgeData = async(badgeToken) =>  {
     let response;
     let userAuthData;
-    const data = `username=${encodeURIComponent(USER)}&password=${encodeURIComponent(PASSWORD)}`;
-    console.log(data);
+    const data = `username=${encodeURIComponent(USER)}&password=${encodeURIComponent(PASSWORD)}`;    
     await axios({
         headers: { 
             'content-type': 'application/x-www-form-urlencoded' 

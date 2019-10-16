@@ -2,23 +2,26 @@ const envs = require('./config')
 const express = require('express')
 const path = require('path')
 const axios = require('axios');
+const bodyParser = require('body-parser');
+
 const badgeController = require('./routes/controllers/BadgeController')
-const cors = require('cors')
- 
+const sendEmailController = require('./routes/controllers/SendEmailController')
+
 axios.defaults.baseURL = envs.BASE_URL
 
 const app = express()
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "build")));
 
 app.use('/api/badge', badgeController);
 
+app.use('/api/email', sendEmailController);
+
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname , "build", "index.html"));
 });
-
-app.use(cors())
-
 
 const PORT = envs.PORT || 3001
 

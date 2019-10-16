@@ -35,14 +35,24 @@ class BadgeContainer extends Component {
 
     closeModal() {
         this.setState({ modalIsOpen: false });
-    }
+    }    
 
-    sendClaimEmail(e) {
-        e.preventDefault()
-    }
-
-    handleEmailChange(e) {
+    handleEmailChange = (e) => {
         this.setState({email: e.target.value})
+    }
+
+    handleEmailSubmit = async(e) => {
+        e.preventDefault()
+        await axios.
+            post(
+                `/email`, {email: this.state.email}
+            )
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     componentDidMount() {
@@ -72,9 +82,9 @@ class BadgeContainer extends Component {
                     contentLabel="Example Modal"
                 >
                     <h1 className="h3 mb-3 font-weight-normal" ref={subtitle => this.subtitle = subtitle}>Claim this badge</h1>
-                    <form onSubmit={this.sendClaimEmail}>
+                    <form onSubmit={this.handleEmailSubmit}>
                         <p>Badge Owner Text</p>
-                        <input onChange={this.handleEmailChange} type="text" className="form-control mb-3" placeholder="Email Address" />
+                        <input onChange={this.handleEmailChange} type="email" className="form-control mb-3" placeholder="Email Address" />
                         <button className="btn btn-lg btn-primary btn-block search-button">Claim Badge</button>
                     </form>
                 </Modal>
