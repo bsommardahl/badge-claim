@@ -23,7 +23,7 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname , "build", "index.html"));
 });
 
-const PORT = envs.PORT || 3001
+const PORT = process.env.PORT || 3001
 
 app.get('/', (req, res) => {
     res.send(`This is the badge claim api: ${process.env.PORT}`)
