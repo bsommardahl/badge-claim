@@ -11,7 +11,7 @@ const BadgeHeader = props =>
                 <div className="col-3 offset-4">
                     <h1>{props.badgeName}</h1>
                 </div>
-                <div className={props.buttonClass || "col-2"} align="right">
+                <div className={props.display || "col-2"} align="right">
                     <p>
                         <a href="" onClick={props.openModal} className="btn btn-primary claim-badge-button btn-lg">Claim badge</a>
                     </p>
