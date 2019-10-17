@@ -8,7 +8,7 @@ const BadgeContent = props =>
             <div className="col-10 mb-3 offset-4 text-left">
             <h3>Criteria</h3>
             <ReactMarkdown source={props.criteriaNarrative} />
-            <a href={props.criteriaURL} className="criteria-url-link">View external Criteria URL</a>
+            <a href={props.criteriaURL}  target="_blank" className="criteria-url-link">View external Criteria URL</a>
             </div>
         </div>
     </div>
