@@ -79,7 +79,7 @@ class BadgeContainer extends Component {
             email: window.localStorage.getItem('email') || ''
         })
         axios
-            .get(`/badge/${params.badge_token}`)
+            .get(`/badges/${params.badge_token}`)
             .then(res => {
                 this.setState({
                     badgeData: res.data.result[0],

@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "build")));
 
-app.use('/api/badge', badgeController);
+app.use('/api/badges', badgeController);
 
 app.use('/api/email', sendEmailController);
 

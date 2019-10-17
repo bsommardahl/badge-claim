@@ -9,7 +9,13 @@ const asyncMiddleware = require('../middleware/AsyncMiddleware');
 router.get('/:badgeToken', asyncMiddleware(authenticate), asyncMiddleware(async (req, res, next) => {
     const badgeToken = req.params.badgeToken
     const authToken = req.authData.access_token
-    const response = await badgeService(badgeToken, authToken)
+    const response = await badgeService.getBadgeData(badgeToken, authToken)
+    res.send(response)
+}))
+
+router.get('/', asyncMiddleware(authenticate), asyncMiddleware(async(req, res, next) => {
+    const authToken = req.authData.access_token
+    const response = await badgeService.getBadges(authToken)
     res.send(response)
 }))
 
