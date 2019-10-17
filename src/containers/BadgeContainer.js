@@ -59,7 +59,7 @@ class BadgeContainer extends Component {
                 }
             )
             .then(res => {
-                ToastsStore.success('Claim email has been sent.')
+                ToastsStore.success('Claim request has been sent.')
                 this.setState({
                     display: 'd-none'
                 })
