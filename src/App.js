@@ -12,7 +12,7 @@ class App extends Component {
           <div className="App">
             <Switch>
               <Route exact path='/' component={LandingContainer} />
-              <Route path='/badgeid/:badge_token' component={BadgeContainer}/>
+              <Route path='/badges/:badge_token' component={BadgeContainer}/>
               <Route path='/award/:badge_token' component={AwardContainer}/>
             </Switch>
           </div>
