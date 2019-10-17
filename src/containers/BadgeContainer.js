@@ -49,7 +49,6 @@ class BadgeContainer extends Component {
 
     handleEmailSubmit = async(e) => {
         e.preventDefault()
-        console.log(this.state.badgeData.badgeName)
         await axios.
             post(
                 `/email`, {
@@ -59,7 +58,7 @@ class BadgeContainer extends Component {
                 }
             )
             .then(res => {
-                ToastsStore.success('Claim request has been sent.')
+                res.data.notification ? ToastsStore.error(res.data.notification) : ToastsStore.success('Claim request has been sent.');
                 this.setState({
                     display: 'd-none'
                 })
