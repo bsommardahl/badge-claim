@@ -2,7 +2,7 @@ import React from 'react'
 import './AwardSection.css'
 
 const AwardSection = props => 
-    <div className="container-fluid">
+    <div className={"container-fluid "+props.display}>
         <div className="row">
             <div className="col-5 offset-4 text-center award-section">
                 <h1 className="h2 mb-3">Claiming</h1> 
