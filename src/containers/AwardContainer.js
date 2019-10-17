@@ -12,7 +12,8 @@ class AwardContainer extends Component {
         this.state = {
             badgeToken: '',
             badgeData: {},            
-            query: {}
+            query: {},
+            display: ''
         }
     }
 
@@ -20,7 +21,8 @@ class AwardContainer extends Component {
         e.preventDefault();
         await axios.
             post(
-                `/award`, {
+                `/award`, 
+                {
                     email: this.state.query.email,
                     authToken: this.state.query.token,
                     badgeToken: this.state.badgeToken
@@ -28,7 +30,9 @@ class AwardContainer extends Component {
             )
             .then(res => {
                 console.log('display success toast')
-                this.props.history.push('/')
+                this.setState({
+                    display: 'd-none'
+                })
             })
             .catch(err => {
                 console.log(err)
@@ -57,9 +61,9 @@ class AwardContainer extends Component {
     render() {
         return (
             <div>
-                <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} buttonClass="d-none" openModal={this.openModal}/>
+                <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} display="d-none" openModal={this.openModal}/>
                 <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
-                <AwardSection handleAwardBadge={this.handleAwardBadge} email={this.state.query.email}/>
+                <AwardSection handleAwardBadge={this.handleAwardBadge} display={this.state.display} email={this.state.query.email}/>
             </div>
         )
         
