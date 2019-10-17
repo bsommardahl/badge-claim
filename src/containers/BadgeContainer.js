@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import BadgeHeader from '../components/BadgeHeader/BadgeHeader';
 import BadgeContent from '../components/BadgeContent/BadgeContent';
 import Modal from 'react-modal';
+import Loading from "react-fullscreen-loading";
+import {ToastsContainer, ToastsStore} from 'react-toasts';
 
 const customStyles = {
     content: {
@@ -24,7 +26,8 @@ class BadgeContainer extends Component {
             badgeData: {},
             email: '',
             modalIsOpen: false,
-            display: ''
+            display: '',
+            isLoading: true
         }
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -46,22 +49,25 @@ class BadgeContainer extends Component {
 
     handleEmailSubmit = async(e) => {
         e.preventDefault()
+        console.log(this.state.badgeData.badgeName)
         await axios.
             post(
                 `/email`, {
                     email: this.state.email,
                     badgeToken: this.state.badgeToken,
-                    badgeName: this.state.badgeData.badgeName                    
+                    badgeName: this.state.badgeData.name
                 }
             )
             .then(res => {
-                console.log('display success toast');
+                ToastsStore.success('Claim email has been sent.')
                 this.setState({
                     display: 'd-none'
                 })
                 this.closeModal();
             })
             .catch(err => {
+                ToastsStore.error('There was an error, notify the admin about this.')
+                this.closeModal();
                 console.log(err)
             })
     }
@@ -76,7 +82,8 @@ class BadgeContainer extends Component {
             .get(`/badge/${params.badge_token}`)
             .then(res => {
                 this.setState({
-                    badgeData: res.data.result[0]
+                    badgeData: res.data.result[0],
+                    isLoading: false
                 })
             })
             .catch(err => {
@@ -87,6 +94,7 @@ class BadgeContainer extends Component {
     render() {
         return (
             <div>
+                <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />
                 <Modal
                     isOpen={this.state.modalIsOpen}                    
                     onRequestClose={this.closeModal}
@@ -102,6 +110,7 @@ class BadgeContainer extends Component {
                 </Modal>
                 <BadgeHeader imageSource={this.state.badgeData.image} buttonClass={this.state.display} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal}/>
                 <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
+                <ToastsContainer store={ToastsStore}/>
             </div>
         )
         

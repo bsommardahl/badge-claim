@@ -16,10 +16,12 @@
     "query-string": "^6.8.3",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
+    "react-fullscreen-loading": "0.0.4",
     "react-markdown": "^4.2.2",
     "react-modal": "^3.10.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "react-toasts": "^3.0.6"
   },
   "scripts": {
     "prestart": "react-scripts build",

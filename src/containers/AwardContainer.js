@@ -5,6 +5,8 @@ import QueryString from 'query-string';
 import BadgeHeader from '../components/BadgeHeader/BadgeHeader';
 import BadgeContent from '../components/BadgeContent/BadgeContent';
 import AwardSection from '../components/AwardSection/AwardSection';
+import Loading from "react-fullscreen-loading";
+import {ToastsContainer, ToastsStore} from 'react-toasts';
 
 class AwardContainer extends Component {
     constructor(props) {
@@ -13,7 +15,8 @@ class AwardContainer extends Component {
             badgeToken: '',
             badgeData: {},            
             query: {},
-            display: ''
+            display: '',
+            isLoading: true
         }
     }
 
@@ -25,11 +28,12 @@ class AwardContainer extends Component {
                 {
                     email: this.state.query.email,
                     authToken: this.state.query.token,
-                    badgeToken: this.state.badgeToken
+                    badgeToken: this.state.badgeToken,
+                    badgeName: this.state.badgeData.name
                 }
             )
             .then(res => {
-                console.log('display success toast')
+                ToastsStore.success('Badge has been awarded!')
                 this.setState({
                     display: 'd-none'
                 })
@@ -50,7 +54,8 @@ class AwardContainer extends Component {
             .get(`/badge/${params.badge_token}`)
             .then(res => {
                 this.setState({
-                    badgeData: res.data.result[0]
+                    badgeData: res.data.result[0],
+                    isLoading: false
                 })
             })
             .catch(err => {
@@ -61,9 +66,11 @@ class AwardContainer extends Component {
     render() {
         return (
             <div>
+                <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />
                 <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} display="d-none" openModal={this.openModal}/>
                 <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
                 <AwardSection handleAwardBadge={this.handleAwardBadge} display={this.state.display} email={this.state.query.email}/>
+                <ToastsContainer store={ToastsStore}/>
             </div>
         )
         

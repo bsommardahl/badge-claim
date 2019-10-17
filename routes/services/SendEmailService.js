@@ -15,11 +15,11 @@ const sendEmail = async(data, authToken) =>  {
           html: `Hello, 
           <br><br>
           
-          We have a request from ${data.email} to claim the ${data.badgeName} badge. Please check any evidence submitted and click the link below to award this badge.
+          We have a request from ${data.email} to claim the "${data.badgeName}" badge. Please check any evidence submitted and click the link below to award this badge.
           
           <br><br>
           
-          <a href= "https://badge-claim.herokuapp.com/award/${data.badgeToken}?token=${authToken}&email=${data.email}" > App </a> 
+          <a href= "https://badge-claim.herokuapp.com/award/${data.badgeToken}?token=${authToken}&email=${data.email}" > Award Badge </a> 
           <br><br>
 
           Thanks,
