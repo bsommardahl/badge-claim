@@ -23,7 +23,8 @@ class BadgeContainer extends Component {
             badgeToken: '',
             badgeData: {},
             email: '',
-            modalIsOpen: false
+            modalIsOpen: false,
+            display: ''
         }
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -40,6 +41,7 @@ class BadgeContainer extends Component {
 
     handleEmailChange = (e) => {
         this.setState({email: e.target.value})
+        window.localStorage.setItem('email', e.target.value);
     }
 
     handleEmailSubmit = async(e) => {
@@ -53,8 +55,11 @@ class BadgeContainer extends Component {
                 }
             )
             .then(res => {
-                console.log('display success toast')
-                this.props.history.push('/')
+                console.log('display success toast');
+                this.setState({
+                    display: 'd-none'
+                })
+                this.closeModal();
             })
             .catch(err => {
                 console.log(err)
@@ -64,7 +69,8 @@ class BadgeContainer extends Component {
     componentDidMount() {
         const { match: {params}} = this.props
         this.setState({
-            badgeToken: params.badge_token
+            badgeToken: params.badge_token,
+            email: window.localStorage.getItem('email') || ''
         })
         axios
             .get(`/badge/${params.badge_token}`)
@@ -90,11 +96,11 @@ class BadgeContainer extends Component {
                     <h1 className="h3 mb-3 font-weight-normal" ref={subtitle => this.subtitle = subtitle}>Claim this badge</h1>
                     <form onSubmit={this.handleEmailSubmit}>
                         <p>Badge Owner Text</p>
-                        <input onChange={this.handleEmailChange} type="email" className="form-control mb-3" placeholder="Email Address" />
+                        <input onChange={this.handleEmailChange} value={this.state.email} required type="email" className="form-control mb-3" placeholder="Email Address" />
                         <button className="btn btn-lg btn-primary btn-block search-button">Claim Badge</button>
                     </form>
                 </Modal>
-                <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal}/>
+                <BadgeHeader imageSource={this.state.badgeData.image} buttonClass={this.state.display} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal}/>
                 <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
             </div>
         )
