@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { PRIVATE_KEY, DOMAIN, BADGE_OWNER_EMAIL } = require('../../config');
+const { PRIVATE_KEY, DOMAIN, BADGE_OWNER_EMAIL, APP_URL } = require('../../config');
 let Mailgun = require('mailgun-js');
 
 
@@ -19,7 +19,7 @@ const sendEmail = async(data, authToken) =>  {
           
           <br><br>
           
-          <a href= "https://badge-claim.herokuapp.com/award/${data.badgeToken}?token=${authToken}&email=${data.email}" > Award Badge </a> 
+          <a href= "${APP_URL}/award/${data.badgeToken}?token=${authToken}&email=${data.email}" > Award Badge </a> 
           <br><br>
 
           Thanks,
