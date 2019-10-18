@@ -21,5 +21,6 @@
 .badge-sidebar {
     background-color: #fff;
     position: absolute;
-    top: 8rem; 
+    top: 5rem;
+    width: 288px;
 }
