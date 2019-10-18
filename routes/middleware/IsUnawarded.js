@@ -1,7 +1,7 @@
 const axios = require('axios')
 const _filter = require('lodash/filter')
 
-const ClaimingUnawarded  = async(req, res, next) =>{
+const isUnawarded  = async(req, res, next) =>{
     let assertions;
     let response = res
     await axios({
@@ -27,4 +27,4 @@ const ClaimingUnawarded  = async(req, res, next) =>{
     return next();
 }
 
-module.exports = ClaimingUnawarded
+module.exports = isUnawarded
