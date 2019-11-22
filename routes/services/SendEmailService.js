@@ -7,10 +7,12 @@ const sendEmail = async(data, authToken) =>  {
     mailgun = new Mailgun({apiKey: PRIVATE_KEY, domain: DOMAIN});
     
     let response;
+
+    const awarderEmail = data.tags.length ? getAwarderEmailFromTag(data) : BADGE_OWNER_EMAIL
     
     let email = {
           from: data.email,
-          to: BADGE_OWNER_EMAIL,
+          to: awarderEmail,
           subject: 'Claiming badge',
           html: `Hello, 
           <br><br>
@@ -39,6 +41,18 @@ const sendEmail = async(data, authToken) =>  {
         });
 
         return response    
-}   
+}
+
+const getAwarderEmailFromTag = (data) => {
+    const tags = data.tags;
+
+    const emailRX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+    if(tags) {
+        let awarderEmail = tags[0].slice(8)
+        return emailRX.test(awarderEmail) ? awarderEmail : null
+    }
+    return null
+}
 
 module.exports = sendEmail;

@@ -54,7 +54,8 @@ class BadgeContainer extends Component {
                 `/email`, {
                     email: this.state.email,
                     badgeToken: this.state.badgeToken,
-                    badgeName: this.state.badgeData.name
+                    badgeName: this.state.badgeData.name,
+                    tags: this.state.badgeData.tags
                 }
             )
             .then(res => {
