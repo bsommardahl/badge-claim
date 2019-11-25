@@ -1,5 +1,3 @@
-const axios = require('axios')
-const { APP_URL } = require('../../config');
 const awardBadgeService = require('../services/AwardBadgeService');
 
 const isAutoAward  = async(req, res, next) => {
