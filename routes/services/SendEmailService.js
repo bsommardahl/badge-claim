@@ -1,4 +1,3 @@
-const axios = require('axios');
 const { PRIVATE_KEY, DOMAIN, BADGE_OWNER_EMAIL, APP_URL } = require('../../config');
 let Mailgun = require('mailgun-js');
 

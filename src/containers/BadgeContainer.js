@@ -49,8 +49,8 @@ class BadgeContainer extends Component {
 
     handleEmailSubmit = async(e) => {
         e.preventDefault()
-        await axios.
-            post(
+        await axios
+            .post(
                 `/email`, {
                     email: this.state.email,
                     badgeToken: this.state.badgeToken,

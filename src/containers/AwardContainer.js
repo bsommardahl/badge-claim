@@ -22,8 +22,8 @@ class AwardContainer extends Component {
 
     handleAwardBadge = async(e) => {
         e.preventDefault();
-        await axios.
-            post(
+        await axios
+            .post(
                 `/award`, 
                 {
                     email: this.state.query.email,
