@@ -47,9 +47,9 @@ const getAwarderEmail = (data) => {
     
     tags.forEach((e, i) => {
        if(e.includes('awarder')) {
-            let email = e.split(':')[1]
+            let email = e.split(':')[1].trim()
             
-            const emailRX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+            const emailRX = /^\w+([\.\+-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
             
            awarderEmail = emailRX.test(email) ? email  : null
        }        

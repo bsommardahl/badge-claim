@@ -51,7 +51,7 @@ class BadgeContainer extends Component {
         e.preventDefault()
         await axios
             .post(
-                `/email`, {
+                `/claim`, {
                     email: this.state.email,
                     badgeToken: this.state.badgeToken,
                     badgeName: this.state.badgeData.name,
