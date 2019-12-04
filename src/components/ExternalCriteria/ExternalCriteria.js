@@ -3,7 +3,7 @@ import './ExternalCriteria.css'
 
 const ExternalCriteria = (props) => {
     if(props.criteriaURL) {        
-        return <a href={props.criteriaURL}  target="_blank" className="criteria-url-link">View external Criteria URL</a>        
+        return <a href={props.criteriaURL}  target="_blank" className="criteria-url-link">Click here to view details</a>        
     }
     return <div></div>
 }
