@@ -109,7 +109,7 @@ class BadgeContainer extends Component {
                     </form>
                 </Modal>
                 <BadgeHeader imageSource={this.state.badgeData.image} buttonClass={this.state.display} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal}/>
-                <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
+                <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} tags={this.state.badgeData.tags} />
                 <ToastsContainer store={ToastsStore}/>
             </div>
         )
