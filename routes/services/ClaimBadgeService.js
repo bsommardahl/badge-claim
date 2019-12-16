@@ -24,9 +24,7 @@ const sendEmail = async(data, authToken) =>  {
           Thanks,
           <br><br>
 
-          Badge Claim System
-          
-          Do you can't read this email?, plase click here : ${awardBadgeUrl}`
+          Badge Claim System`
         }
     
         await mailgun.messages().send(email, function (err, body) {            
