@@ -6,7 +6,7 @@ const sendEmail = async(data, authToken) =>  {
     mailgun = new Mailgun({apiKey: PRIVATE_KEY, domain: DOMAIN});
     
     let response;
-    
+    let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?token=${authToken}&email=${data.email}`;
     let email = {
           from: data.email,
           to: getAwarderEmail(data) || BADGE_OWNER_EMAIL,
@@ -18,13 +18,15 @@ const sendEmail = async(data, authToken) =>  {
           
           <br><br>
           
-          <a href= "${APP_URL}/award/${data.badgeToken}?token=${authToken}&email=${data.email}" > Award Badge </a> 
+          ${awardBadgeUrl}
           <br><br>
 
           Thanks,
           <br><br>
 
-          Badge Claim System`
+          Badge Claim System
+          
+          Do you can't read this email?, plase click here : ${awardBadgeUrl}`
         }
     
         await mailgun.messages().send(email, function (err, body) {            
