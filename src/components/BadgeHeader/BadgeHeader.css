@@ -1,6 +1,7 @@
 .jumbotron {
     padding-left: 0rem;
     padding-right: 0rem;
+    padding-top: 0rem;
 }
 
 .claim-badge-button {
@@ -13,14 +14,14 @@
     border-color: #5c67e0;
 }
 
-.badge-image {
-    height: 192px;
-    width: 192px;
+.badge-image {   
+    max-width: 192px;
+    max-height: 192px;
 }
 
 .badge-sidebar {
     background-color: #fff;
-    position: absolute;
-    top: 5rem;
-    width: 288px;
+    position: relative;
+    top: 10rem;
+    width: 100px;
 }
