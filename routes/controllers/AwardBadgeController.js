@@ -1,14 +1,19 @@
-
 const express = require('express');
 
 const router = express.Router();
 
 const awardBadgeService = require('../services/AwardBadgeService');
 const asyncMiddleware = require('../middleware/AsyncMiddleware');
+const authenticate = require('../middleware/Authenticate');
 
-router.post('/', asyncMiddleware(async (req, res, next) => {
-    const response = await awardBadgeService(req.body)
-    res.send(response)
-}))
+router.post(
+  '/',
+  asyncMiddleware(authenticate),
+  asyncMiddleware(async (req, res, next) => {
+    const authToken = req.authData.access_token;
+    const response = await awardBadgeService(req.body, authToken);
+    res.send(response);
+  })
+);
 
-module.exports = router
+module.exports = router;
