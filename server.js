@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
 
 const badgeController = require('./routes/controllers/BadgeController');
 const ClaimBadgeController = require('./routes/controllers/ClaimBadgeController');
@@ -26,6 +27,19 @@ app.use('/api/award', awardBadgeController);
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+
+app.post('/api/request', (req, res) => {
+  var data = {
+    from: req.body.from,
+    to: req.body.to,
+    subject: req.body.subject,
+    text: req.body.text
+  };
+  
+  mailgun.messages().send(data, function (error, body) {
+    res.status(200).send('OK');
+  });
+})
 
 const PORT = process.env.PORT || 3001;
 
