@@ -32,8 +32,18 @@ app.post('/api/request', (req, res) => {
   var data = {
     from: req.body.from,
     to: req.body.to,
-    subject: req.body.subject,
-    text: req.body.text
+    subject: `Subscription to ${req.body.pathway} pathway`,
+    html: `Hello, 
+          <br><br>
+          
+          We have a request from ${req.body.from} to subscribe to the ${req.body.pathway} pathway.
+          
+          <br><br>
+
+          Thanks,
+          <br><br>
+
+          Badgr Extras Extension`
   };
   
   mailgun.messages().send(data, function (error, body) {
