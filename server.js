@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const {
   PRIVATE_KEY,
   DOMAIN
-} = require('../../config');
+} = require('./config');
 
 const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
 
