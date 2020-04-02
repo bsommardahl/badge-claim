@@ -28,7 +28,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.post('/api/request', (req, res) => {
+app.post('/api/pathways/:pathwayId/subscribe', (req, res) => {
   var data = {
     from: req.body.from,
     to: req.body.to,
@@ -36,8 +36,9 @@ app.post('/api/request', (req, res) => {
     html: `Hello, 
           <br><br>
           
-          We have a request from ${req.body.from} to subscribe to the ${req.body.pathway} pathway.
-          
+          We have a request from ${req.body.from} to subscribe to the pathway:
+          <p>Name: ${req.body.pathway}</p>
+          <p>ID: ${req.params.pathwayId}</p>
           <br><br>
 
           Thanks,
