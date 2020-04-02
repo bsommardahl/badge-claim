@@ -3,6 +3,12 @@ const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+
+const {
+  PRIVATE_KEY,
+  DOMAIN
+} = require('./config');
+
 const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
 
 const badgeController = require('./routes/controllers/BadgeController');
