@@ -6,14 +6,22 @@ const {
 } = require('../../config');
 let Mailgun = require('mailgun-js');
 
+const issuerService = require('../services/IssuerService');
+const badgeService = require('../services/BadgeService')
+
 const sendEmail = async (data, authToken) => {
   mailgun = new Mailgun({ apiKey: PRIVATE_KEY, domain: DOMAIN });
+
+  const responseBadge = await badgeService.getBadgeData(data.badgeToken, authToken);
+  const issuerID = responseBadge.result[0].issuer;
+  const responseIssuer = await issuerService.getIssuerData(issuerID, authToken);
+  const emailIssuer = responseIssuer.result[0].email;
 
   let response;
   let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?email=${data.email}`;
   let email = {
     from: data.email,
-    to: getAwarderEmail(data) || BADGE_OWNER_EMAIL,
+    to: getAwarderEmail(data) || emailIssuer,
     subject: 'Claiming badge',
     html: `Hello, 
           <br><br>
