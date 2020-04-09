@@ -1,7 +1,13 @@
 const axios = require('axios');
 
+const issuers = {};
+
 const IssuerService = {
     getIssuerData: async(issuerToken, authToken) => {
+        if(issuers[issuerToken]){
+            return issuers[issuerToken];
+        }
+        
         let response;
 
         await axios({
@@ -13,6 +19,7 @@ const IssuerService = {
 
         }).then(res => {                
             response = res.data
+            issuers[issuerToken] = response;
         }).catch(err => {
             console.log(err)
         })

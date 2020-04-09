@@ -1,11 +1,15 @@
 const awardBadgeService = require('../services/AwardBadgeService');
+const badgeService = require('../services/BadgeService')
 
 const isAutoAward  = async(req, res, next) => {
+    const authToken = req.authData.access_token;
+    const responseBadge = await badgeService.getBadgeData(req.body.badgeToken, authToken);
+
     let data = req.body
 
-    data.authToken = req.authData.access_token
+    data.authToken = authToken
 
-    const autoAwardFlag = hasAutoAwardTag(data)
+    const autoAwardFlag = hasAutoAwardTag(responseBadge.result[0])
 
     req.autoAwardFlag = autoAwardFlag
 
