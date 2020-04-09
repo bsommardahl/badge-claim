@@ -1,8 +1,14 @@
 const axios = require('axios');
 const { ISSUER_ID } = require('../../config');
 
+const badges = {};
+
 const BadgeService = {
     getBadgeData: async(badgeToken, authToken) => {
+        if(badges[badgeToken]){
+            return badges[badgeToken];
+        }
+
         let response;
 
         await axios({
@@ -14,6 +20,7 @@ const BadgeService = {
 
         }).then(res => {                
             response = res.data
+            badges[badgeToken] = response
         }).catch(err => {
             console.log(err)
         })

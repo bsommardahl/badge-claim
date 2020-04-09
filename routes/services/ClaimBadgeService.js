@@ -21,7 +21,7 @@ const sendEmail = async (data, authToken) => {
   let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?email=${data.email}`;
   let email = {
     from: data.email,
-    to: getAwarderEmail(data) || emailIssuer,
+    to: getAwarderEmail(responseBadge.result[0]) || emailIssuer,
     subject: 'Claiming badge',
     html: `Hello, 
           <br><br>
