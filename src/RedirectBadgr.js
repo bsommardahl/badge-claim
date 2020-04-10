@@ -3,11 +3,7 @@ import { useParams } from "react-router-dom";
 
 class RedirectBadgr extends Component {
     render() {
-        var url = window.location.href;
-        var array = url.split('/');
-
-        var lastsegment = array[array.length-1];
-        window.location = "https://badgr.com/public/badges/" + lastsegment;
+        window.location = "https://chrome.google.com/webstore/detail/badgr-extras/libekojokjjjmhfopdejamgkmloedldj";
         return (
         <div/>
         )
