@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import BadgeContainer from './containers/BadgeContainer';
+import RedirectBadgr from './RedirectBadgr';
 import LandingContainer from './containers/LandingContainer';
 import AwardContainer from './containers/AwardContainer'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -12,7 +12,7 @@ class App extends Component {
           <div className="App">
             <Switch>
               <Route exact path='/' component={LandingContainer} />
-              <Route path='/badgeid/:badge_token' component={BadgeContainer}/>
+              <Route path='/badgeid/:badge_token' component={RedirectBadgr}/>
               <Route path='/award/:badge_token' component={AwardContainer}/>
             </Switch>
           </div>
