@@ -18,7 +18,7 @@ const sendEmail = async (data, authToken) => {
   const emailIssuer = responseIssuer.result[0].email;
 
   let response;
-  let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?email=${data.email}`;
+  let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?email=${data.email}&evidence=${encodeURI(data.evidence)}`;
   let email = {
     from: data.email,
     to: getAwarderEmail(responseBadge.result[0]) || emailIssuer,

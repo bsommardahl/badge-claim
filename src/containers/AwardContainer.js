@@ -61,6 +61,8 @@ class AwardContainer extends Component {
             .catch(err => {
                 console.log(err)
             })
+        
+        console.log(this.state.query.toString());
     }
 
     render() {
@@ -69,7 +71,7 @@ class AwardContainer extends Component {
                 <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />
                 <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} display="d-none" openModal={this.openModal}/>
                 <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
-                <AwardSection handleAwardBadge={this.handleAwardBadge} display={this.state.display} email={this.state.query.email}/>
+                <AwardSection handleAwardBadge={this.handleAwardBadge} display={this.state.display} email={this.state.query.email} evidence={this.state.query.evidence}/>
                 <ToastsContainer store={ToastsStore}/>
             </div>
         )

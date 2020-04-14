@@ -6,7 +6,9 @@ const AwardSection = props =>
         <div className="row">
             <div className="col-5 offset-4 text-center award-section">
                 <h1 className="h2 mb-3">Claiming</h1> 
-                <p>{props.email}</p>
+                <p>Email: {props.email}</p>
+                <p>Evidence:</p>
+                <p>{(props.evidence)}</p>
                 <p>
                     <a href="" onClick={props.handleAwardBadge} className="btn btn-primary award-badge-button btn-lg">Award Badge</a>
                 </p>                
