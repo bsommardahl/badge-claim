@@ -1,12 +1,16 @@
 const axios = require('axios');
 const { ISSUER_ID } = require('../../config');
 
+var ONE_HOUR = 60 * 60 * 1000;
 const badges = {};
 
 const BadgeService = {
     getBadgeData: async(badgeToken, authToken) => {
-        if(badges[badgeToken]){
-            return badges[badgeToken];
+        var d = new Date(); 
+        var time = d.getTime();
+
+        if(badges[badgeToken] && (time - badges[badgeToken][1]) < ONE_HOUR){
+            return badges[badgeToken][0];
         }
 
         let response;
@@ -20,7 +24,7 @@ const BadgeService = {
 
         }).then(res => {                
             response = res.data
-            badges[badgeToken] = response
+            badges[badgeToken] = [response, time];
         }).catch(err => {
             console.log(err)
         })

@@ -1,11 +1,15 @@
 const axios = require('axios');
 
+var ONE_HOUR = 60 * 60 * 1000;
 const issuers = {};
 
 const IssuerService = {
     getIssuerData: async(issuerToken, authToken) => {
-        if(issuers[issuerToken]){
-            return issuers[issuerToken];
+        var d = new Date(); 
+        var time = d.getTime();
+
+        if(issuers[issuerToken] && (time - issuers[issuerToken][1]) < ONE_HOUR){
+            return issuers[issuerToken][0];
         }
         
         let response;
@@ -19,7 +23,7 @@ const IssuerService = {
 
         }).then(res => {                
             response = res.data
-            issuers[issuerToken] = response;
+            issuers[issuerToken] = [response, time];
         }).catch(err => {
             console.log(err)
         })
