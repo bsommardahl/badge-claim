@@ -35,7 +35,11 @@ const sendEmail = async (data, authToken) => {
   const emailIssuer = responseIssuer.result[0].email;
 
   let response;
-  let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?email=${data.email}&evidence=${escape(replaceMulti(data.evidence,['@','-','_','/','.','*'],['%40','%2D','%5F','%2F','%2E','%2A']))}`;
+  let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?email=${data.email}&evidence=${escape(replaceMulti(
+    data.evidence,
+    ['@','-','_','/','.','*'],
+    ['%40','%2D','%5F','%2F','%2E','%2A']))
+  }`;
   let email = {
     from: data.email,
     to: getAwarderEmail(responseBadge.result[0]) || emailIssuer,

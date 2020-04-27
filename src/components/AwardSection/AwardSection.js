@@ -18,7 +18,12 @@ const AwardSection = props =>
                 <h1 className="h2 mb-3">Claiming</h1> 
                 <p>Email: {props.email}</p>
                 <p>Evidence:</p>
-                <p>{unescape(replaceMulti(props.evidence+"",['%40','%2D','%5F','%2F','%2E','%2A'],['@','-','_','/','.','*']))}</p>
+                <p className="justify">{
+                    unescape(replaceMulti(
+                    props.evidence+"",
+                    ['%40','%2D','%5F','%2F','%2E','%2A'],
+                    ['@','-','_','/','.','*']))
+                }</p>
                 <p>
                     <a href="" onClick={props.handleAwardBadge} className="btn btn-primary award-badge-button btn-lg">Award Badge</a>
                 </p>                
