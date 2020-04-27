@@ -9,6 +9,23 @@ let Mailgun = require('mailgun-js');
 const issuerService = require('../services/IssuerService');
 const badgeService = require('../services/BadgeService')
 
+function replaceMulti(str, findings, replacings) {
+  var newStr = str;
+  var regex;
+
+  for (var i = 0; i < findings.length; i++) {
+    if(findings[i] === '.'){
+      newStr = newStr.replace(/\./g, replacings[i]);
+    }else if(findings[i] === '*'){
+      newStr = newStr.replace(/\./g, replacings[i]);
+    }else{
+      regex = new RegExp(findings[i], "g");
+      newStr = newStr.replace(regex, replacings[i]);
+    }
+  }
+  return newStr;
+};
+
 const sendEmail = async (data, authToken) => {
   mailgun = new Mailgun({ apiKey: PRIVATE_KEY, domain: DOMAIN });
 
@@ -18,7 +35,7 @@ const sendEmail = async (data, authToken) => {
   const emailIssuer = responseIssuer.result[0].email;
 
   let response;
-  let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?email=${data.email}&evidence=${encodeURI(data.evidence)}`;
+  let awardBadgeUrl = `${APP_URL}/award/${data.badgeToken}?email=${data.email}&evidence=${escape(replaceMulti(data.evidence,['@','-','_','/','.','*'],['%40','%2D','%5F','%2F','%2E','%2A']))}`;
   let email = {
     from: data.email,
     to: getAwarderEmail(responseBadge.result[0]) || emailIssuer,
