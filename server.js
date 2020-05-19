@@ -12,7 +12,6 @@ const {
 const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
 
 const badgeController = require('./routes/controllers/BadgeController');
-const issuerController = require('./routes/controllers/IssuerController');
 const ClaimBadgeController = require('./routes/controllers/ClaimBadgeController');
 const awardBadgeController = require('./routes/controllers/AwardBadgeController');
 const wakeUpDyno = require('./utils/wakeUpDyno');
@@ -28,8 +27,6 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use('/api/badges', badgeController);
 
 app.use('/api/claim', ClaimBadgeController);
-
-app.use('/api/issuer', issuerController);
 
 app.use('/api/award', awardBadgeController);
 
@@ -56,30 +53,6 @@ app.post('/api/pathways/:pathwayId/subscribe', (req, res) => {
           Badgr Extras Extension`
   };
   
-  mailgun.messages().send(data, function (error, body) {
-    res.status(200).send('OK');
-  });
-})
-
-//API V2
-
-app.post('/api/v2/pathways/:pathwayId/subscribe', (req, res) => {
-  var data = {
-    from: req.body.from,
-    to: req.body.to,
-    subject: `Subscription to ${req.body.pathway} pathway`,
-    html: `Hello, 
-          <br><br>
-          
-          We have a request from ${req.body.from} to subscribe to the pathway:
-          <p>Name: ${req.body.pathway}</p>
-          <p>ID: ${req.params.pathwayId}</p>
-          <br><br>
-          Thanks,
-          <br><br>
-          Badgr Extras Extension`
-  };
-
   mailgun.messages().send(data, function (error, body) {
     res.status(200).send('OK');
   });
