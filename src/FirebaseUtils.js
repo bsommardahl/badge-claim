@@ -1,14 +1,20 @@
 import firebase from 'firebase'
 
+const {
+  REACT_APP_FB_APIKEY,REACT_APP_FB_AUTHDOM,REACT_APP_FB_DATABASE,
+  REACT_APP_FB_PROJECTID,REACT_APP_FB_STOREBUCKET,REACT_APP_FB_SENDER,
+  REACT_APP_FB_APPID,REACT_APP_FB_MEASURE
+} = require('./firebase.config');
+
 const config = {
-    apiKey: process.env.REACT_APP_FB_APIKEY,
-    authDomain: process.env.REACT_APP_FB_AUTHDOM,
-    databaseURL: process.env.REACT_APP_FB_DATABASE,
-    projectId: process.env.REACT_APP_FB_PROJECTID,
-    storageBucket: process.env.REACT_APP_FB_STOREBUCKET,
-    messagingSenderId: process.env.REACT_APP_FB_SENDER,
-    appId: process.env.REACT_APP_FB_APPID,
-    measurementId: process.env.REACT_APP_FB_MEASURE
+    apiKey: REACT_APP_FB_APIKEY,
+    authDomain: REACT_APP_FB_AUTHDOM,
+    databaseURL: REACT_APP_FB_DATABASE,
+    projectId: REACT_APP_FB_PROJECTID,
+    storageBucket: REACT_APP_FB_STOREBUCKET,
+    messagingSenderId: REACT_APP_FB_SENDER,
+    appId: REACT_APP_FB_APPID,
+    measurementId: REACT_APP_FB_MEASURE
 };
 
 var FOUR_HOURS = 60 * 60 * 1000 * 4;
