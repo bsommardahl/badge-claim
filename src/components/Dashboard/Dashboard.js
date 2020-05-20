@@ -68,7 +68,7 @@ class Dashboard extends Component{
     }
 
     componentDidMount(){
-        getPathways().on('value', (snapshot) =>
+        getPathways().once('value', (snapshot) =>
             this.setState({pathways: snapshot.val()})
         );
         getUserEmail().then((user) => this.setState({userEmail: user.email}))

@@ -18,7 +18,7 @@ class Pathway extends React.Component{
         const { match: {params}} = this.props
         const pathway = existPath(params.pathway_id);
         if(pathway == null) {
-            getPathways().on('value', (snapshot) =>
+            getPathways().once('value', (snapshot) =>
             this.setState({pathway:snapshot.val().filter(pathway => getID(pathway.completionBadge) === params.pathway_id)[0]})
             );
         }else{

@@ -12,13 +12,6 @@ import Dashboard from './components/Dashboard/Dashboard';
 class App extends Component {
   constructor(props){
     super(props);
-    this.viewPathway = this.viewPathway.bind(this);
-    this.state = {currentPathway: {}};
-  }
-
-  viewPathway = (pathway) => {
-    this.setState({currentPathway: pathway});
-    document.location.href = '/pathway';
   }
 
   render () {
@@ -30,8 +23,8 @@ class App extends Component {
               <Route path='/badgeid/:badge_token' component={RedirectBadgr}/>
               <Route path='/award/:badge_token' component={AwardContainer}/>
               <Route path='/login' component={LogIn}/>
-              <PrivateRoute viewPathway={this.viewPathway} component={Dashboard} path='/dashboard' exact />
-              <PrivateRoute currentPathway={this.state.currentPathway} component={Pathway} path="/pathway/:pathway_id" exact />
+              <PrivateRoute component={Dashboard} path='/dashboard' />
+              <PrivateRoute component={Pathway} path="/pathway/:pathway_id" />
             </Switch>
           </div>
         </Router>

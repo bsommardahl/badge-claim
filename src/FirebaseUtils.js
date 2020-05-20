@@ -32,7 +32,7 @@ const logOut = () => {
 }
 
 const isLogin = async() => {
-  app.auth().onAuthStateChanged(function(user) {
+  app.auth().onAuthStateChanged(function (user) {
     //console.log(user);
     //console.log(user != null);
     return user != null;

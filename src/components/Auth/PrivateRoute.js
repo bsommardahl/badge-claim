@@ -1,13 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { isLogin } from '../../FirebaseUtils';
+import { isLogin, getUserEmail } from '../../FirebaseUtils';
 
 const PrivateRoute = ({component: Component, ...rest}) => {
-    const login = isLogin();
+    const [user, setUser] = useState('');
+
+    useEffect(() => {
+        if (!user) {
+            getUser();
+        }
+    }, []);
+
+    const getUser = async () => {
+        const msg = await getUserEmail();
+        setUser(msg);
+    };
+
     return (
         <Route {...rest} render={props => (
-            login ?
-                <Component {...props} {...rest}/>
+            user != null ?
+                <Component {...props}/>
             : <Redirect to="/login" />
         )} />
     );
