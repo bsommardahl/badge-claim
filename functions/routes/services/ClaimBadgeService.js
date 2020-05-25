@@ -1,13 +1,13 @@
-const {
-  PRIVATE_KEY,
-  DOMAIN,
-  BADGE_OWNER_EMAIL,
-  APP_URL
-} = require('../../config');
+const envs = require('../../env.json');
+
+const APP_URL=envs.service.app_url
+const PRIVATE_KEY=envs.service.private_key
+const DOMAIN=envs.service.domain
+
 let Mailgun = require('mailgun-js');
 
-const issuerService = require('../services/IssuerService');
-const badgeService = require('../services/BadgeService')
+const issuerService = require('./IssuerService');
+const badgeService = require('./BadgeService')
 
 function replaceMulti(str, findings, replacings) {
   var newStr = str;

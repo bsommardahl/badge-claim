@@ -1,29 +1,26 @@
-const envs = require('./functions/config');
+const functions = require('firebase-functions');
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const envs = require('./env.json');
 
-const {
-  PRIVATE_KEY,
-  DOMAIN
-} = require('./functions/config');
-
-const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
-
-const badgeController = require('./functions/routes/controllers/BadgeController');
-const ClaimBadgeController = require('./functions/routes/controllers/ClaimBadgeController');
-const awardBadgeController = require('./functions/routes/controllers/AwardBadgeController');
-const issuerController = require('./functions/routes/controllers/IssuerController');
-const wakeUpDyno = require('./utils/wakeUpDyno');
-
-axios.defaults.baseURL = envs.BASE_URL;
+const PRIVATE_KEY=envs.service.private_key
+const DOMAIN=envs.service.domain
 
 const app = express();
 
+axios.defaults.baseURL = envs.service.base_url;
+
+const badgeController = require('./routes/controllers/BadgeController');
+const ClaimBadgeController = require('./routes/controllers/ClaimBadgeController');
+const awardBadgeController = require('./routes/controllers/AwardBadgeController');
+const issuerController = require('./routes/controllers/IssuerController');
+
+const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'build')));
 
 app.use('/api/badges', badgeController);
 
@@ -32,10 +29,6 @@ app.use('/api/claim', ClaimBadgeController);
 app.use('/api/issuer', issuerController);
 
 app.use('/api/award', awardBadgeController);
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 app.post('/api/pathways/:pathwayId/subscribe', (req, res) => {
   var data = {
@@ -85,14 +78,8 @@ app.post('/api/v2/pathways/:pathwayId/subscribe', (req, res) => {
   });
 })
 
-const PORT = process.env.PORT || 3001;
-
-app.get('/', (req, res) => {
-  res.send(`This is the badge claim api: ${process.env.PORT}`);
+app.get('/hi', (req, res) => {
+    res.send(`This is the badge claim api`);  
 });
 
-app.listen(PORT, () => {
-  console.log(`App listening to ${PORT}....`);
-  console.log('Press Ctrl+C to quit.');
-  wakeUpDyno(envs.BASE_URL);
-});
+exports.app = functions.https.onRequest(app)

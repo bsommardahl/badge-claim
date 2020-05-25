@@ -1,5 +1,8 @@
 const axios = require('axios')
-const { USER, PASSWORD } = require('../../config')
+const envs = require('../../env.json');
+
+const USER=envs.service.user
+const PASSWORD=envs.service.password
 
 const authenticate  = async(req, res, next) =>{
     const data = `username=${encodeURIComponent(USER)}&password=${encodeURIComponent(PASSWORD)}`;

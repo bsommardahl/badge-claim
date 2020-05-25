@@ -1,5 +1,7 @@
 const axios = require('axios');
-const { ISSUER_ID } = require('../../config');
+const envs = require('../../env.json');
+
+const ISSUER_ID = envs.service.issuer_id
 
 var ONE_HOUR = 60 * 60 * 1000;
 const badges = {};
@@ -22,7 +24,7 @@ const BadgeService = {
             method: 'get',
             url: `/badgeclasses/${badgeToken}`,
 
-        }).then(res => {                
+        }).then(res => {             
             response = res.data
             badges[badgeToken] = [response, time];
         }).catch(err => {
@@ -41,9 +43,9 @@ const BadgeService = {
             method: 'get',
             url: `/issuers/${ISSUER_ID}/badgeclasses`,
 
-        }).then(res => {                
+        }).then(res => {                   
             response = res.data
-        }).catch(err => {
+        }).catch(err => {  
             console.log(err)
         })
 
