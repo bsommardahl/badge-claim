@@ -9,7 +9,7 @@ deploy_firebase:
       - npm install
       - npm install -g firebase-tools
       - firebase --token ${FIREBASE_TOKEN} functions:config:get > functions/env.json
-      - npm run prestart
+      - CI="" npm run prestart
       - cd functions/
       - npm install
       - cd ..
