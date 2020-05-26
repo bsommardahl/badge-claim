@@ -14,4 +14,5 @@ deploy_firebase:
       - npm install
       - cd ..
       - echo "Deploying..."
-      - firebase --token ${FIREBASE_TOKEN} deploy
+      - firebase use --token $FIREBASE_TOKEN default
+      - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
