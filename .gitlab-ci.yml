@@ -7,7 +7,7 @@ deploy_firebase:
   script:
       - npm install
       - npm install -g firebase-tools
-      - firebase functions:config:get > functions/env.json
+      - firebase functions:config:get
       - npm run prestart
       - cd functions/
       - npm install
