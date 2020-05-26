@@ -8,8 +8,6 @@ import './Dashboard.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
 
-const goto = (path) => {document.location.href = path;}
-
 const card = (pathway, userEmail, view) => {
     return (
         <div class="col-sm-6">

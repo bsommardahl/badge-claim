@@ -10,10 +10,6 @@ import LogIn from './components/Auth/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 
 class App extends Component {
-  constructor(props){
-    super(props);
-  }
-
   render () {
       return (
         <Router>
