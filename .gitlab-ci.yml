@@ -15,4 +15,4 @@ deploy_firebase:
       - cd ..
       - echo "Deploying..."
       - firebase use --token $FIREBASE_TOKEN default
-      - firebase --token $FIREBASE_TOKEN deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive
+      - firebase --token $FIREBASE_TOKEN deploy --non-interactive
