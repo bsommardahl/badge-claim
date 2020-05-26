@@ -14,5 +14,5 @@ deploy_firebase:
       - npm install
       - cd ..
       - echo "Deploying..."
-      - firebase use --token $FIREBASE_TOKEN default
-      - firebase --token $FIREBASE_TOKEN deploy --non-interactive
+      - firebase use --token ${FIREBASE_TOKEN} default
+      - firebase --token ${FIREBASE_TOKEN} deploy --non-interactive
