@@ -4,12 +4,13 @@ stages:
 deploy_firebase:
   stage: deploy
   image: node:latest
-  before_script:
+  script:
       - npm install
       - npm install -g firebase-tools
+      - firebase functions:config:get > functions/env.json
+      - npm run prestart
       - cd functions/
       - npm install
-  script:
+      - cd ..
       - echo "Deploying..."
-      - firebase functions:config:get > functions/env.json
       - firebase deploy --token ${FIREBASE_TOKEN}
