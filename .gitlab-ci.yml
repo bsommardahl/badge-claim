@@ -7,6 +7,7 @@ deploy_firebase:
   script:
       - npm install
       - npm install -g firebase-tools
+      - firebase --token $FIREBASE_TOKEN functions:config:set service.user="$USER" service.password="$PASSWORD" service.app_url="$APP_URL" service.issuer_id="$ISSUER_ID" service.base_url="$BASE_URL" service.private_key="$PRIVATE_KEY" service.public_key="$PUBLIC_KEY" service.domain="$DOMAIN" service.badge_owner_email="$BADGE_OWNER_EMAIL"
       - firebase --token $FIREBASE_TOKEN functions:config:get > functions/env.json
       - CI="" npm run prestart
       - cd functions/
