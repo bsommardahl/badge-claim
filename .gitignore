@@ -12,6 +12,7 @@ node_modules
 
 #Env Vars
 .env
+env.json
 
 # production
 build
