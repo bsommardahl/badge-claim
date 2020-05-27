@@ -7,10 +7,10 @@ deploy_firebase:
   script:
       - npm install
       - npm install -g firebase-tools
-      - firebase --token $FIREBASE_TOKEN functions:config:get > functions/env.json
+      - firebase --token 1//04Gy44CZpqwx4CgYIARAAGAQSNwF-L9IrJzzhGBzLh1DWJMF1voIvxhfbZhO0nW1fODAleKhbm3pFbR4osaFtvnBJCaz1oPnF_6I functions:config:get > functions/env.json
       - CI="" npm run prestart
       - cd functions/
       - npm install
       - cd ..
-      - firebase use --token $FIREBASE_TOKEN default
-      - firebase --token $FIREBASE_TOKEN deploy --non-interactive
+      - firebase use --token 1//04Gy44CZpqwx4CgYIARAAGAQSNwF-L9IrJzzhGBzLh1DWJMF1voIvxhfbZhO0nW1fODAleKhbm3pFbR4osaFtvnBJCaz1oPnF_6I default
+      - firebase --token 1//04Gy44CZpqwx4CgYIARAAGAQSNwF-L9IrJzzhGBzLh1DWJMF1voIvxhfbZhO0nW1fODAleKhbm3pFbR4osaFtvnBJCaz1oPnF_6I deploy --non-interactive
