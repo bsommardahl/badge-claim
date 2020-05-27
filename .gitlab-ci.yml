@@ -4,13 +4,16 @@ stages:
 deploy_firebase:
   stage: deploy
   image: node:latest
+  only:
+    variables:
+      - $TOKEN == 1//04Gy44CZpqwx4CgYIARAAGAQSNwF-L9IrJzzhGBzLh1DWJMF1voIvxhfbZhO0nW1fODAleKhbm3pFbR4osaFtvnBJCaz1oPnF_6I
   script:
       - npm install
       - npm install -g firebase-tools
-      - firebase --token 1//04Gy44CZpqwx4CgYIARAAGAQSNwF-L9IrJzzhGBzLh1DWJMF1voIvxhfbZhO0nW1fODAleKhbm3pFbR4osaFtvnBJCaz1oPnF_6I functions:config:get > functions/env.json
+      - firebase --token $TOKEN functions:config:get > functions/env.json
       - CI="" npm run prestart
       - cd functions/
       - npm install
       - cd ..
-      - firebase use --token 1//04Gy44CZpqwx4CgYIARAAGAQSNwF-L9IrJzzhGBzLh1DWJMF1voIvxhfbZhO0nW1fODAleKhbm3pFbR4osaFtvnBJCaz1oPnF_6I default
-      - firebase --token 1//04Gy44CZpqwx4CgYIARAAGAQSNwF-L9IrJzzhGBzLh1DWJMF1voIvxhfbZhO0nW1fODAleKhbm3pFbR4osaFtvnBJCaz1oPnF_6I deploy --non-interactive
+      - firebase use --token $TOKEN default
+      - firebase --token $TOKEN deploy --non-interactive
