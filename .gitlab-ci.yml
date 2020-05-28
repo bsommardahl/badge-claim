@@ -15,3 +15,5 @@ deploy_firebase:
       - cd ..
       - firebase use --token $FIREBASE_TOKEN default
       - firebase --token $FIREBASE_TOKEN deploy --non-interactive
+  only:
+      - master
