@@ -69,3 +69,5 @@ app.listen(PORT, () => {
   console.log('Press Ctrl+C to quit.');
   wakeUpDyno(envs.BASE_URL);
 });
+
+
