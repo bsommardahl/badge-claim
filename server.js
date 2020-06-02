@@ -1,13 +1,13 @@
-const envs = require('./functions/config');
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const envs = require('./functions/env.json');
 
-const {
-  PRIVATE_KEY,
-  DOMAIN
-} = require('./functions/config');
+const PRIVATE_KEY=envs.service.private_key
+const DOMAIN=envs.service.domain
+
+axios.defaults.baseURL = envs.service.base_url;
 
 const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
 
@@ -15,9 +15,8 @@ const badgeController = require('./functions/routes/controllers/BadgeController'
 const ClaimBadgeController = require('./functions/routes/controllers/ClaimBadgeController');
 const awardBadgeController = require('./functions/routes/controllers/AwardBadgeController');
 const issuerController = require('./functions/routes/controllers/IssuerController');
-const wakeUpDyno = require('./utils/wakeUpDyno');
 
-axios.defaults.baseURL = envs.BASE_URL;
+axios.defaults.baseURL = "https://api.badgr.io/v2";
 
 const app = express();
 
@@ -94,5 +93,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`App listening to ${PORT}....`);
   console.log('Press Ctrl+C to quit.');
-  wakeUpDyno(envs.BASE_URL);
 });
