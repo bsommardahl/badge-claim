@@ -1,0 +1,41 @@
+{
+  "hosting": {
+    "public": "build",
+    "rewrites": [{
+      "source": "/hi",
+      "function": "app"
+    },{
+      "source": "/api/*",
+      "function": "app"
+    },{
+      "source": "/api/pathways/*/*",
+      "function": "app"
+    },{
+      "source": "/api/v2/pathways/*/*",
+      "function": "app"
+    },{
+      "source": "/api/*/*",
+      "function": "app"
+    },{
+      "source": "/login",
+      "destination": "/index.html"
+    },{
+      "source": "/badgeid/*",
+      "destination": "/index.html"
+    },{
+      "source": "/award/*",
+      "destination": "/index.html"
+    },{
+      "source": "/dashboard",
+      "destination": "/index.html"
+    },{
+      "source": "/pathway/*",
+      "destination": "/index.html"
+    }],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

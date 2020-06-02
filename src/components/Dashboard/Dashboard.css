@@ -1,0 +1,15 @@
+.dashboard{
+    margin-top: 5px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.card{
+    margin-bottom: 20px;
+}
+
+.white{
+    color: white;
+}
