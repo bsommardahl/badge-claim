@@ -42,7 +42,6 @@ const subscribe = async(name, from, id) =>{
     await axios
         .get(`/badges/${id}`)
         .then(res => {
-            console.log(res.data.result[0].issuer);
             issuer = res.data.result[0].issuer;
         })
         .catch(err => {
@@ -50,7 +49,6 @@ const subscribe = async(name, from, id) =>{
         });
     await axios.get(`/issuer/${issuer}`)
         .then(res => {
-            console.log("issuer",res.data.result[0].email);
             to = res.data.result[0].email;
         })
         .catch(err => {

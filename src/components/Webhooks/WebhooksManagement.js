@@ -1,15 +1,12 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import Toast from 'react-bootstrap/Toast';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
-import { Link } from "react-router-dom";
 import Cookies from 'universal-cookie';
 import {addWebhook, app, deleteWebhook, getUserEmail} from '../../FirebaseUtils'
 import {WebhookFire} from './WebhookEngine'
-import { tree } from 'd3';
 
 const cookies = new Cookies();
 
@@ -24,7 +21,7 @@ const name2event = (key) =>{
         case "Pathway Join Requested":
             return "pathway_join_requested"
     }
-    return "Unknow"
+    return "Unknown"
 }
 
 const event2name = (key) =>{
@@ -38,7 +35,7 @@ const event2name = (key) =>{
         case "pathway_join_requested":
             return "Pathway Join Requested"
     }
-    return "Unknow"
+    return "Unknown"
 }
 
 class WebhooksManagement extends React.Component{
@@ -46,8 +43,7 @@ class WebhooksManagement extends React.Component{
         super(props)
         this.state = {
             show: false, 
-            showConfirm: false, 
-            userEmail: "",
+            showConfirm: false,
             id: "", 
             name: "", 
             url: "", 
@@ -90,7 +86,6 @@ class WebhooksManagement extends React.Component{
     }
 
     handleClose(){
-        WebhookFire("2mE3WXrJT1KEdqousLHhFw","pathway_join_requested",{data: "hello", data2: "world!!1"});
         this.setState({show: false})
         this.setState({editing: false})
     }
@@ -127,7 +122,6 @@ class WebhooksManagement extends React.Component{
         const data = `username=${encodeURIComponent(this.state.email)}&password=${encodeURIComponent(this.state.password)}`;
         const cookie = cookies.get('issuer');
         if(cookie && cookie === this.state.id){
-            console.log("cookie!!!!!");
             addWebhook(this.state);
             this.setState({editing: false})
             this.setState({name :""})
@@ -135,7 +129,6 @@ class WebhooksManagement extends React.Component{
             this.setState({url :""})
             this.setState({id :""})
             this.setState({secret :""})
-            this.setState({email :""})
             this.setState({password :""})
             this.setState({showConfirm: false})
             this.setState({show: false})
@@ -157,32 +150,32 @@ class WebhooksManagement extends React.Component{
                     url: `https://api.badgr.io/v2/issuers`,
         
                 }).then(res1 => {
-                    console.log(this.state, res1.data.result)                
+                    //console.log(this.state, res1.data.result)                
                     const len = res1.data.result.filter(r => r.entityId === this.state.id).length;
-                    console.log("longitud", len)                
+                    //console.log("longitud", len)                
 
                     if(len > 0)
                     {
                         addWebhook(this.state);
-                        console.log("longitud", len)
+                        //console.log("longitud", len)
                         let d = new Date();
                         d.setTime(d.getTime() + (9*60*1000));
-                        console.log("longitud", len)
+                        //console.log("longitud", len);
                         cookies.set("issuer", this.state.id, {path: "/webhooks", expires: d});
-                        console.log("longitud", len)
-                        this.setState({editing: false})
-                        this.setState({name :""})
-                        this.setState({event :"Badge Awarded"})
-                        this.setState({url :""})
-                        this.setState({id :""})
-                        this.setState({secret :""})
-                        this.setState({email :""})
-                        this.setState({password :""})
-                        this.setState({showConfirm: false})
-                        this.setState({show: false})
+                        //console.log("longitud", len);
+
+                        this.setState({editing: false});
+                        this.setState({name :""});
+                        this.setState({event :"Badge Awarded"});
+                        this.setState({url :""});
+                        this.setState({id :""});
+                        this.setState({secret :""});
+                        this.setState({password :""});
+                        this.setState({showConfirm: false});
+                        this.setState({show: false});
                     }
                 }).catch(err => {
-                    console.log("ISSUERS")
+                    console.log(err)
                 })
             }).catch(err => {
                 this.setState({showError: true})
@@ -192,7 +185,7 @@ class WebhooksManagement extends React.Component{
 
     editWebhook(key, data){
         this.setState({ id: key.split(":")[0]})
-        this.setState({ name: key.split(":")})
+        this.setState({ name: key.split(":")[1]})
         this.setState({ url: data.url})
         this.setState({ event: data.event})
         this.setState({ secret: data.secret})
@@ -202,7 +195,7 @@ class WebhooksManagement extends React.Component{
 
     componentDidMount(){
         getUserEmail().then((user) => {
-            this.setState({userEmail: user.email})
+            this.setState({email: user.email})
             app.database().ref(`webhooks/`).orderByChild("owner").equalTo(user.email).on('value', (snapshot) =>
             {this.setState({
                 webhooks: snapshot.val()
@@ -306,7 +299,7 @@ class WebhooksManagement extends React.Component{
                             <Form>
                                 <Form.Group controlId="formBasicEmail">
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" value={this.state.userEmail} placeholder="Enter email" onChange={this.onChangeEmail}/>
+                                    <Form.Control type="email" placeholder="Enter email" onChange={this.onChangeEmail}/>
                                 </Form.Group>
                                 <Form.Group controlId="formBasicPassword">
                                     <Form.Label>Password</Form.Label>

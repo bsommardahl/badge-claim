@@ -7,6 +7,8 @@ import BadgeContent from '../components/BadgeContent/BadgeContent';
 import AwardSection from '../components/AwardSection/AwardSection';
 import Loading from "react-fullscreen-loading";
 import {ToastsContainer, ToastsStore} from 'react-toasts';
+import {WebhookFire} from '../components/Webhooks/WebhookEngine'
+
 
 class AwardContainer extends Component {
     constructor(props) {
@@ -33,6 +35,7 @@ class AwardContainer extends Component {
                 }
             )
             .then(res => {
+                WebhookFire("2mE3WXrJT1KEdqousLHhFw","badge_awarded",{data: "payload"});
                 ToastsStore.success('Badge has been awarded!')
                 this.setState({
                     display: 'd-none'

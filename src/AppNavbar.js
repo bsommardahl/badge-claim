@@ -11,19 +11,18 @@ class AppNavbar extends Component {
     }
 
     componentDidMount(){
-        getUserEmail().then((user) => {this.setState({user: user.email}); console.log(user)})
+        getUserEmail().then((user) => {this.setState({user: user.email});})
     }
 
     render () {
         const isLogged = this.state.user === "";
-        console.log("email",this.state.user, isLogged);
         return (
             <Navbar bg="dark" variant="dark" expand="lg">
-                <Navbar.Brand href="#home">Badge Claim</Navbar.Brand>
+                <Navbar.Brand href="/home">Badge Claim</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link href="/">Home</Nav.Link>
+                        <Nav.Link href="/">Badges</Nav.Link>
                         <Nav.Link href="/dashboard">Dashboard</Nav.Link>
                         <Nav.Link href="/webhooks">Webhooks</Nav.Link>
                     </Nav>

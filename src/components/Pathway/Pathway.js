@@ -28,7 +28,7 @@ class Pathway extends React.Component{
     componentDidUpdate(prevProps, prevState) {
         const { match: {params}} = this.props
         if (prevState.pathway !== this.state.pathway) {
-           console.log('UPDATE', this.state);
+           //console.log('UPDATE', this.state);
            createPathway(this.state.pathway, this.state.userEmail, this.state.awarded)
            if(existPath(params.pathway_id) == null) {
                savePath(params.pathway_id, this.state.pathway)
@@ -46,7 +46,6 @@ class Pathway extends React.Component{
                     <div 
                         className="pathway-div"
                         style={{textAlign: "center", overflow: "auto", height: "500px", width: "80%"}}
-                        onLoad={() => console.log('LOADED')}
                     >
                         <div class="progress-bar">
                             <div class="progress-bar-value"></div>
