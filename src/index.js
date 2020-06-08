@@ -6,7 +6,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import axios from 'axios';
 
-axios.defaults.baseURL = process.env.API_URL || '/api'
+axios.defaults.baseURL = "http://localhost:3001/api" || '/api'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

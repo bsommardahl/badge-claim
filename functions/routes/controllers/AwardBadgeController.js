@@ -11,7 +11,28 @@ router.post(
   asyncMiddleware(authenticate),
   asyncMiddleware(async (req, res, next) => {
     const authToken = req.authData.access_token;
-    const response = await awardBadgeService(req.body, authToken);
+    const response = await awardBadgeService.awardBadge(req.body, authToken);
+    res.send(response);
+  })
+);
+
+router.get(
+  '/',
+  asyncMiddleware(authenticate),
+  asyncMiddleware(async (req, res, next) => {
+    const authToken = req.authData.access_token;
+    const response = await awardBadgeService.listAwards(req.body, authToken);
+    res.send(response);
+  })
+);
+
+router.get(
+  '/user',
+  asyncMiddleware(authenticate),
+  asyncMiddleware(async (req, res, next) => {
+    const authToken = req.authData.access_token;
+    const awards = await awardBadgeService.listAwards(req.body, authToken);
+    const response = await awardBadgeService.awardsByUser(req.body, awards.result);
     res.send(response);
   })
 );

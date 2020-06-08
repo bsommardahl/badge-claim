@@ -13,3 +13,17 @@
 .white{
     color: white;
 }
+
+#myProgress {
+    width: 100%;
+    background-color: #ddd;
+  }
+  
+#myBar {
+    width: 0%;
+    height: 15px;
+    margin-top: 10%;
+    font-size: 10px;
+    text-align: center;
+    background-color: #6cc7be;
+}
