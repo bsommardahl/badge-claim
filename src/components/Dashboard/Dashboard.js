@@ -154,7 +154,7 @@ class Dashboard extends Component{
     componentDidMount(){
         getPathways().once('value', (snapshot) =>
             {
-                this.setState({pathways: snapshot.val()});
+                this.setState({pathways: Object.values(snapshot.val())});
                 getUserEmail().then((user) => {
                     this.setState({userEmail: user.email})
                     this.getAwards(this.state.pathways, user.email);
@@ -169,9 +169,8 @@ class Dashboard extends Component{
             <div>
                 <div className="badge-summary jumbotron">
                 <h1>Explore</h1>
-                <button className="btn btn-primary" onClick={() => logOut()}>Sign Out</button>
                 </div>
-                <div className="dashboard row">
+                <div className="row body-app">
                     {this.state.pathways.map((pathway) => card(pathway, this.state.userEmail, this.props.viewPathway, this.state))}
                 </div>
             </div>
