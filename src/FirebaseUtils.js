@@ -21,7 +21,7 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 const logIn = () => {
   app.auth().signInWithPopup(googleProvider).then(result => 
   {
-    console.log(result);
+    //console.log(result);
     document.location.href = '/dashboard';
   });
 }
@@ -74,4 +74,18 @@ const savePath = (pathwayID, pathway) => {
   PATHWAYS[pathwayID] = [pathway, time];
 }
 
-export {app, googleProvider, isLogin, logIn, logOut, getID, existPath, savePath};
+export const getWebhooks = () => {
+  const promiseData = app.database().ref('/webhooks');
+  return promiseData;
+}
+
+const addWebhook=(data)=>{
+  app.database().ref(`webhooks/${data.id}:${data.name}`)
+    .set({"url":  data.url, "event":  data.event, "secret":  data.secret, "owner": data.email})
+}
+
+const deleteWebhook=(value)=>{
+  app.database().ref(`webhooks/${value}`).remove()
+}
+
+export {app, googleProvider, isLogin, logIn, logOut, getID, existPath, savePath, addWebhook, deleteWebhook};

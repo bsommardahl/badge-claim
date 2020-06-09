@@ -19,13 +19,15 @@
     "node-fetch": "^2.6.0",
     "query-string": "^6.12.1",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-fullscreen-loading": "0.0.4",
     "react-markdown": "^4.3.1",
     "react-modal": "^3.11.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
-    "react-toasts": "^3.0.6"
+    "react-toasts": "^3.0.6",
+    "universal-cookie": "^4.0.3"
   },
   "scripts": {
     "prestart": "react-scripts build",

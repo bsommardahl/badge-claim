@@ -17,7 +17,7 @@ class Pathway extends React.Component{
         const pathway = existPath(params.pathway_id);
         if(pathway == null) {
             getPathways().once('value', (snapshot) =>{
-            this.setState({pathway:snapshot.val().filter(pathway => getID(pathway.completionBadge) === params.pathway_id)[0]})
+            this.setState({pathway:Object.values(snapshot.val()).filter(pathway => getID(pathway.completionBadge) === params.pathway_id)[0]})
         });
         }else{
             this.setState({pathway: pathway})
@@ -28,7 +28,7 @@ class Pathway extends React.Component{
     componentDidUpdate(prevProps, prevState) {
         const { match: {params}} = this.props
         if (prevState.pathway !== this.state.pathway) {
-           console.log('UPDATE', this.state);
+           //console.log('UPDATE', this.state);
            createPathway(this.state.pathway, this.state.userEmail, this.state.awarded)
            if(existPath(params.pathway_id) == null) {
                savePath(params.pathway_id, this.state.pathway)
@@ -42,12 +42,10 @@ class Pathway extends React.Component{
                 <div>
                     <div className="badge-summary jumbotron">
                         <h1></h1>
-                        <Link className="btn btn-primary" to="/dashboard">Dashboard</Link>
                     </div>
                     <div 
                         className="pathway-div"
                         style={{textAlign: "center", overflow: "auto", height: "500px", width: "80%"}}
-                        onLoad={() => console.log('LOADED')}
                     >
                         <div class="progress-bar">
                             <div class="progress-bar-value"></div>

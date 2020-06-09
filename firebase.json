@@ -29,6 +29,9 @@
       "source": "/dashboard",
       "destination": "/index.html"
     },{
+      "source": "/webhooks",
+      "destination": "/index.html"
+    },{
       "source": "/pathway/*",
       "destination": "/index.html"
     }],

@@ -2,8 +2,19 @@
   text-align: center;
 }
 
+.badge-summary{
+  text-align: center;
+}
+
 .App-logo {
   height: 40vmin;
+}
+
+.body-app{
+  margin-top: 5px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 5px;
 }
 
 .App-header {
@@ -19,4 +30,9 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+#confirmation{
+  width: "44%" !important;
+  margin-top: "19%" !important;
 }

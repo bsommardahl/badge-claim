@@ -42,7 +42,6 @@ const subscribe = async(name, from, id) =>{
     await axios
         .get(`/badges/${id}`)
         .then(res => {
-            console.log(res.data.result[0].issuer);
             issuer = res.data.result[0].issuer;
         })
         .catch(err => {
@@ -50,7 +49,6 @@ const subscribe = async(name, from, id) =>{
         });
     await axios.get(`/issuer/${issuer}`)
         .then(res => {
-            console.log("issuer",res.data.result[0].email);
             to = res.data.result[0].email;
         })
         .catch(err => {
@@ -62,7 +60,7 @@ const subscribe = async(name, from, id) =>{
             pathway: name
           })
           .then(function (response) {
-            console.log(response);
+            console.log("SENT");
           })
           .catch(function (error) {
             console.log(error);
@@ -83,7 +81,6 @@ const getAwarded = async(email) =>{
     })
     .then(res => {
       resp = res.data;
-      console.log(resp)
     })
     .catch(err => {
       console.log(err);
@@ -125,8 +122,8 @@ class Dashboard extends Component{
             badgesCount[id] = this.badges;
         }
 
-        console.log(progress);
-        console.log(badgesCount);
+        //console.log(progress);
+        //console.log(badgesCount);
         this.setState({progress: progress})
         this.setState({badgesCount: badgesCount})
     }
@@ -152,9 +149,9 @@ class Dashboard extends Component{
     }
 
     componentDidMount(){
-        getPathways().once('value', (snapshot) =>
+        getPathways().on('value', (snapshot) =>
             {
-                this.setState({pathways: snapshot.val()});
+                this.setState({pathways: Object.values(snapshot.val())});
                 getUserEmail().then((user) => {
                     this.setState({userEmail: user.email})
                     this.getAwards(this.state.pathways, user.email);
@@ -169,9 +166,8 @@ class Dashboard extends Component{
             <div>
                 <div className="badge-summary jumbotron">
                 <h1>Explore</h1>
-                <button className="btn btn-primary" onClick={() => logOut()}>Sign Out</button>
                 </div>
-                <div className="dashboard row">
+                <div className="row body-app">
                     {this.state.pathways.map((pathway) => card(pathway, this.state.userEmail, this.props.viewPathway, this.state))}
                 </div>
             </div>

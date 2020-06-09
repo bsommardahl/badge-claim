@@ -4,7 +4,7 @@ import BadgeListContainer from './BadgeListContainer'
 class LandingContainer extends Component {
 	render() {
 		return (
-			<BadgeListContainer/>			
+			<div className="App"><BadgeListContainer/></div>			
 		)
 	}
 }

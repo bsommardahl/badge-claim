@@ -8,12 +8,15 @@ import Pathway from './components/Pathway/Pathway';
 import PrivateRoute from './components/Auth/PrivateRoute'
 import LogIn from './components/Auth/Login';
 import Dashboard from './components/Dashboard/Dashboard';
+import WebhooksManagement from './components/Webhooks/WebhooksManagement';
+import AppNavbar from './AppNavbar';
 
 class App extends Component {
   render () {
       return (
         <Router>
-          <div className="App">
+          <div>
+            <AppNavbar/>
             <Switch>
               <Route exact path='/' component={LandingContainer} />
               <Route path='/badgeid/:badge_token' component={RedirectBadgr}/>
@@ -21,6 +24,7 @@ class App extends Component {
               <Route path='/login' component={LogIn}/>
               <PrivateRoute component={Dashboard} path='/dashboard' />
               <PrivateRoute component={Pathway} path="/pathway/:pathway_id" />
+              <PrivateRoute component={WebhooksManagement} path='/webhooks' />
             </Switch>
           </div>
         </Router>
