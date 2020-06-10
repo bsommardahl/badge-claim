@@ -1,29 +1,31 @@
 import React, { Component } from 'react';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 import {
     Link
   } from "react-router-dom";
 import axios from 'axios';
-import {getPathways, getUserEmail, logOut} from '../../FirebaseUtils'
+import {getPathways, getUserEmail, joinPathway} from '../../FirebaseUtils'
 import './Dashboard.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
 
-const card = (pathway, userEmail, view, state) => {
+const card = (pathway, userEmail, subscribed, state) => {
     var badgeID = getID(pathway.completionBadge);
     var percent = state.progress[badgeID] 
         /state.badgesCount[badgeID] * 100;
     return (
         <div class="col-sm-6">
-            <div className="card">
+            <div className="card" style={{marginTop: "15px"}}>
                 <h5 className="card-header">{pathway.title}</h5>
                 <div className="card-body">
                     <div>
-                        <button onClick={() => subscribe(pathway.title, userEmail, getID(pathway.completionBadge))} 
+                        {!subscribed ? <button onClick={() => joinPathway(pathway, userEmail)} 
                             className="btn btn-primary"
                         >
                             Request Access
-                        </button>
-                        <Link style={{marginLeft: "10%"}} className="btn btn-primary" to={`/pathway/${badgeID}`}>View</Link>
+                        </button> : <div/>}
+                        <Link style={{marginLeft: !subscribed ? "20px" : ""}} className="btn btn-primary" to={`/pathway/${badgeID}`}>View</Link>
                     </div>
                     <div id="myProgress">
                         <div id="myBar" 
@@ -35,7 +37,7 @@ const card = (pathway, userEmail, view, state) => {
     )
 }
 
-const subscribe = async(name, from, id) =>{
+/*const subscribe = async(name, from, id) =>{
     var to = "";
     var issuer = "";
 
@@ -65,7 +67,9 @@ const subscribe = async(name, from, id) =>{
           .catch(function (error) {
             console.log(error);
           });
-}
+}*/
+
+
 
 const getAwarded = async(email) =>{
     var resp = null;
@@ -81,6 +85,7 @@ const getAwarded = async(email) =>{
     })
     .then(res => {
       resp = res.data;
+      console.log(res.data);
     })
     .catch(err => {
       console.log(err);
@@ -99,7 +104,11 @@ class Dashboard extends Component{
         super(props);
         this.getAwards = this.getAwards.bind(this);
         this.getAwards_aux = this.getAwards_aux.bind(this);
-        this.state = {pathways: [], userEmail: "", progress: {}, badgesCount: {}};
+        this.state = {pathways: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
+    }
+
+    joinPathway = () => {
+
     }
 
     getAwards = async(obj, email) => {
@@ -155,8 +164,11 @@ class Dashboard extends Component{
                 getUserEmail().then((user) => {
                     this.setState({userEmail: user.email})
                     this.getAwards(this.state.pathways, user.email);
+                    this.setState({my_pathways:
+                        this.state.pathways.filter(
+                            path => path.users && path.users.includes(user.email)
+                        )})
                 })
-               
             }
         );
     }
@@ -167,8 +179,19 @@ class Dashboard extends Component{
                 <div className="badge-summary jumbotron">
                 <h1>Explore</h1>
                 </div>
-                <div className="row body-app">
-                    {this.state.pathways.map((pathway) => card(pathway, this.state.userEmail, this.props.viewPathway, this.state))}
+                <div className="body-app">
+                    <Tabs style={{width: "100%"}}>
+                        <Tab eventKey="available" title="Available">
+                            <div className="row">
+                                {this.state.pathways.map((pathway) => card(pathway, this.state.userEmail, false, this.state))}
+                            </div>
+                        </Tab>
+                        <Tab eventKey="my_pathways" title="My Pathways">
+                            <div className="row">
+                                {this.state.my_pathways.map((pathway) => card(pathway, this.state.userEmail, true, this.state))}
+                            </div>
+                        </Tab>
+                    </Tabs>
                 </div>
             </div>
         )
