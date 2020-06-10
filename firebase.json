@@ -26,7 +26,7 @@
       "source": "/award/*",
       "destination": "/index.html"
     },{
-      "source": "/dashboard",
+      "source": "/explore",
       "destination": "/index.html"
     },{
       "source": "/webhooks",

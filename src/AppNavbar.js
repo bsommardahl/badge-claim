@@ -23,7 +23,7 @@ class AppNavbar extends Component {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
                         <Nav.Link href="/">Badges</Nav.Link>
-                        <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                        <Nav.Link href="/explore">Explore</Nav.Link>
                         <Nav.Link href="/webhooks">Webhooks</Nav.Link>
                     </Nav>
                     <div>{isLogged ? 

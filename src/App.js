@@ -22,7 +22,7 @@ class App extends Component {
               <Route path='/badgeid/:badge_token' component={RedirectBadgr}/>
               <Route path='/award/:badge_token' component={AwardContainer}/>
               <Route path='/login' component={LogIn}/>
-              <PrivateRoute component={Dashboard} path='/dashboard' />
+              <PrivateRoute component={Dashboard} path='/explore' />
               <PrivateRoute component={Pathway} path="/pathway/:pathway_id" />
               <PrivateRoute component={WebhooksManagement} path='/webhooks' />
             </Switch>

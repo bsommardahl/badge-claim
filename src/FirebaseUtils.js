@@ -22,7 +22,7 @@ const logIn = () => {
   app.auth().signInWithPopup(googleProvider).then(result => 
   {
     //console.log(result);
-    document.location.href = '/dashboard';
+    document.location.href = '/explore';
   });
 }
 
@@ -44,6 +44,13 @@ const isLogin = async() => {
 export const getPathways = () => {
   const promiseData = app.database().ref('/pathways');
   return promiseData;
+}
+
+export const joinPathway = (pathway, usermail) => {
+  const promiseData = app.database()
+      .ref(`/pathways/${pathway.completionBadge?getID(pathway.completionBadge):getID(pathway.requiredBadge)}/users`)
+      .set(pathway.users ? pathway.users.concat([usermail]) : [usermail]);
+  return promiseData
 }
 
 export const getUserEmail = () => {
