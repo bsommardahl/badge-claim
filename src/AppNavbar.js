@@ -25,6 +25,7 @@ class AppNavbar extends Component {
                         <Nav.Link href="/">Badges</Nav.Link>
                         <Nav.Link href="/explore">Explore</Nav.Link>
                         <Nav.Link href="/webhooks">Webhooks</Nav.Link>
+                        <Nav.Link href="/creating">Creation</Nav.Link>
                     </Nav>
                     <div>{isLogged ? 
                         <Button variant="outline-info" onClick={() => logIn()}>Log In</Button> :  
