@@ -34,7 +34,7 @@ class Pathway extends React.Component{
                savePath(params.pathway_id, this.state.pathway)
            }
         }
-      }
+    }
 
     render() {
         return (

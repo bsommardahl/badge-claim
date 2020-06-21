@@ -2,9 +2,6 @@
   "hosting": {
     "public": "build",
     "rewrites": [{
-      "source": "/hi",
-      "function": "app"
-    },{
       "source": "/api/*",
       "function": "app"
     },{
