@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import {
-    Link
-  } from "react-router-dom";
-import {getDrafts, getID, deleteDraft} from '../../FirebaseUtils'
+import { Link } from "react-router-dom";
+import {getDrafts, getID, deleteDraft, getUserEmail, getAdmins} from '../../FirebaseUtils'
 import '../Dashboard/Dashboard.css'
 
 const card = (pathway, subscribed, state) => {
@@ -30,6 +28,13 @@ class Creations extends Component{
     }
 
     componentDidMount(){
+        getUserEmail().then((user) => getAdmins().on('value', (snapshot) => {
+            if(!snapshot.val().includes(user.email)){
+                alert("You don't have permission to be here")
+                document.location.href = '/explore';
+            }
+        }))
+
         getDrafts().on('value', (snapshot) =>
             {
                 this.setState({pathways: Object.values(snapshot.val())});

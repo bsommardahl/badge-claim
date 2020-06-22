@@ -39,6 +39,11 @@ const isLogin = async() => {
   });
 }
 
+export const getAdmins = () => {
+  const promiseData = app.database().ref('/admins');
+  return promiseData;
+}
+
 //DATABASE
 
 export const getPathways = () => {

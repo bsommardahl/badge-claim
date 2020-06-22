@@ -1,7 +1,7 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form';
 import { useParams } from "react-router-dom";
-import {getID, addDraft, publishDraft, getDraft} from '../../FirebaseUtils'
+import {getID, addDraft, publishDraft, getDraft, getUserEmail, getAdmins} from '../../FirebaseUtils'
 
 class CardChild extends React.Component{
     constructor(props){
@@ -201,6 +201,14 @@ class Drafts extends React.Component{
     }
 
     componentDidMount(){
+        getUserEmail().then((user) => getAdmins().on('value', (snapshot) => {
+
+            if(!snapshot.val().includes(user.email)){
+                alert("You don't have permission to be here")
+                document.location.href = '/explore';
+            }
+        }))
+
         const { match: {params}} = this.props
         if(params.draft_id){
             getDraft(params.draft_id).on('value', (snapshot) => {

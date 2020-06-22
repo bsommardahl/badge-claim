@@ -107,10 +107,6 @@ class Dashboard extends Component{
         this.state = {pathways: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
     }
 
-    joinPathway = () => {
-
-    }
-
     getAwards = async(obj, email) => {
         var hello = await getAwarded(email);
         var progress = {}
@@ -190,7 +186,11 @@ class Dashboard extends Component{
                                     </div>
                                     :
                                     this.state.pathways.map((pathway) => 
-                                        card(pathway, this.state.userEmail, false, this.state))
+                                        card(
+                                            pathway, 
+                                            this.state.userEmail, 
+                                            pathway.users && pathway.users.includes(this.state.userEmail), 
+                                            this.state))
                                 }
                             </div>
                         </Tab>
