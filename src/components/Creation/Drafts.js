@@ -99,7 +99,7 @@ class CardChild extends React.Component{
                 <div className="card-body">
                     <div className="row">
                         <div class="col-auto">
-                            <button className="btn btn-primary" disabled={this.state.name==="" || this.state.requiredBadge === ""} onClick={this.addRoot}>{this.state.savedName === "" ? 'Create' : 'Update'}</button>
+                            <button className="btn btn-primary" disabled={this.state.name===""} onClick={this.addRoot}>{this.state.savedName === "" ? 'Create' : 'Update'}</button>
                         </div>
                         <div class="col">
                             <Form>
@@ -226,13 +226,13 @@ class Drafts extends React.Component{
                 <div>
                     <div className="badge-summary jumbotron">
                         <h1>Creating</h1>
-                        <button className="btn btn-primary" disabled={this.state.savedName === ""} onClick={this.save}>Save</button>
-                        <button style={{marginLeft: "20px"}} className="btn btn-primary" disabled={this.state.savedName === ""} onClick={this.publish}>Publish</button>
+                        <button className="btn btn-primary" disabled={this.state.savedName === "" || this.state.url === ""} onClick={this.save}>Save</button>
+                        <button style={{marginLeft: "20px"}} className="btn btn-primary" disabled={this.state.savedName === "" || this.state.url === ""} onClick={this.publish}>Publish</button>
                     </div>
                     <div  className="body-app">
                         <div className="row">
                             <div class="col-auto">
-                                <button className="btn btn-primary" disabled={this.state.name === ""} onClick={this.addRoot}>{this.state.savedName ? 'Update Root' : 'Add Root'}</button>
+                                <button className="btn btn-primary" disabled={this.state.name === "" || this.state.url === ""} onClick={this.addRoot}>{this.state.savedName ? 'Update Root' : 'Add Root'}</button>
                             </div>
                             <div class="col">
                                 <Form>

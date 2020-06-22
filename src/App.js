@@ -27,9 +27,9 @@ class App extends Component {
               <PrivateRoute component={Dashboard} path='/explore' />
               <PrivateRoute component={Pathway} path="/pathway/:pathway_id" />
               <PrivateRoute component={WebhooksManagement} path='/webhooks' />
-              <Route component={Creations} path='/creations' />
-              <Route component={Drafts} path='/drafts/:draft_id' />
-              <Route component={Drafts} path='/drafts' />
+              <PrivateRoute component={Creations} path='/creations' />
+              <PrivateRoute component={Drafts} path='/drafts/:draft_id' />
+              <PrivateRoute component={Drafts} path='/drafts' />
             </Switch>
           </div>
         </Router>
