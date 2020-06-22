@@ -3,49 +3,6 @@ import Form from 'react-bootstrap/Form';
 import { useParams } from "react-router-dom";
 import {getID, addDraft, publishDraft, getDraft} from '../../FirebaseUtils'
 
-var arr = []
-var pathway = {}
-var IDS = 0;
-
-const build = (name, adding) => {
-    var root = arr.filter(a => a.herencia === name)
-    var parts = 3;
-    console.log("A",arr)
-
-    if(root!=null)
-        pathway[getID(root[0].url)] = {title: name.split(" > ")[1], completionBadge: root[0].url, children: []}
-        //pathway["completationBadge"]=getID(root[0].url);
-    for(var i = 0; i < arr.length; i++){
-        const heri = arr[i].herencia.split(" > ");
-        
-        if(heri.length == parts){
-            //const child = {title: heri[parts-1], requiredBadge: arr[i].url};\
-            //buildAux(arr[i] ,parts+1)
-            pathway[getID(root[0].url)].children.push(buildAux(arr[i], heri[parts-1], parts+1));
-        }
-    }
-
-    console.log("B",arr)
-
-    if(adding)
-        publishDraft(getID(root[0].url), pathway[getID(root[0].url)])
-    else
-        addDraft(getID(root[0].url), pathway[getID(root[0].url)])
-}
-
-
-const buildAux = (parent, parentName, parts) => {
-    var subpath = {title: parentName, requiredBadge: parent.url, children: []}
-    for(var i = 0; i < arr.length; i++){
-        const heri = arr[i].herencia.split(" > ");
-        if(heri.length == parts && arr[i].herencia.includes(parent.herencia)){
-            subpath.children.push(buildAux(arr[i], heri[parts-1], parts+1))
-        }
-    }
-
-    return subpath
-}
-
 class CardChild extends React.Component{
     constructor(props){
         super(props)
@@ -71,28 +28,28 @@ class CardChild extends React.Component{
     }
 
     updateChild(savedName, newname, requiredBadge, children){
-        console.log("***********PARENT", this.state.savedName, "***************");
-        console.log(savedName, newname, requiredBadge, children);
+        //console.log"***********PARENT", this.state.savedName, "***************");
+        //console.logsavedName, newname, requiredBadge, children);
         if(newname === "" || newname === undefined){
             this.setState({children: 
                 this.state.children
                     .filter(child => child.title !== savedName)})
         }else{
-            this.setState({children: 
-                this.state.children
-                    .filter(child => child.title !== savedName)
-                    .concat([{title: newname, requiredBadge: requiredBadge, children: children ? children : []}])})
+
+            const pos = this.state.children.map(function(e) { return e.title; }).indexOf(savedName);
+
+            var oldChildren = this.state.children;
+            var newChildren = this.state.children;
+
+            newChildren[pos] = {title: newname, requiredBadge: requiredBadge, children: children ? children : []};
+
+            this.setState({children: newChildren})
         }
-        console.log(this.state)
-        console.log("***********SENDING", this.state.savedName, "***************");
         this.props.updateChild(this.state.savedName, this.state.name, this.state.requiredBadge, this.state.children);
     }
 
     deleteChild(){
         this.props.updateChild(this.state.savedName, "", "", [])
-        arr = arr.filter(a => a.herencia.includes(`ROOT > ${this.props.parents} > ${this.state.savedName}`))
-        //this.setState({savedName: ""});
-        console.log(arr);
     }
 
     handleName(e){
@@ -104,7 +61,6 @@ class CardChild extends React.Component{
     }
 
     componentDidMount(){
-        console.log("MOUNTING", this.props.obj)
         if(this.props.editing && this.state.savedName !== undefined){
             this.setState({
                 savedName: this.props.obj.title, 
@@ -113,28 +69,17 @@ class CardChild extends React.Component{
                 children: this.props.obj.children ? this.props.obj.children : [], 
                 draft: this.props.obj
             })
-            arr.push({herencia: `ROOT > ${this.props.parents} > ${this.props.obj.title}`, requiredBadge: this.props.obj.requiredBadge})
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        // You don't have to do this check first, but it can help prevent an unneeded render
         if (nextProps.obj.title !== this.state.savedName) {
           this.setState({ savedName: nextProps.obj.title, name: nextProps.obj.title, requiredBadge: nextProps.obj.requiredBadge, children: nextProps.obj.children ? nextProps.obj.children : [] });
         }
       }
 
     componentDidUpdate(prevProps, prevState) {
-        /*const { match: {params}} = this.props
-        if (prevState.pathway !== this.state.pathway) {
-           //console.log('UPDATE', this.state);
-           createPathway(this.state.pathway, this.state.userEmail, this.state.awarded)
-           if(existPath(params.pathway_id) == null) {
-               savePath(params.pathway_id, this.state.pathway)
-           }
-        }*/
         if (prevState.children !== this.state.children && prevState.children.length > 0) {
-            console.log("SENDING", this.state, prevState);
             this.props.updateChild(this.state.savedName, this.state.savedName, this.state.requiredBadge, this.state.children)
         }
     }
@@ -200,17 +145,6 @@ class Drafts extends React.Component{
 
     addRoot(){
         if(this.state.name){
-            if(arr.length == 0){
-                arr.push({herencia: "ROOT > " + this.state.name, url: this.state.url})
-            }else{
-                for(var i = 0; i < arr.length; i++){
-                    if(`ROOT > ${this.state.savedName}` === arr[i].herencia){
-                        arr[i].url = this.state.url;
-                    }
-                    const newName = arr[i].herencia.replace(`ROOT > ${this.state.savedName}`, `ROOT > ${this.state.name}`);
-                    arr[i].herencia = newName;
-                }
-            }
             this.setState({savedName: this.state.name})
         }
     }
@@ -221,22 +155,23 @@ class Drafts extends React.Component{
     }
 
     updateChild(savedName, newname, requiredBadge, children){
-        console.log("***********PARENT", "ROOT***********");
-        console.log(savedName, newname, requiredBadge, children);
         if(newname === "" || newname === undefined){
             this.setState({children: 
                 this.state.children
                     .filter(child => child.title !== savedName)})
         }else{
-            this.setState({children: 
-                this.state.children
-                    .filter(child => child.title !== savedName)
-                    .concat([{title: newname, requiredBadge: requiredBadge, children: children ? children : []}])})
+            const pos = this.state.children.map(function(e) { return e.title; }).indexOf(savedName);
+
+            var oldChildren = this.state.children;
+            var newChildren = this.state.children;
+
+            newChildren[pos] = {title: newname, requiredBadge: requiredBadge, children: children ? children : []};
+
+            this.setState({children: newChildren})
         }
     }
 
     deleteChild(){
-        console.log(arr);
     }
 
     save(){
@@ -279,8 +214,6 @@ class Drafts extends React.Component{
                     draft: obj,
                     editing: true
                 })
-
-                arr.push({herencia: "ROOT > " + this.state.savedName, url: this.state.url})
             })
         }
 
