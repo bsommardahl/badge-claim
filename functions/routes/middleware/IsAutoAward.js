@@ -14,7 +14,7 @@ const isAutoAward  = async(req, res, next) => {
     req.autoAwardFlag = autoAwardFlag
 
     if (autoAwardFlag) {
-        const response = await awardBadgeService(req.body)
+        const response = await awardBadgeService.awardBadge(req.body)
         res.send(response)
     }
     

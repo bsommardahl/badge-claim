@@ -39,6 +39,11 @@ const isLogin = async() => {
   });
 }
 
+export const getAdmins = () => {
+  const promiseData = app.database().ref('/admins');
+  return promiseData;
+}
+
 //DATABASE
 
 export const getPathways = () => {
@@ -95,4 +100,34 @@ const deleteWebhook=(value)=>{
   app.database().ref(`webhooks/${value}`).remove()
 }
 
-export {app, googleProvider, isLogin, logIn, logOut, getID, existPath, savePath, addWebhook, deleteWebhook};
+//DRAFTS
+
+const addDraft=(id,data)=>{
+  app.database().ref(`drafts/${id}`).set(data)
+}
+
+const deleteDraft=(id)=>{
+  app.database().ref(`drafts/${id}`).remove()
+}
+
+const publishDraft=(id,data)=>{
+  app.database().ref(`drafts/${id}`).set(data)
+  app.database().ref(`pathways/${id}`).set(data);
+}
+
+export const getDrafts = () => {
+  const promiseData = app.database().ref('/drafts');
+  return promiseData;
+}
+
+export const getDraft = (id) => {
+  const promiseData = app.database().ref(`/drafts/${id}`);
+  return promiseData;
+}
+
+export {
+        app, googleProvider, isLogin, logIn, 
+        logOut, getID, existPath, savePath, 
+        addWebhook, deleteWebhook, addDraft, publishDraft,
+        deleteDraft
+      };

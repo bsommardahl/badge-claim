@@ -107,10 +107,6 @@ class Dashboard extends Component{
         this.state = {pathways: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
     }
 
-    joinPathway = () => {
-
-    }
-
     getAwards = async(obj, email) => {
         var hello = await getAwarded(email);
         var progress = {}
@@ -183,12 +179,32 @@ class Dashboard extends Component{
                     <Tabs style={{width: "100%"}}>
                         <Tab eventKey="available" title="Available">
                             <div className="row">
-                                {this.state.pathways.map((pathway) => card(pathway, this.state.userEmail, false, this.state))}
+                                {!this.state.pathways.length?
+                                    <div class="col-sm-6">
+                                        <br/>
+                                        <span>Loading...</span>
+                                    </div>
+                                    :
+                                    this.state.pathways.map((pathway) => 
+                                        card(
+                                            pathway, 
+                                            this.state.userEmail, 
+                                            pathway.users && pathway.users.includes(this.state.userEmail), 
+                                            this.state))
+                                }
                             </div>
                         </Tab>
                         <Tab eventKey="my_pathways" title="My Pathways">
                             <div className="row">
-                                {this.state.my_pathways.map((pathway) => card(pathway, this.state.userEmail, true, this.state))}
+                                {!this.state.my_pathways.length?
+                                    <div class="col-sm-12">
+                                        <br/>
+                                        <span>There are currently no pathways here. Request access to one in Avaliable!</span>
+                                    </div>
+                                    :
+                                    this.state.my_pathways.map((pathway) => 
+                                        card(pathway, this.state.userEmail, true, this.state))
+                                }
                             </div>
                         </Tab>
                     </Tabs>
