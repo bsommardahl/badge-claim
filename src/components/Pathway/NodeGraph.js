@@ -45,9 +45,10 @@ function down2Up(obj, email, awarded) {
   node["y"] = 0;
   node["x"] = (lvls-1) * 300;
   node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
+  node["isComplete"] = obj.completionBadge ? true : false;
 
   PATHWAYOBJ["nodes"].push(node)
-  renderGraph(PATHWAYOBJ, email, awarded);
+  renderGraph(PATHWAYOBJ, email);
   $("h1").html(obj.title + " Pathway");
 }
 
@@ -81,6 +82,7 @@ function down2Up_aux(level, obj, xdes, ydes, iddes) {
   node["name"] = obj.title;
   node["y"] = myY * 75;
   node["x"] = (level-1) * 300;
+  node["isComplete"] = obj.completionBadge ? true : false;
   node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
   
   PATHWAYOBJ["nodes"].push(node);
@@ -99,20 +101,15 @@ function evaluateObj(obj) {
   return (new Function(` return  ${obj.split("=")[1]}` ));
 }
 
-const getAwarded = async(email) =>{
+const getAwarded = async(email) => {
   var resp = null;
 
   await axios({
       method: 'get',
-      url: `/award/user`,
-      data: {
-        body: {
-          email: email
-        }
-      }
+      url: `/award`,
   })
   .then(res => {
-    resp = res.data;
+    resp = res.data.result.filter(a => a.recipient.plaintextIdentity ===  email);
   })
   .catch(err => {
     console.log(err);
@@ -142,13 +139,9 @@ const isAwarded = async(data, id) => {
 }
 
 function findEarned(badge, awards) {
-  if(badge.url){
     var partbadge = String(badge.url).split('/');
     var badgeId = partbadge[partbadge.length-1];
-    return awards.filter(a => a.entityId === badgeId).length > 0
-  }
-
-  return false;
+    return awards.filter(a => a.badgeclass === badgeId).length > 0
 }
 
 async function renderGraph(data, email) {
@@ -174,7 +167,7 @@ async function renderGraph(data, email) {
       .style("stroke", "#aaa")
       .style("stroke-width", "4")
       .attr("fill", "none");
-
+  
   var node = svg
       .selectAll("rect")
       .data(data.nodes)
@@ -199,11 +192,11 @@ async function renderGraph(data, email) {
       node
         .attr("x", function (d) { return d.x; })
         .attr("y", function(d) { return d.y; })
-        .attr("stroke", function(d) { return findEarned(d, dataAward) ? "#6cc7be" : "#535dc8" });
+        .attr("stroke", function(d) { return findEarned(d, dataAward) ? "#13bf00" : d.isComplete ? "#ffdd00" : "#535dc8" });
       text
         .attr("x", function (d) { return d.x+10; })
         .attr("y", function(d) { return d.y+20; })
-        .attr("fill", function(d) { return findEarned(d, dataAward) ? "#6cc7be" : "#535dc8" });
+        .attr("fill", function(d) { return findEarned(d, dataAward) ? "#13bf00" : d.isComplete ? "#ffdd00" : "#535dc8" });
       link.attr("d", function(d) {
         var half = d.xori + (d.xdes - d.xori)/2
         return "M" + 

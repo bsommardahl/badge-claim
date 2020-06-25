@@ -11,26 +11,20 @@ const findParents = (authToken, badgeToken, data) => {
   const aws = AwardService.listAwards(data, authToken);
   aws.then(res => {
     if(res!==undefined){
-      const awardsUser = res.result.filter(a => a.recipient.plaintextIdentity === "luis.alvarez@herounit.io")
-      //res.result.map(a => console.log(a.recipient))
-      //console.log("AWARDS-n", awardsUser)
+      const awardsUser = res.result.filter(a => a.recipient.plaintextIdentity === data.email)
       getPathways().on('value', (snapshot) => {
         Object.values(snapshot.val()).map(path => {
           if(path.children){
             if(getID(path.completionBadge) !== badgeToken)
-              findParentAux(badgeToken, path, awardsUser);
-            else{
-              console.log("LLEGUE AL FINAL DE LA CADENA")
-            }
+              findParentAux(badgeToken, path, awardsUser, data);
           } 
         });
       }) 
     }
   })
-  //console.log("AWARDS", aws.filter(a => a.recipient.plaintextIdentity === "luis.alvarez@herounit.io"));
 }
 
-const findParentAux = (badgeToken, path, awardsUser) => {
+const findParentAux = (badgeToken, path, awardsUser, data) => {
   if(path){
     if(path.children){
       for(let i = 0;  i < path.children.length; i++){
@@ -43,25 +37,21 @@ const findParentAux = (badgeToken, path, awardsUser) => {
           childID = getID(path.children[i].completionBadge)
         }
 
-        //console.log("Padre: ",path.title); 
-        //console.log("Hijo: ",path.children[i].title, "/n");
-        //console.log("ChildID: ", childID);
-
         if(childID===badgeToken){
-          console.log("YES! CHILD!(Aqui deberia complete child)");
-          checkParent(path, awardsUser)
+          checkParent(path, awardsUser, data)
         }
 
-        findParentAux(badgeToken, path.children[i], awardsUser);
+        findParentAux(badgeToken, path.children[i], awardsUser, data);
       } 
     }
   }
 }
 
-const checkParent = (parent, awardsUser) => {
+const checkParent = (parent, awardsUser, data) => {
   if(parent && parent.completionBadge && parent.children){
     var completedChildren = 0
     let childID = '';
+    
     for(let i = 0;  i < parent.children.length; i++){
 
       if(parent.children[i]){
@@ -75,24 +65,19 @@ const checkParent = (parent, awardsUser) => {
         completedChildren++;
       }
     }
-    if(awardsUser.filter(a => a.badgeclass === getID(parent.completionBadge))){
-      console.log("PARENT ALREADY AWARDED");
-    }
+
     if(completedChildren == parent.children.length && awardsUser.filter(a => a.badgeclass === getID(parent.completionBadge))){
-      console.log("PARENT COMPLETED", parent.t)
       axios
         .post(
             `${APP_URL}/api/award`, 
             {
-                email: "luis.alvarez@herounit.io",
+                email: data.email,
                 authToken: "",
                 badgeToken: getID(parent.completionBadge),
                 badgeName: parent.title
             }
         )
         .then(res => {
-            //WebhookFire("2mE3WXrJT1KEdqousLHhFw","badge_awarded",{data: "payload"});
-            console.log("PARENT AWARDED")
         })
         .catch(err => {
             console.log(err)
@@ -122,7 +107,6 @@ const AwardService = {
     })
       .then(res => {
         response = res.data;
-        console.log(res.data);
         findParents(authToken, data.badgeToken, data);
       })
       .catch(err => {
@@ -148,8 +132,7 @@ const AwardService = {
     return response;
   },
   awardsByUser: async (data, issuerAwards) => {
-    //console.log("AWARDS DATA", data)
-    return issuerAwards.filter(a => a.recipient.plaintextIdentity === "luis.alvarez@herounit.io") //<--CAMBIARLO
+    return issuerAwards.filter(a => a.recipient.plaintextIdentity === data.email) //<--CAMBIARLO
   }
 }
 

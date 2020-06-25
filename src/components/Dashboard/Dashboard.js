@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import {
-    Link
-  } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import {getPathways, getUserEmail, joinPathway} from '../../FirebaseUtils'
 import './Dashboard.css'
@@ -83,7 +81,6 @@ const getAwarded = async(email) =>{
         )
     .then(res => {
       resp = res.data;
-      console.log(res.data);
     })
     .catch(err => {
       console.log(err);
