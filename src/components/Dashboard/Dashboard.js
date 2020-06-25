@@ -74,15 +74,13 @@ const card = (pathway, userEmail, subscribed, state) => {
 const getAwarded = async(email) =>{
     var resp = null;
 
-    await axios({
-        method: 'get',
-        url: `/award/user`,
-        data: {
-          body: {
-            email: email
-          }
-        }
-    })
+    await axios
+        .get(
+            `/award/user`, 
+            {
+                email: email,
+            }
+        )
     .then(res => {
       resp = res.data;
       console.log(res.data);

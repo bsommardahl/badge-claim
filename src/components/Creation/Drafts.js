@@ -1,23 +1,30 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form';
-import { useParams } from "react-router-dom";
 import {getID, addDraft, publishDraft, getDraft, getUserEmail, getAdmins} from '../../FirebaseUtils'
 
 class CardChild extends React.Component{
     constructor(props){
         super(props)
-        this.state = {draft: null, id: 0, savedName: this.props.obj.title, name: this.props.obj.title, requiredBadge: this.props.obj.requiredBadge, children: []}
+        this.state = {
+            draft: null, 
+            id: 0, 
+            savedName: this.props.obj.title, 
+            name: this.props.obj.title, 
+            requiredBadge: this.props.obj.requiredBadge, 
+            isCompletion: false,
+            children: []}
         this.addRoot = this.addRoot.bind(this);
         this.updateChild = this.updateChild.bind(this);
         this.addChild = this.addChild.bind(this);
         this.handleName = this.handleName.bind(this);
         this.handleUrl = this.handleUrl.bind(this);
+        this.handleCompletion = this.handleCompletion.bind(this);
         this.deleteChild =  this.deleteChild.bind(this);
     }
 
     addRoot(){
         if(this.state.name !== "" && this.state.name !== undefined){
-            this.props.updateChild(this.state.savedName, this.state.name, this.state.requiredBadge, this.state.children);
+            this.props.updateChild(this.state.savedName, this.state.name, this.state.requiredBadge, this.state.children, this.state.isCompletion);
             this.setState({savedName: this.state.name})
         }
     }
@@ -27,9 +34,7 @@ class CardChild extends React.Component{
             this.setState({children: this.state.children.concat([{title: "", requiredBadge: "", children: []}])})
     }
 
-    updateChild(savedName, newname, requiredBadge, children){
-        //console.log"***********PARENT", this.state.savedName, "***************");
-        //console.logsavedName, newname, requiredBadge, children);
+    updateChild(savedName, newname, requiredBadge, children, isCompletion){
         if(newname === "" || newname === undefined){
             this.setState({children: 
                 this.state.children
@@ -38,22 +43,27 @@ class CardChild extends React.Component{
 
             const pos = this.state.children.map(function(e) { return e.title; }).indexOf(savedName);
 
-            var oldChildren = this.state.children;
             var newChildren = this.state.children;
 
-            newChildren[pos] = {title: newname, requiredBadge: requiredBadge, children: children ? children : []};
+            isCompletion?
+            newChildren[pos] = {title: newname, completionBadge: requiredBadge, children: children ? children : []}:
+            newChildren[pos] = {title: newname, requiredBadge: requiredBadge, children: children ? children : []}
 
             this.setState({children: newChildren})
         }
-        this.props.updateChild(this.state.savedName, this.state.name, this.state.requiredBadge, this.state.children);
+        this.props.updateChild(this.state.savedName, this.state.name, this.state.requiredBadge, this.state.children, this.state.isCompletion);
     }
 
     deleteChild(){
-        this.props.updateChild(this.state.savedName, "", "", [])
+        this.props.updateChild(this.state.savedName, "", "", [], false)
     }
 
     handleName(e){
         this.setState({name: e.target.value})
+    }
+
+    handleCompletion(){
+        this.setState({isCompletion: !this.state.isCompletion})
     }
 
     handleUrl(e){
@@ -65,22 +75,29 @@ class CardChild extends React.Component{
             this.setState({
                 savedName: this.props.obj.title, 
                 name: this.props.obj.title, 
-                requiredBadge: this.props.obj.requiredBadge, 
+                requiredBadge: this.props.obj.requiredBadge ? this.props.obj.requiredBadge : this.props.obj.completionBadge, 
                 children: this.props.obj.children ? this.props.obj.children : [], 
-                draft: this.props.obj
+                draft: this.props.obj,
+                isCompletion: this.props.obj.requiredBadge ? false : true
             })
         }
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.obj.title !== this.state.savedName) {
-          this.setState({ savedName: nextProps.obj.title, name: nextProps.obj.title, requiredBadge: nextProps.obj.requiredBadge, children: nextProps.obj.children ? nextProps.obj.children : [] });
+            this.setState({ 
+              savedName: nextProps.obj.title, 
+              name: nextProps.obj.title, 
+              requiredBadge: nextProps.obj.requiredBadge ? nextProps.obj.requiredBadge : nextProps.obj.completionBadge,
+              children: nextProps.obj.children ? nextProps.obj.children : [],
+              isCompletion: nextProps.obj.requiredBadge ? false : true
+            });
         }
       }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.children !== this.state.children && prevState.children.length > 0) {
-            this.props.updateChild(this.state.savedName, this.state.savedName, this.state.requiredBadge, this.state.children)
+            this.props.updateChild(this.state.savedName, this.state.savedName, this.state.requiredBadge, this.state.children, this.state.isCompletion)
         }
     }
 
@@ -114,6 +131,11 @@ class CardChild extends React.Component{
                                     <Form.Control placeholder="Enter URL" value={this.state.requiredBadge} onChange={this.handleUrl}/>
                                 </Form.Group>
                             </Form>
+                            <label class="row">
+                                <input type="checkbox" checked={this.state.isCompletion} onChange={this.handleCompletion}/>
+                                &nbsp;
+                                <p>Completion Badge</p>
+                            </label>
                         </div>
                         <div class="col-auto">
                             <div class="btn-group" role="group">
@@ -154,7 +176,7 @@ class Drafts extends React.Component{
             this.setState({children: this.state.children.concat([{title: "", requiredBadge: "", children: []}])})
     }
 
-    updateChild(savedName, newname, requiredBadge, children){
+    updateChild(savedName, newname, requiredBadge, children, isCompletion){
         if(newname === "" || newname === undefined){
             this.setState({children: 
                 this.state.children
@@ -162,10 +184,11 @@ class Drafts extends React.Component{
         }else{
             const pos = this.state.children.map(function(e) { return e.title; }).indexOf(savedName);
 
-            var oldChildren = this.state.children;
             var newChildren = this.state.children;
 
-            newChildren[pos] = {title: newname, requiredBadge: requiredBadge, children: children ? children : []};
+            isCompletion?
+            newChildren[pos] = {title: newname, completionBadge: requiredBadge, children: children ? children : []}:
+            newChildren[pos] = {title: newname, requiredBadge: requiredBadge, children: children ? children : []}
 
             this.setState({children: newChildren})
         }
