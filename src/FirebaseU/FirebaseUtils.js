@@ -21,7 +21,6 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 const logIn = () => {
   app.auth().signInWithPopup(googleProvider).then(result => 
   {
-    //console.log(result);
     document.location.href = '/explore';
   });
 }
@@ -33,8 +32,6 @@ const logOut = () => {
 
 const isLogin = async() => {
   app.auth().onAuthStateChanged(function (user) {
-    //console.log(user);
-    //console.log(user != null);
     return user != null;
   });
 }

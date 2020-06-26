@@ -3,15 +3,16 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import {getPathways, getUserEmail, joinPathway} from '../../FirebaseUtils'
+import {getPathways, getUserEmail, joinPathway} from '../../FirebaseU/FirebaseUtils'
 import './Dashboard.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
 
+let awardedBadges = 0;
+
 const card = (pathway, userEmail, subscribed, state) => {
     var badgeID = getID(pathway.completionBadge);
-    var percent = state.progress[badgeID] 
-        /state.badgesCount[badgeID] * 100;
+    var percent = state.progress[badgeID] / state.badgesCount[badgeID] * 100;
     return (
         <div class="col-sm-6">
             <div className="card" style={{marginTop: "15px"}}>
@@ -74,13 +75,10 @@ const getAwarded = async(email) =>{
 
     await axios
         .get(
-            `/award/user`, 
-            {
-                email: email,
-            }
+            `/award`
         )
     .then(res => {
-      resp = res.data;
+      resp = res.data.result.filter(a => a.recipient.plaintextIdentity === email);
     })
     .catch(err => {
       console.log(err);
@@ -90,7 +88,7 @@ const getAwarded = async(email) =>{
 }
 
 const isAwarded = (awards, id) => {
-    return awards.filter(a => a.entityId === id).length
+    return awards.filter(a => a.badgeclass === id).length > 0 ? 1 : 0;
 }
 
 class Dashboard extends Component{
@@ -102,64 +100,55 @@ class Dashboard extends Component{
         this.state = {pathways: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
     }
 
-    getAwards = async(obj, email) => {
-        var hello = await getAwarded(email);
+    getAwards = async(obj, awarded) => {
         var progress = {}
         var badgesCount = {}
-        for (let index = 0; index < obj.length; index++) {
-            this.badges = 1;
-            //console.log("pathway", obj[index].title, obj[index]);
-            //console.log("isAwarded", isAwarded(hello, getID(obj[index].requiredBadge ? obj[index].requiredBadge : obj[index].completionBadge)))
-            var id = getID(obj[index].requiredBadge ? obj[index].requiredBadge : obj[index].completionBadge);
-            var counter = isAwarded(hello, id);
-            for (let index1 = 0; index1 < obj[index].children.length; index1++) {
-                //console.log (obj[index].children[index1]);
-                counter += this.getAwards_aux(obj[index].children[index1], hello);
-                if(obj[index].children[index1].completionBadge || obj[index].children[index1].requiredBadge)
-                    this.badges++;
-            }
-            progress[id] = counter;
-            badgesCount[id] = this.badges;
-        }
 
-        //console.log(progress);
-        //console.log(badgesCount);
-        this.setState({progress: progress})
-        this.setState({badgesCount: badgesCount})
-    }
-      
-    getAwards_aux = (obj, hello) => {
-        var counter = 0
-        if(obj.children){
-            //console.log(obj, "obj");
-            //console.log("sub pathway", obj.title);
-            for (let index = 0; index < obj.children.length; index++) {
-                //console.log("child", obj.children[index].title, getID(obj.children[index].requiredBadge 
-                //    ? obj.children[index].requiredBadge : obj.children[index].completionBadge ? obj.children[index].completionBadge : ""));
-                counter += isAwarded(hello,
-                    getID(obj.children[index].requiredBadge 
-                        ? obj.children[index].requiredBadge : obj.children[index].completionBadge ? obj.children[index].completionBadge : ""));
-                if(obj.children[index].requiredBadge || obj.children[index].completionBadge)
-                        this.badges++;
-                this.getAwards_aux(obj.children[index], hello);
+        if(obj){
+            var pathways = Object.values(obj);
+            for(let i = 0; i < pathways.length; i++){
+                var count = {};
+                count = this.getAwards_aux(pathways[i], awarded);
+                badgesCount[getID(pathways[i].completionBadge)]=count.count + 1
+                progress[getID(pathways[i].completionBadge)]=count.progress
             }
         }
-
-        return counter;
+        this.setState({progress: progress, badgesCount: badgesCount})
+    }
+     
+    getAwards_aux = (obj, awarded) => {
+        let awardCount = 0
+        if(obj){
+            let objID = getID(obj.completionBadge ? obj.completionBadge : obj.requiredBadge) 
+            if(objID){
+                awardCount = isAwarded(awarded, objID)
+                if(obj.children){
+                    let returnObj = {'count': obj.children.length, 'progress': 0}
+    
+                    for(let j = 0; j <= obj.children.length; j++){
+                        returnObj.count += this.getAwards_aux(obj.children[j], awarded).count
+                        returnObj.progress += this.getAwards_aux(obj.children[j], awarded).progress
+                    }
+                    returnObj.progress += awardCount;
+                    return returnObj;
+                }
+            }
+        }
+        return {'count': 0, 'progress': awardCount};
     }
 
-    componentDidMount(){
+    async componentDidMount(){
+        const user = await getUserEmail();
+        const awarded = await getAwarded(user.email);
         getPathways().on('value', (snapshot) =>
             {
-                this.setState({pathways: Object.values(snapshot.val())});
-                getUserEmail().then((user) => {
-                    this.setState({userEmail: user.email})
-                    this.getAwards(this.state.pathways, user.email);
-                    this.setState({my_pathways:
-                        this.state.pathways.filter(
-                            path => path.users && path.users.includes(user.email)
-                        )})
-                })
+                this.setState({pathways: Object.values(snapshot.val()), userEmail: user.email});
+
+                this.getAwards(this.state.pathways, awarded);
+                this.setState({my_pathways:
+                    this.state.pathways.filter(
+                        path => path.users && path.users.includes(user.email)
+                    )})
             }
         );
     }

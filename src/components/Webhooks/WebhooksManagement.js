@@ -5,8 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import {addWebhook, app, deleteWebhook, getUserEmail} from '../../FirebaseUtils'
-import {WebhookFire} from './WebhookEngine'
+import {addWebhook, app, deleteWebhook, getUserEmail} from '../../FirebaseU/FirebaseUtils'
 
 const cookies = new Cookies();
 
@@ -123,15 +122,7 @@ class WebhooksManagement extends React.Component{
         const cookie = cookies.get('issuer');
         if(cookie && cookie === this.state.id){
             addWebhook(this.state);
-            this.setState({editing: false})
-            this.setState({name :""})
-            this.setState({event :"Badge Awarded"})
-            this.setState({url :""})
-            this.setState({id :""})
-            this.setState({secret :""})
-            this.setState({password :""})
-            this.setState({showConfirm: false})
-            this.setState({show: false})
+            this.setState({editing: false, name :"", event :"Badge Awarded", url :"", id :"", secret :"", password :"", showConfirm: false, show: false})
         }else{
             axios({
                 headers: { 
@@ -140,8 +131,7 @@ class WebhooksManagement extends React.Component{
                 method: 'post',
                 url: 'https://api.badgr.io/o/token',
                 data
-            }).then(res => {
-                console.log(res, res.data.access_token)                
+            }).then(res => {             
                 axios({
                     headers: {
                         'Authorization': `Bearer ${res.data.access_token}`
@@ -149,30 +139,15 @@ class WebhooksManagement extends React.Component{
                     method: 'get',
                     url: `https://api.badgr.io/v2/issuers`,
         
-                }).then(res1 => {
-                    //console.log(this.state, res1.data.result)                
-                    const len = res1.data.result.filter(r => r.entityId === this.state.id).length;
-                    //console.log("longitud", len)                
-
+                }).then(res1 => {            
+                    const len = res1.data.result.filter(r => r.entityId === this.state.id).length;                
                     if(len > 0)
                     {
                         addWebhook(this.state);
-                        //console.log("longitud", len)
                         let d = new Date();
                         d.setTime(d.getTime() + (9*60*1000));
-                        //console.log("longitud", len);
                         cookies.set("issuer", this.state.id, {path: "/webhooks", expires: d});
-                        //console.log("longitud", len);
-
-                        this.setState({editing: false});
-                        this.setState({name :""});
-                        this.setState({event :"Badge Awarded"});
-                        this.setState({url :""});
-                        this.setState({id :""});
-                        this.setState({secret :""});
-                        this.setState({password :""});
-                        this.setState({showConfirm: false});
-                        this.setState({show: false});
+                        this.setState({editing: false, name :"", event :"Badge Awarded", url :"", id :"", secret :"", password :"", showConfirm: false, show: false});
                     }
                 }).catch(err => {
                     console.log(err)
@@ -184,23 +159,17 @@ class WebhooksManagement extends React.Component{
     }
 
     editWebhook(key, data){
-        this.setState({ id: key.split(":")[0]})
-        this.setState({ name: key.split(":")[1]})
-        this.setState({ url: data.url})
-        this.setState({ event: data.event})
-        this.setState({ secret: data.secret})
-        this.setState({ editing: true})
-        this.setState({ show: true})
+        this.setState({ id: key.split(":")[0], name: key.split(":")[1], url: data.url, event: data.event, secret: data.secret, editing: true, show: true})
     }
 
-    componentDidMount(){
-        getUserEmail().then((user) => {
-            this.setState({email: user.email})
-            app.database().ref(`webhooks/`).orderByChild("owner").equalTo(user.email).on('value', (snapshot) =>
-            {this.setState({
+    async componentDidMount(){
+        const user = await getUserEmail()
+        this.setState({email: user.email})
+        console.log("email", user)
+        app.database().ref(`webhooks/`).orderByChild("owner").equalTo(user.email).on('value', (snapshot) =>{
+            this.setState({
                 webhooks: snapshot.val()
-            })}
-        )
+            })
         })
     }
 

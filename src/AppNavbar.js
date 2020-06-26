@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
-import { getUserEmail, logOut, logIn } from './FirebaseUtils';
+import { getUserEmail, logOut, logIn } from './FirebaseU/FirebaseUtils';
 
 class AppNavbar extends Component {
     constructor(props){
@@ -10,8 +10,9 @@ class AppNavbar extends Component {
         this.state = {user: ""}
     }
 
-    componentDidMount(){
-        getUserEmail().then((user) => {this.setState({user: user.email});})
+    async componentDidMount(){
+        const user = await getUserEmail();
+        this.setState({user: user.email});
     }
 
     render () {

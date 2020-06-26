@@ -7,21 +7,20 @@ const APP_URL = envs.service.app_url;
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
 
-const findParents = (authToken, badgeToken, data) => {
-  const aws = AwardService.listAwards(data, authToken);
-  aws.then(res => {
-    if(res!==undefined){
-      const awardsUser = res.result.filter(a => a.recipient.plaintextIdentity === data.email)
-      getPathways().on('value', (snapshot) => {
-        Object.values(snapshot.val()).map(path => {
-          if(path.children){
-            if(getID(path.completionBadge) !== badgeToken)
-              findParentAux(badgeToken, path, awardsUser, data);
-          } 
-        });
-      }) 
-    }
-  })
+const findParents = async(authToken, badgeToken, data) => {
+  const temp = await AwardService.listAwards(data, authToken);
+  const aws = temp.result;  
+  if(aws!==undefined){
+    const awardsUser = aws.filter(a => a.recipient.plaintextIdentity === data.email)
+    getPathways().on('value', (snapshot) => {
+      Object.values(snapshot.val()).map(path => {
+        if(path.children){
+          if(getID(path.completionBadge) !== badgeToken)
+            findParentAux(badgeToken, path, awardsUser, data);
+        } 
+      });
+    }) 
+  }
 }
 
 const findParentAux = (badgeToken, path, awardsUser, data) => {
@@ -38,6 +37,8 @@ const findParentAux = (badgeToken, path, awardsUser, data) => {
         }
 
         if(childID===badgeToken){
+          console.log("PARENT ", path)
+          console.log("CHILD ", path.children[i])
           checkParent(path, awardsUser, data)
         }
 
@@ -61,8 +62,9 @@ const checkParent = (parent, awardsUser, data) => {
         childID = getID(parent.children[i].completionBadge)
       }
 
-      if(awardsUser.filter(a => a.badgeclass === childID)){
+      if(awardsUser.filter(a => a.badgeclass === childID).length > 0){
         completedChildren++;
+        console.log("Completed children: ", completedChildren);
       }
     }
 
@@ -78,6 +80,7 @@ const checkParent = (parent, awardsUser, data) => {
             }
         )
         .then(res => {
+          //console.log(res);
         })
         .catch(err => {
             console.log(err)
@@ -89,7 +92,7 @@ const checkParent = (parent, awardsUser, data) => {
 const AwardService = {
   awardBadge: async (data, authToken) => {
     let response = "test";
-    
+    console.log("AWARDING!!!!!!!")
     await axios({
       headers: {
         Authorization: `Bearer ${authToken}`
@@ -107,6 +110,7 @@ const AwardService = {
     })
       .then(res => {
         response = res.data;
+        console.log("AWARDED!!!!!!!")
         findParents(authToken, data.badgeToken, data);
       })
       .catch(err => {
@@ -130,9 +134,6 @@ const AwardService = {
         console.log(err);
       });
     return response;
-  },
-  awardsByUser: async (data, issuerAwards) => {
-    return issuerAwards.filter(a => a.recipient.plaintextIdentity === data.email) //<--CAMBIARLO
   }
 }
 

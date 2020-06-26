@@ -1,5 +1,5 @@
 import React,{ Component} from 'react'
-import {logIn} from '../../FirebaseUtils'
+import {logIn} from '../../FirebaseU/FirebaseUtils'
 
 export default class LogIn extends Component{
     render(){

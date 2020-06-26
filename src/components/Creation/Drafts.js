@@ -1,6 +1,6 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form';
-import {getID, addDraft, publishDraft, getDraft, getUserEmail, getAdmins} from '../../FirebaseUtils'
+import {getID, addDraft, publishDraft, getDraft, getUserEmail, getAdmins} from '../../FirebaseU/FirebaseUtils'
 
 class CardChild extends React.Component{
     constructor(props){
@@ -223,14 +223,14 @@ class Drafts extends React.Component{
         this.setState({url: e.target.value})
     }
 
-    componentDidMount(){
-        getUserEmail().then((user) => getAdmins().on('value', (snapshot) => {
-
+    async componentDidMount(){
+        const user = await getUserEmail();
+        getAdmins().on('value', (snapshot) => {
             if(!snapshot.val().includes(user.email)){
                 alert("You don't have permission to be here")
                 document.location.href = '/explore';
             }
-        }))
+        })
 
         const { match: {params}} = this.props
         if(params.draft_id){
