@@ -48,6 +48,10 @@ export const getPathways = () => {
   return promiseData;
 }
 
+const exportGetPathways = () => {
+  return getPathways();
+}
+
 export const joinPathway = (pathway, usermail) => {
   const promiseData = app.database()
       .ref(`/pathways/${pathway.completionBadge?getID(pathway.completionBadge):getID(pathway.requiredBadge)}/users`)
@@ -128,3 +132,5 @@ export {
         addWebhook, deleteWebhook, addDraft, publishDraft,
         deleteDraft
       };
+
+module.exports = exportGetPathways;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import {getDrafts, getID, deleteDraft, getUserEmail, getAdmins} from '../../FirebaseU/FirebaseUtils'
+import {getDrafts, getID, deleteDraft, getUserEmail, getAdmins} from '../../../functions/FirebaseU/FirebaseUtils'
 import '../Dashboard/Dashboard.css'
 
 const card = (pathway, subscribed) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { createPathway } from './NodeGraph';
 import './Pathway.css'
-import {getPathways, getID, getUserEmail} from '../../FirebaseU/FirebaseUtils'
+import {getPathways, getID, getUserEmail} from '../../../functions/FirebaseU/FirebaseUtils'
 
 class Pathway extends React.Component{
     constructor(props) {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
-import { getUserEmail, logOut, logIn } from './FirebaseU/FirebaseUtils';
+import { getUserEmail, logOut, logIn } from './../functions/FirebaseU/FirebaseUtils';
 
 class AppNavbar extends Component {
     constructor(props){

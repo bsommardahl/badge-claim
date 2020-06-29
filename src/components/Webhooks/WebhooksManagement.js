@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import {addWebhook, app, deleteWebhook, getUserEmail} from '../../FirebaseU/FirebaseUtils'
+import {addWebhook, app, deleteWebhook, getUserEmail} from '../../../functions/FirebaseU/FirebaseUtils'
 
 const cookies = new Cookies();
 

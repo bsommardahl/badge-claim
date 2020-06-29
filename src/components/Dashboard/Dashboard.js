@@ -3,7 +3,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import {getPathways, getUserEmail, joinPathway} from '../../FirebaseU/FirebaseUtils'
+import {getPathways, getUserEmail, joinPathway} from '../../../functions/FirebaseU/FirebaseUtils'
 import './Dashboard.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1)

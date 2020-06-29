@@ -1,4 +1,4 @@
-const getPathways = require('./FirePathway');
+const exportGetPathways = require('../../FirebaseU/FirebaseUtils');
 
 const axios = require('axios');
 const envs = require('../../env.json');

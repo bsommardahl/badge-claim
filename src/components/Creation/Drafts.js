@@ -1,6 +1,6 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form';
-import {getID, addDraft, publishDraft, getDraft, getUserEmail, getAdmins} from '../../FirebaseU/FirebaseUtils'
+import {getID, addDraft, publishDraft, getDraft, getUserEmail, getAdmins} from '../../../functions/FirebaseU/FirebaseUtils'
 
 class CardChild extends React.Component{
     constructor(props){
