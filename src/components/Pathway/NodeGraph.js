@@ -102,20 +102,11 @@ function evaluateObj(obj) {
 }
 
 const getAwarded = async(email) => {
-  var resp = null;
-
-  await axios({
+  var resp = await axios({
       method: 'get',
       url: `/award`,
   })
-  .then(res => {
-    resp = res.data.result.filter(a => a.recipient.plaintextIdentity ===  email);
-  })
-  .catch(err => {
-    console.log(err);
-  });
-
-  return resp;
+  return resp.data.result.filter(a => a.recipient.plaintextIdentity ===  email);;
 }
 
 export function createPathway(pathway, email, awarded) {

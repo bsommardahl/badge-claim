@@ -69,31 +69,27 @@ const checkParent = (parent, awardsUser, data) => {
     }
 
     if(completedChildren == parent.children.length && awardsUser.filter(a => a.badgeclass === getID(parent.completionBadge))){
-      axios
-        .post(
-            `${APP_URL}/api/award`, 
-            {
-                email: data.email,
-                authToken: "",
-                badgeToken: getID(parent.completionBadge),
-                badgeName: parent.title
-            }
-        )
-        .then(res => {
-          //console.log(res);
-        })
-        .catch(err => {
-            console.log(err)
-        })
+      postAward(data, parent);
     }
   }
 }
 
+const postAward = async(data, parent) => {
+  await axios
+  .post(
+      `${APP_URL}/api/award`, 
+      {
+          email: data.email,
+          authToken: "",
+          badgeToken: getID(parent.completionBadge),
+          badgeName: parent.title
+      }
+  )
+}
+
 const AwardService = {
   awardBadge: async (data, authToken) => {
-    let response = "test";
-    console.log("AWARDING!!!!!!!")
-    await axios({
+    let response = await axios({
       headers: {
         Authorization: `Bearer ${authToken}`
       },
@@ -108,32 +104,21 @@ const AwardService = {
         notify: true
       }
     })
-      .then(res => {
-        response = res.data;
-        console.log("AWARDED!!!!!!!")
-        findParents(authToken, data.badgeToken, data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    return response;
+
+    console.log("AWARD_RESPONSE", response)
+    if(response.status == 201)
+      findParents(authToken, data.badgeToken, data);
+    return response.data;
   },
   listAwards: async (data, authToken) => {
-    let response;
-    await axios({
+    let response = await axios({
       headers: {
         Authorization: `Bearer ${authToken}`
       },
       method: 'get',
       url: `/issuers/${ISSUER_ID}/assertions`,
     })
-      .then(res => {
-        response = res.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    return response;
+    return response.data;
   }
 }
 

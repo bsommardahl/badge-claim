@@ -71,20 +71,8 @@ const card = (pathway, userEmail, subscribed, state) => {
 
 
 const getAwarded = async(email) =>{
-    var resp = null;
-
-    await axios
-        .get(
-            `/award`
-        )
-    .then(res => {
-      resp = res.data.result.filter(a => a.recipient.plaintextIdentity === email);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-
-    return resp;
+    var resp = await axios.get(`/award`)
+    return resp.data.result.filter(a => a.recipient.plaintextIdentity === email);
 }
 
 const isAwarded = (awards, id) => {
