@@ -16,11 +16,11 @@ const app = firebase.initializeApp(config);
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 //SESSIONS
-const logIn = () => {
-  app.auth().signInWithPopup(googleProvider).then(result => 
-  {
+const logIn = async() => {
+  var signin = await app.auth().signInWithPopup(googleProvider)
+  
+  if(signin)
     document.location.href = '/explore';
-  });
 }
 
 const logOut = () => {
