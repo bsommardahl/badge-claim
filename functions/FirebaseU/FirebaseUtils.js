@@ -1,14 +1,15 @@
 const firebase = require('firebase')
+const envs = require('../config')
 
 const config = {
-    apiKey: process.env.REACT_APP_FB_APIKEY,
-    authDomain: process.env.REACT_APP_FB_AUTHDOM,
-    databaseURL: "https://bagde-claim.firebaseio.com",
-    projectId: process.env.REACT_APP_FB_PROJECTID,
-    storageBucket: process.env.REACT_APP_FB_STOREBUCKET,
-    messagingSenderId: process.env.REACT_APP_FB_SENDER,
-    appId: process.env.REACT_APP_FB_APPID,
-    measurementId: process.env.REACT_APP_FB_MEASURE
+    apiKey: envs.REACT_APP_FB_APIKEY,
+    authDomain: envs.REACT_APP_FB_AUTHDOM,
+    databaseURL: envs.REACT_APP_FB_DATABASE,
+    projectId: envs.REACT_APP_FB_PROJECTID,
+    storageBucket: envs.REACT_APP_FB_STOREBUCKET,
+    messagingSenderId: envs.REACT_APP_FB_SENDER,
+    appId: envs.REACT_APP_FB_APPID,
+    measurementId: envs.REACT_APP_FB_MEASURE
 };
 
 const app = firebase.initializeApp(config);
