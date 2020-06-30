@@ -6,9 +6,7 @@ import axios from 'axios';
 import {getPathways, getUserEmail, joinPathway} from '../../../functions/FirebaseU/FirebaseUtils'
 import './Dashboard.css'
 
-const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
-
-let awardedBadges = 0;
+const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
 
 const card = (pathway, userEmail, subscribed, state) => {
     var badgeID = getID(pathway.completionBadge);

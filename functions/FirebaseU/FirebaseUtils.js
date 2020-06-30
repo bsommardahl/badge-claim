@@ -1,18 +1,15 @@
-import firebase from 'firebase'
+const firebase = require('firebase')
 
 const config = {
     apiKey: process.env.REACT_APP_FB_APIKEY,
     authDomain: process.env.REACT_APP_FB_AUTHDOM,
-    databaseURL: process.env.REACT_APP_FB_DATABASE,
+    databaseURL: "https://bagde-claim.firebaseio.com",
     projectId: process.env.REACT_APP_FB_PROJECTID,
     storageBucket: process.env.REACT_APP_FB_STOREBUCKET,
     messagingSenderId: process.env.REACT_APP_FB_SENDER,
     appId: process.env.REACT_APP_FB_APPID,
     measurementId: process.env.REACT_APP_FB_MEASURE
 };
-
-var FOUR_HOURS = 60 * 60 * 1000 * 4;
-const PATHWAYS = {}
 
 const app = firebase.initializeApp(config);
 const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -36,30 +33,26 @@ const isLogin = async() => {
   });
 }
 
-export const getAdmins = () => {
+const getAdmins = () => {
   const promiseData = app.database().ref('/admins');
   return promiseData;
 }
 
 //DATABASE
 
-export const getPathways = () => {
+const getPathways = () => {
   const promiseData = app.database().ref('/pathways');
   return promiseData;
 }
 
-const exportGetPathways = () => {
-  return getPathways();
-}
-
-export const joinPathway = (pathway, usermail) => {
+const joinPathway = (pathway, usermail) => {
   const promiseData = app.database()
       .ref(`/pathways/${pathway.completionBadge?getID(pathway.completionBadge):getID(pathway.requiredBadge)}/users`)
       .set(pathway.users ? pathway.users.concat([usermail]) : [usermail]);
   return promiseData
 }
 
-export const getUserEmail = () => {
+const getUserEmail = () => {
   return new Promise((resolve, reject) => {
      const unsubscribe = app.auth().onAuthStateChanged(user => {
         unsubscribe();
@@ -87,7 +80,7 @@ const savePath = (pathwayID, pathway) => {
   PATHWAYS[pathwayID] = [pathway, time];
 }
 
-export const getWebhooks = () => {
+const getWebhooks = () => {
   const promiseData = app.database().ref('/webhooks');
   return promiseData;
 }
@@ -116,21 +109,35 @@ const publishDraft=(id,data)=>{
   app.database().ref(`pathways/${id}`).set(data);
 }
 
-export const getDrafts = () => {
-  const promiseData = app.database().ref('/drafts');
+const getDrafts = () => {
+  const promiseData = app.database().ref('/drafts');  
   return promiseData;
 }
 
-export const getDraft = (id) => {
+const getDraft = (id) => {
   const promiseData = app.database().ref(`/drafts/${id}`);
   return promiseData;
 }
 
-export {
-        app, googleProvider, isLogin, logIn, 
-        logOut, getID, existPath, savePath, 
-        addWebhook, deleteWebhook, addDraft, publishDraft,
-        deleteDraft
-      };
-
-module.exports = exportGetPathways;
+module.exports = {
+        app: app, 
+        googleProvider: googleProvider, 
+        isLogin: isLogin, 
+        logIn: logIn, 
+        logOut: logOut, 
+        getID: getID, 
+        existPath: existPath,
+        savePath: savePath, 
+        addWebhook: addWebhook, 
+        deleteWebhook: deleteWebhook, 
+        addDraft: addDraft, 
+        publishDraft: publishDraft,
+        deleteDraft: deleteDraft, 
+        getUserEmail: getUserEmail,
+        getAdmins: getAdmins,
+        getPathways: getPathways,
+        joinPathway: joinPathway,
+        getWebhooks: getWebhooks,
+        getDrafts: getDrafts,
+        getDraft: getDraft
+};

@@ -1,4 +1,4 @@
-const exportGetPathways = require('../../FirebaseU/FirebaseUtils');
+const fire = require('../../FirebaseU/FirebaseUtils');
 
 const axios = require('axios');
 const envs = require('../../env.json');
@@ -12,7 +12,7 @@ const findParents = async(authToken, badgeToken, data) => {
   const aws = temp.result;  
   if(aws!==undefined){
     const awardsUser = aws.filter(a => a.recipient.plaintextIdentity === data.email)
-    getPathways().on('value', (snapshot) => {
+    await fire.getPathways().on('value', (snapshot) => {
       Object.values(snapshot.val()).map(path => {
         if(path.children){
           if(getID(path.completionBadge) !== badgeToken)
