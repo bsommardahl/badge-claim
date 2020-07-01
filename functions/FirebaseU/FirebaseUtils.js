@@ -99,6 +99,7 @@ const deleteWebhook=(value)=>{
 
 const addDraft=(id,data)=>{
   app.database().ref(`drafts/${id}`).set(data)
+  alert("Draft saved");
 }
 
 const deleteDraft=(id)=>{
@@ -108,6 +109,7 @@ const deleteDraft=(id)=>{
 const publishDraft=(id,data)=>{
   app.database().ref(`drafts/${id}`).set(data)
   app.database().ref(`pathways/${id}`).set(data);
+  alert("Draft Published");
 }
 
 const getDrafts = () => {

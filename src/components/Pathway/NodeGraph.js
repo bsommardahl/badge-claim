@@ -25,6 +25,7 @@ function treeDeep(obj) {
 }
 
 function down2Up(obj, email, awarded) {
+  console.log("PATHWAYS", obj)
   var lvls = treeDeep(obj);
   var id = ID;
   ID++;
@@ -47,6 +48,7 @@ function down2Up(obj, email, awarded) {
   node["x"] = (lvls-1) * 300;
   node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
   node["isComplete"] = obj.completionBadge ? true : false;
+  node["pathwayURL"] = obj.pathwayURL ? obj.pathwayURL : "";
 
   PATHWAYOBJ["nodes"].push(node)
   renderGraph(PATHWAYOBJ, email);
@@ -85,6 +87,9 @@ function down2Up_aux(level, obj, xdes, ydes, iddes) {
   node["x"] = (level-1) * 300;
   node["isComplete"] = obj.completionBadge ? true : false;
   node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
+  node["pathwayURL"] = obj.pathwayURL ? obj.pathwayURL : "";
+
+  console.log("NODE", node)
   
   PATHWAYOBJ["nodes"].push(node);
 }
@@ -203,7 +208,10 @@ async function renderGraph(data, email) {
   }
 
   function handleClick(d) {
-    if(d.url){
+    console.log("All inside D: ", d);
+    if(d.pathwayURL !== "" ){
+      window.location = `/pathway/${getID(d.pathwayURL)}`
+    }else if(d.url){
       window.location = `/badgeid/${getID(d.url)}`;
     }
   }

@@ -37,8 +37,6 @@ const findParentAux = (badgeToken, path, awardsUser, data) => {
         }
 
         if(childID===badgeToken){
-          console.log("PARENT ", path)
-          console.log("CHILD ", path.children[i])
           checkParent(path, awardsUser, data)
         }
 
@@ -64,7 +62,6 @@ const checkParent = (parent, awardsUser, data) => {
 
       if(awardsUser.filter(a => a.badgeclass === childID).length > 0){
         completedChildren++;
-        console.log("Completed children: ", completedChildren);
       }
     }
 
@@ -105,7 +102,6 @@ const AwardService = {
       }
     })
 
-    console.log("AWARD_RESPONSE", response)
     if(response.status == 201)
       findParents(authToken, data.badgeToken, data);
     return response.data;

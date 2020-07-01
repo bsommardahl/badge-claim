@@ -10,7 +10,6 @@ router.post(
   '/',
   asyncMiddleware(authenticate),
   asyncMiddleware(async (req, res, next) => {
-    console.log("AWARDING IN CONTROLLER!!!!!!!")
     const authToken = req.authData.access_token;
     const response = await awardBadgeService.awardBadge(req.body, authToken);
     res.send(response);
