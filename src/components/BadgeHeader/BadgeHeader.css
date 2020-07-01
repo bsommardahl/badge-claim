@@ -14,13 +14,56 @@
 }
 
 .badge-image {
-    height: 192px;
-    width: 192px;
+    max-width: 50%;
+    max-height: 50%;
 }
 
 .badge-sidebar {
     background-color: #fff;
     position: absolute;
     top: 5rem;
-    width: 288px;
+    width: 100%;
+}
+
+.center{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.space{
+    display: flex;
+    flex-direction: row;
+}
+
+.sections{
+    width:33%;
+    vertical-align: middle;
+    align-items: center;
+}
+
+.titleV{
+    margin-top:10%
+}
+
+.buttonV{
+    margin-top:20%
+}
+
+
+@media(max-width:400px){
+    .titleV{
+        margin-top:10%;
+        word-wrap: break-word;
+    }
+    
+    .buttonV{
+        margin-top:70%
+    }
+
+    .badge-image {
+        max-width: 50%;
+        max-height: 50%;
+        margin-top: 70%;
+    }
 }
