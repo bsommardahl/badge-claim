@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import RedirectBadgr from './RedirectBadgr';
 import LandingContainer from './containers/LandingContainer';
+import BadgeContainer from './containers/BadgeContainer';
 import AwardContainer from './containers/AwardContainer'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Pathway from './components/Pathway/Pathway';
@@ -21,7 +21,7 @@ class App extends Component {
             <AppNavbar/>
             <Switch>
               <Route exact path='/' component={LandingContainer} />
-              <Route path='/badgeid/:badge_token' component={RedirectBadgr}/>
+              <Route path='/badgeid/:badge_token' component={BadgeContainer}/>
               <Route path='/award/:badge_token' component={AwardContainer}/>
               <Route path='/login' component={LogIn}/>
               <PrivateRoute component={Dashboard} path='/explore' />

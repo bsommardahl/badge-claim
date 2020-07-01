@@ -1,5 +1,4 @@
 import React from 'react'
-import './AwarderInfo.css'
 
 const AwarderInfo = (props) => {
     let awarderEmail;

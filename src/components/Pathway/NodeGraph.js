@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import axios from 'axios';
 import $ from 'jquery';
+import {getID} from '../../../functions/FirebaseU/FirebaseUtils'
 
 var Y_OFFSET = [];
 var LANES = 0;
@@ -202,8 +203,9 @@ async function renderGraph(data, email) {
   }
 
   function handleClick(d) {
-    if(d.url)
-      window.location = d.url;
+    if(d.url){
+      window.location = `/badgeid/${getID(d.url)}`;
+    }
   }
   
   var simulation = d3.forceSimulation(data.nodes).on("end", ticked);
