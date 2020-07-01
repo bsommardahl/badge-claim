@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import {getDrafts, getID, deleteDraft, getUserEmail, getAdmins} from '../../FirebaseUtils'
+import {getDrafts, getID, deleteDraft, getUserEmail, getAdmins} from '../../../functions/FirebaseU/FirebaseUtils'
 import '../Dashboard/Dashboard.css'
 
-const card = (pathway, subscribed, state) => {
+const card = (pathway, subscribed) => {
     var badgeID = getID(pathway.completionBadge);
     return (
         <div class="col-sm-6">
@@ -27,13 +27,14 @@ class Creations extends Component{
         this.state = {pathways: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
     }
 
-    componentDidMount(){
-        getUserEmail().then((user) => getAdmins().on('value', (snapshot) => {
+    async componentDidMount(){
+        const user = await getUserEmail();
+        getAdmins().on('value', (snapshot) => {
             if(!snapshot.val().includes(user.email)){
                 alert("You don't have permission to be here")
                 document.location.href = '/explore';
             }
-        }))
+        })
 
         getDrafts().on('value', (snapshot) =>
             {
@@ -51,7 +52,7 @@ class Creations extends Component{
                 </div>
                 <div className="body-app">
                     <div className="row">
-                        {this.state.pathways.map((pathway) => card(pathway, this.state.userEmail, false, this.state))}
+                        {this.state.pathways.map((pathway) => card(pathway, this.state.userEmail, false))}
                     </div>
                 </div>
             </div>

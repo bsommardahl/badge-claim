@@ -1,4 +1,4 @@
-import {getWebhooks} from '../../FirebaseUtils'
+import {getWebhooks} from '../../../functions/FirebaseU/FirebaseUtils'
 import axios from 'axios'
 
 export const WebhookFire = (issuer, event, payload) => {

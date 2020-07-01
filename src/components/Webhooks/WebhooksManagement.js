@@ -5,8 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import {addWebhook, app, deleteWebhook, getUserEmail} from '../../FirebaseUtils'
-import {WebhookFire} from './WebhookEngine'
+import {addWebhook, app, deleteWebhook, getUserEmail} from '../../../functions/FirebaseU/FirebaseUtils'
 
 const cookies = new Cookies();
 
@@ -66,6 +65,7 @@ class WebhooksManagement extends React.Component{
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePass = this.onChangePass.bind(this);
 
+        this.checkCookie = this.checkCookie.bind(this);
         this.addWebhook = this.addWebhook.bind(this);
         this.editWebhook = this.editWebhook.bind(this);
         this.openConfirm = this.openConfirm.bind(this);
@@ -118,89 +118,81 @@ class WebhooksManagement extends React.Component{
         this.setState({password :event.target.value})
     }
 
-    addWebhook(){
-        const data = `username=${encodeURIComponent(this.state.email)}&password=${encodeURIComponent(this.state.password)}`;
+    checkCookie(){
         const cookie = cookies.get('issuer');
         if(cookie && cookie === this.state.id){
             addWebhook(this.state);
-            this.setState({editing: false})
-            this.setState({name :""})
-            this.setState({event :"Badge Awarded"})
-            this.setState({url :""})
-            this.setState({id :""})
-            this.setState({secret :""})
-            this.setState({password :""})
-            this.setState({showConfirm: false})
-            this.setState({show: false})
+            this.setState({editing: false, name :"", event :"Badge Awarded", url :"", id :"", secret :"", password :"", showConfirm: false, show: false})
         }else{
-            axios({
+            this.openConfirm();
+        }
+    }
+
+    addWebhook(){
+        const data = `username=${encodeURIComponent(this.state.email)}&password=${encodeURIComponent(this.state.password)}`;
+        this.postToken(data);
+    }
+
+    async postToken(data){
+        var res;
+        try{
+            res = await axios({
                 headers: { 
                     'content-type': 'application/x-www-form-urlencoded' 
-                },       
-                method: 'post',
+                },    
+                method: 'post',   
                 url: 'https://api.badgr.io/o/token',
                 data
-            }).then(res => {
-                console.log(res, res.data.access_token)                
-                axios({
-                    headers: {
-                        'Authorization': `Bearer ${res.data.access_token}`
-                    },
-                    method: 'get',
-                    url: `https://api.badgr.io/v2/issuers`,
-        
-                }).then(res1 => {
-                    //console.log(this.state, res1.data.result)                
-                    const len = res1.data.result.filter(r => r.entityId === this.state.id).length;
-                    //console.log("longitud", len)                
-
-                    if(len > 0)
-                    {
-                        addWebhook(this.state);
-                        //console.log("longitud", len)
-                        let d = new Date();
-                        d.setTime(d.getTime() + (9*60*1000));
-                        //console.log("longitud", len);
-                        cookies.set("issuer", this.state.id, {path: "/webhooks", expires: d});
-                        //console.log("longitud", len);
-
-                        this.setState({editing: false});
-                        this.setState({name :""});
-                        this.setState({event :"Badge Awarded"});
-                        this.setState({url :""});
-                        this.setState({id :""});
-                        this.setState({secret :""});
-                        this.setState({password :""});
-                        this.setState({showConfirm: false});
-                        this.setState({show: false});
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
-            }).catch(err => {
-                this.setState({showError: true})
             })
+        }catch(error){
+            console.log("An error ocurred", error);
+            this.setState({showError: true})  
+        }
+
+        console.log("RES_TOKEN",res.status); 
+        if(res.status == 200){
+            await this.getIssuer(res)
+        }
+    }
+
+    async getIssuer(res){
+        var res1 = await axios({
+            headers: {
+                'Authorization': `Bearer ${res.data.access_token}`
+            },
+            method: 'get',
+            url: `https://api.badgr.io/v2/issuers`,
+
+        })
+        if(res1.status == 200){
+            console.log("RES1",res1);            
+            const len = res1.data.result.filter(r => r.entityId === this.state.id).length;   
+            console.log("LEN", len);      
+            if(len > 0)
+            {
+                addWebhook(this.state);
+                let d = new Date();
+                d.setTime(d.getTime() + (9*60*1000));
+                cookies.set("issuer", this.state.id, {path: "/webhooks", expires: d});
+                this.setState({editing: false, name :"", event :"Badge Awarded", url :"", id :"", secret :"", password :"", showConfirm: false, show: false});
+            }else{
+                alert("The Issuer ID does not belong to you");
+            }
         }
     }
 
     editWebhook(key, data){
-        this.setState({ id: key.split(":")[0]})
-        this.setState({ name: key.split(":")[1]})
-        this.setState({ url: data.url})
-        this.setState({ event: data.event})
-        this.setState({ secret: data.secret})
-        this.setState({ editing: true})
-        this.setState({ show: true})
+        this.setState({ id: key.split(":")[0], name: key.split(":")[1], url: data.url, event: data.event, secret: data.secret, editing: true, show: true})
     }
 
-    componentDidMount(){
-        getUserEmail().then((user) => {
-            this.setState({email: user.email})
-            app.database().ref(`webhooks/`).orderByChild("owner").equalTo(user.email).on('value', (snapshot) =>
-            {this.setState({
+    async componentDidMount(){
+        const user = await getUserEmail()
+        this.setState({email: user.email})
+        console.log("email", user)
+        app.database().ref(`webhooks/`).orderByChild("owner").equalTo(user.email).on('value', (snapshot) =>{
+            this.setState({
                 webhooks: snapshot.val()
-            })}
-        )
+            })
         })
     }
 
@@ -286,7 +278,7 @@ class WebhooksManagement extends React.Component{
                         <Button variant="secondary" onClick={this.handleClose}>
                             Close
                         </Button>
-                        <Button variant="primary" disabled={!disable} onClick={cookies.get('issuer') ? this.addWebhook : this.openConfirm}>
+                        <Button variant="primary" disabled={!disable} onClick={cookies.get('issuer') ? this.checkCookie : this.openConfirm}>
                             Save Changes
                         </Button>
                         </Modal.Footer>

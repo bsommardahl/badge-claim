@@ -19,6 +19,7 @@
     "node-fetch": "^2.6.0",
     "query-string": "^6.12.1",
     "react": "^16.13.1",
+    "react-app-rewired": "^2.1.6",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-fullscreen-loading": "0.0.4",
@@ -30,11 +31,11 @@
     "universal-cookie": "^4.0.3"
   },
   "scripts": {
-    "prestart": "react-scripts build",
+    "prestart": "react-app-rewired build",
     "start": "node server.js",
-    "start:frontend": "react-scripts start",
-    "build:frontend": "react-scripts build",
-    "test:frontend": "react-scripts test",
+    "start:frontend": "react-app-rewired start",
+    "build:frontend": "react-app-rewired build",
+    "test:frontend": "react-app-rewired test",
     "eject:frontend": "react-scripts eject"
   },
   "author": "",
