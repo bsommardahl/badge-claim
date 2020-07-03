@@ -10,7 +10,7 @@ class CardChild extends React.Component{
             id: 0, 
             savedName: this.props.obj.title, 
             name: this.props.obj.title, 
-            requiredBadge: this.props.obj.requiredBadge, 
+            requiredBadge: this.props.obj.requiredBadge,
             isCompletion: false,
             pathwayURL: "",
             children: []}
@@ -34,7 +34,7 @@ class CardChild extends React.Component{
 
     addChild(){
         if(this.state.children.filter(child => child.title === "" || child.title === undefined).length === 0)
-            this.setState({children: this.state.children.concat([{title: "", requiredBadge: "", children: []}])})
+            this.setState({children: this.state.children.concat([{title: "", requiredBadge: "", pathwayURL: "", children: []}])})
     }
 
     updateChild(savedName, newname, requiredBadge, children, isCompletion, pathwayURL){
@@ -85,7 +85,8 @@ class CardChild extends React.Component{
     }
 
     handleUrl(e){
-        this.setState({requiredBadge: e.target.value})
+        this.setState({requiredBadge: e.target.value, isCompletion: e.target.value ? this.state.isCompletion : false})
+
     }
 
     handlePathwayURL(e){
@@ -97,7 +98,11 @@ class CardChild extends React.Component{
             this.setState({
                 savedName: this.props.obj.title, 
                 name: this.props.obj.title, 
-                requiredBadge: this.props.obj.requiredBadge ? this.props.obj.requiredBadge : this.props.obj.completionBadge, 
+                requiredBadge: 
+                    this.props.obj.requiredBadge ? 
+                        this.props.obj.requiredBadge : 
+                        this.props.obj.completionBadge ? 
+                            this.props.obj.completionBadge : "", 
                 children: this.props.obj.children ? this.props.obj.children : [], 
                 draft: this.props.obj,
                 isCompletion: this.props.obj.requiredBadge ? false : true,
@@ -209,7 +214,7 @@ class Drafts extends React.Component{
 
     addChild(){
         if(this.state.children.filter(child => child.title === "" || child.title === undefined).length === 0)
-            this.setState({children: this.state.children.concat([{title: "", requiredBadge: "", children: []}])})
+            this.setState({children: this.state.children.concat([{title: "", requiredBadge: "", pathwayURL:"", children: []}])})
     }
 
     updateChild(savedName, newname, requiredBadge, children, isCompletion, pathwayURL){
@@ -288,6 +293,7 @@ class Drafts extends React.Component{
                     url: obj.completionBadge, 
                     children: obj.children ? obj.children : [], 
                     draft: obj,
+                    pathwayURL: obj.pathwayURL,
                     editing: true
                 })
             })

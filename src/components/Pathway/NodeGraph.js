@@ -2,6 +2,7 @@ import * as d3 from 'd3'
 import axios from 'axios';
 import $ from 'jquery';
 import {getID} from '../../../functions/FirebaseU/FirebaseUtils'
+import { Children } from 'react';
 
 var Y_OFFSET = [];
 var LANES = 0;
@@ -57,10 +58,18 @@ function down2Up(obj, email, awarded) {
 
 function down2Up_aux(level, obj, xdes, ydes, iddes) {
   let myY = getY(false);
-  var id = ID;
-  ID++;
+  var id = 0;
+  var found = PATHWAYOBJ["nodes"].filter(node => node.name === obj.title)
+  console.log("Found", found);
+  if(found.length > 0){
+    //console.log("****************FOUND", found[0])
+    id = found[0].id
+  }else{
+    id = ID;
+    ID++;
+  }
   
-  if(obj.children){
+  if(obj.children && found.length == 0){
     for (let index = 0; index < obj.children.length; index++) {
       down2Up_aux(level - 1, obj.children[index], ((level-1) * 300), (myY * 75) + 25, id);
     }
@@ -74,24 +83,33 @@ function down2Up_aux(level, obj, xdes, ydes, iddes) {
   var link = {};
   link["source"]= id;
   link["target"]= iddes;
-  link["xori"]= xori;
-  link["yori"]= yori;
-  link["xdes"]= xdes;
-  link["ydes"]= ydes;
+  if(found.length > 0){
+    var foundlink = PATHWAYOBJ["links"].filter(link => link.source === found[0].id)
+    //console.log("**************FOUND LINKS", foundlink)
+    link["xori"]= foundlink[0].xori;
+    link["yori"]= foundlink[0].yori;
+    link["xdes"]= xdes;
+    link["ydes"]= ydes;
+  }else{
+    link["xori"]= xori;
+    link["yori"]= yori;
+    link["xdes"]= xdes;
+    link["ydes"]= ydes;
+  }
   PATHWAYOBJ["links"].push(link);
 
-  var node = {};
-  node["id"] = id;
-  node["name"] = obj.title;
-  node["y"] = myY * 75;
-  node["x"] = (level-1) * 300;
-  node["isComplete"] = obj.completionBadge ? true : false;
-  node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
-  node["pathwayURL"] = obj.pathwayURL ? obj.pathwayURL : "";
+  if(found.length == 0){
+    var node = {};
+    node["id"] = id;
+    node["name"] = obj.title;
+    node["y"] = myY * 75;
+    node["x"] = (level-1) * 300;
+    node["isComplete"] = obj.completionBadge ? true : false;
+    node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
+    node["pathwayURL"] = obj.pathwayURL ? obj.pathwayURL : "";
 
-  console.log("NODE", node)
-  
-  PATHWAYOBJ["nodes"].push(node);
+    PATHWAYOBJ["nodes"].push(node);
+  }
 }
 
 function getY(end){
@@ -115,10 +133,98 @@ const getAwarded = async(email) => {
   return resp.data.result.filter(a => a.recipient.plaintextIdentity ===  email);;
 }
 
-export function createPathway(pathway, email, awarded) {
-  
+export function createPathway(pathway, email, awarded, pathways) {
+  var newPathway = modify(pathway, pathways)
+  console.log("NEW PATHWAY: ", newPathway)
   down2Up(pathway, email, awarded);
 
+}
+
+function modify(pathway, pathways){
+  var newPathway = pathway;
+  if(pathway){
+    console.log("Pathway title: ",pathway.title)
+    var newChildren = []
+    if(pathway.children){
+
+      for(let index = 0; index < pathway.children.length; index++){
+        var newChild = modifyaux(pathway.children[index], pathways)
+        if(newChild)
+          newChildren.push(newChild)
+      }
+    }
+    console.log(`NEW CHILDREN OF ${pathway.title}:`, newChildren)
+  }
+
+  return newPathway
+}
+
+function modifyaux(pathway, pathways){
+  var newPathway = pathway;
+  if(pathway){
+    console.log("Title: ",pathway.title)
+    var newChildren = []
+    var oldChildren = []
+    if(pathway.pathwayURL && pathway.pathwayURL!==""){
+      var childPathway = pathways.filter(path => getID(path.completionBadge) === getID(pathway.pathwayURL))
+      if(childPathway.length > 0 && childPathway[0].children && newPathway.children){
+        oldChildren = newPathway.children;
+        newPathway.children = childPathway[0].children;
+        console.log(`INSERTED OLD CHILDREN (${childPathway[0].title}): `, addChildrenAtDeep(oldChildren,childPathway[0]))
+      }
+    }
+    
+    if(newPathway.children){
+      for(let index = 0; index < newPathway.children.length; index++){
+        var newChild = modifyaux(newPathway.children[index], pathways)
+        if(newChild)
+          newChildren.push(newChild)
+      }
+      newPathway.children = newChildren
+    }
+    //console.log("New Pathway", testPathway)
+    //console.log(`NEW CHILDREN OF ${pathway.title}:`, newChildren)
+    //console.log(`OLD CHILDREN OF ${pathway.title}:`, oldChildren)
+  }
+
+  return newPathway
+}
+
+function addChildrenAtDeep(oldChildren, pathway){
+  var newPathway = pathway
+
+  if(newPathway){
+    console.log("pathway title: ",newPathway.title)
+    if(newPathway.children && newPathway.children.length>0){
+      for(let index = 0; index < newPathway.children.length; index++){
+        addChildrenAtDeep_aux(oldChildren, newPathway.children[index])
+      }
+    }else{
+      newPathway["children"] = oldChildren
+    }
+  }
+  
+  return newPathway
+}
+
+function addChildrenAtDeep_aux(oldChildren, pathway){
+  var newPathway = pathway
+
+  if(newPathway){
+    console.log("pathway title: ",newPathway.title)
+    if(newPathway.children){
+      var newChildren = []
+      for(let index = 0; index < newPathway.children.length; index++){
+        var child = addChildrenAtDeep_aux(oldChildren, newPathway.children[index])
+        if(child)
+          newChildren.push(child)
+      }
+      newPathway["children"] = newChildren
+    }else{
+      newPathway["children"] = oldChildren
+    }
+  }
+  return newPathway
 }
 
 function getJSCode(url) {
@@ -142,6 +248,7 @@ function findEarned(badge, awards) {
 }
 
 async function renderGraph(data, email) {
+  console.log("DATA",data)
   var dataAward = await getAwarded(email);
   var margin = {top: 10, right: 30, bottom: 30, left: 40},
       width = (LANES*300) - margin.left - margin.right,
@@ -208,10 +315,7 @@ async function renderGraph(data, email) {
   }
 
   function handleClick(d) {
-    console.log("All inside D: ", d);
-    if(d.pathwayURL !== "" ){
-      window.location = `/pathway/${getID(d.pathwayURL)}`
-    }else if(d.url){
+    if(d.url){
       window.location = `/badgeid/${getID(d.url)}`;
     }
   }
