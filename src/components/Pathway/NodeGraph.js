@@ -167,10 +167,13 @@ function modifyaux(pathway, pathways){
     var oldChildren = []
     if(pathway.pathwayURL && pathway.pathwayURL!==""){
       var childPathway = pathways.filter(path => getID(path.completionBadge) === getID(pathway.pathwayURL))
-      if(childPathway.length > 0 && childPathway[0].children && newPathway.children){
-        oldChildren = newPathway.children;
-        newPathway.children = childPathway[0].children;
-        console.log(`INSERTED OLD CHILDREN (${childPathway[0].title}): `, addChildrenAtDeep(oldChildren,childPathway[0]))
+      if(childPathway.length > 0 && childPathway[0].children){
+        if(!newPathway.children){
+          newPathway.children = childPathway[0].children;
+        } else {
+          oldChildren = newPathway.children;
+          newPathway.children = childPathway[0].children;
+        }
       }
     }
     
@@ -225,20 +228,6 @@ function addChildrenAtDeep_aux(oldChildren, pathway){
     }
   }
   return newPathway
-}
-
-function getJSCode(url) {
-  var settings = {
-    "url": url,
-    "method": "GET",
-    "timeout": 0,
-  };
-
-  return $.ajax(settings);
-}
-
-const isAwarded = async(data, id) => {
-  return data.filter(a => a.entityId === id).length;
 }
 
 function findEarned(badge, awards) {
