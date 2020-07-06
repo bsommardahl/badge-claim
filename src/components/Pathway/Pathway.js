@@ -15,7 +15,7 @@ class Pathway extends React.Component{
         this.setState({userEmail: user.email});
         getPathways().once('value', (snapshot) =>{
             this.setState({pathway:Object.values(snapshot.val()).filter(pathway => getID(pathway.completionBadge) === params.pathway_id)[0]})
-            createPathway(this.state.pathway, this.state.userEmail, this.state.awarded)
+            createPathway(this.state.pathway, this.state.userEmail, Object.values(snapshot.val()))
         });
     }
 

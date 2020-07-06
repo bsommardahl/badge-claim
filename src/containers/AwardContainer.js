@@ -65,7 +65,6 @@ class AwardContainer extends Component {
                 console.log(err)
             })
         
-        console.log(this.state.query.toString());
     }
 
     render() {

@@ -105,7 +105,7 @@ class Dashboard extends Component{
     getAwards_aux = (obj, awarded) => {
         let awardCount = 0
         if(obj){
-            let objID = getID(obj.completionBadge ? obj.completionBadge : obj.requiredBadge) 
+            let objID = getID(obj.completionBadge ? obj.completionBadge : obj.requiredBadge ? obj.requiredBadge : "") 
             if(objID){
                 awardCount = isAwarded(awarded, objID)
                 if(obj.children){

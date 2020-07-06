@@ -24,7 +24,7 @@ function treeDeep(obj) {
   return h + 1;
 }
 
-function down2Up(obj, email, awarded) {
+function down2Up(obj, email) {
   var lvls = treeDeep(obj);
   var id = ID;
   ID++;
@@ -47,6 +47,7 @@ function down2Up(obj, email, awarded) {
   node["x"] = (lvls-1) * 300;
   node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
   node["isComplete"] = obj.completionBadge ? true : false;
+  node["pathwayURL"] = obj.pathwayURL ? obj.pathwayURL : "";
 
   PATHWAYOBJ["nodes"].push(node)
   renderGraph(PATHWAYOBJ, email);
@@ -55,10 +56,16 @@ function down2Up(obj, email, awarded) {
 
 function down2Up_aux(level, obj, xdes, ydes, iddes) {
   let myY = getY(false);
-  var id = ID;
-  ID++;
+  var id = 0;
+  var found = PATHWAYOBJ["nodes"].filter(node => node.name === obj.title)
+  if(found.length > 0){
+    id = found[0].id
+  }else{
+    id = ID;
+    ID++;
+  }
   
-  if(obj.children){
+  if(obj.children && found.length == 0){
     for (let index = 0; index < obj.children.length; index++) {
       down2Up_aux(level - 1, obj.children[index], ((level-1) * 300), (myY * 75) + 25, id);
     }
@@ -72,29 +79,38 @@ function down2Up_aux(level, obj, xdes, ydes, iddes) {
   var link = {};
   link["source"]= id;
   link["target"]= iddes;
-  link["xori"]= xori;
-  link["yori"]= yori;
-  link["xdes"]= xdes;
-  link["ydes"]= ydes;
+  if(found.length > 0){
+    var foundlink = PATHWAYOBJ["links"].filter(link => link.source === found[0].id)
+    link["xori"]= foundlink[0].xori;
+    link["yori"]= foundlink[0].yori;
+    link["xdes"]= xdes;
+    link["ydes"]= ydes;
+  }else{
+    link["xori"]= xori;
+    link["yori"]= yori;
+    link["xdes"]= xdes;
+    link["ydes"]= ydes;
+  }
   PATHWAYOBJ["links"].push(link);
 
-  var node = {};
-  node["id"] = id;
-  node["name"] = obj.title;
-  node["y"] = myY * 75;
-  node["x"] = (level-1) * 300;
-  node["isComplete"] = obj.completionBadge ? true : false;
-  node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
-  
-  PATHWAYOBJ["nodes"].push(node);
+  if(found.length == 0){
+    var node = {};
+    node["id"] = id;
+    node["name"] = obj.title;
+    node["y"] = myY * 75;
+    node["x"] = (level-1) * 300;
+    node["isComplete"] = obj.completionBadge ? true : false;
+    node["url"] = obj.completionBadge ? obj.completionBadge : obj.requiredBadge;
+    node["pathwayURL"] = obj.pathwayURL ? obj.pathwayURL : "";
+
+    PATHWAYOBJ["nodes"].push(node);
+  }
 }
 
 function getY(end){
   var pos = Y_OFFSET[0];
-  //for (let index = 0; index < lvl; index++) {
   if(end)
     Y_OFFSET[0] += 1;
-  //}
   return pos;
 }
 
@@ -110,24 +126,90 @@ const getAwarded = async(email) => {
   return resp.data.result.filter(a => a.recipient.plaintextIdentity ===  email);;
 }
 
-export function createPathway(pathway, email, awarded) {
+export function createPathway(pathway, email, pathways) {
+  modify(pathway, pathways)
+  down2Up(pathway, email);
+
+}
+
+function modify(pathway, pathways){
+  if(pathway){
+    var newChildren = []
+    if(pathway.children){
+
+      for(let index = 0; index < pathway.children.length; index++){
+        var newChild = modifyaux(pathway.children[index], pathways)
+        if(newChild)
+          newChildren.push(newChild)
+      }
+    }
+  }
+}
+
+function modifyaux(pathway, pathways){
+  var newPathway = pathway;
+  if(pathway){
+    var newChildren = []
+    var oldChildren = []
+    if(pathway.pathwayURL && pathway.pathwayURL!==""){
+      var childPathway = pathways.filter(path => getID(path.completionBadge) === getID(pathway.pathwayURL))
+      if(childPathway.length > 0 && childPathway[0].children){
+        if(!newPathway.children){
+          newPathway.children = childPathway[0].children;
+        } else {
+          oldChildren = newPathway.children;
+          newPathway.children = childPathway[0].children;
+          newPathway = addChildrenAtDeep(oldChildren, newPathway)
+        }
+      }
+    }
+    
+    if(newPathway.children){
+      for(let index = 0; index < newPathway.children.length; index++){
+        var newChild = modifyaux(newPathway.children[index], pathways)
+        if(newChild)
+          newChildren.push(newChild)
+      } 
+      newPathway.children = newChildren
+    }
+  }
+
+  return newPathway
+}
+
+function addChildrenAtDeep(oldChildren, pathway){
+  var newPathway = pathway
+
+  if(newPathway){
+    if(newPathway.children && newPathway.children.length>0){
+      for(let index = 0; index < newPathway.children.length; index++){
+        addChildrenAtDeep_aux(oldChildren, newPathway.children[index])
+      }
+    }else{
+      newPathway["children"] = oldChildren
+    }
+  }
   
-  down2Up(pathway, email, awarded);
-
+  return newPathway
 }
 
-function getJSCode(url) {
-  var settings = {
-    "url": url,
-    "method": "GET",
-    "timeout": 0,
-  };
+function addChildrenAtDeep_aux(oldChildren, pathway){
+  var newPathway = pathway
 
-  return $.ajax(settings);
-}
-
-const isAwarded = async(data, id) => {
-  return data.filter(a => a.entityId === id).length;
+  if(newPathway){
+    if(newPathway.children){
+      var newChildren = []
+      for(let index = 0; index < newPathway.children.length; index++){
+        var child = addChildrenAtDeep_aux(oldChildren, newPathway.children[index])
+        if(child)
+          newChildren.push(child)
+      }
+      newPathway["children"] = newChildren
+    }else{
+      newPathway["children"] = oldChildren
+    }
+  }
+  return newPathway
 }
 
 function findEarned(badge, awards) {

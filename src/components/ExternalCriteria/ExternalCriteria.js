@@ -1,5 +1,4 @@
 import React from 'react'
-import './ExternalCriteria.css'
 
 const ExternalCriteria = (props) => {
     if(props.criteriaURL) {        
