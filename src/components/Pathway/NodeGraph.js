@@ -2,7 +2,6 @@ import * as d3 from 'd3'
 import axios from 'axios';
 import $ from 'jquery';
 import {getID} from '../../../functions/FirebaseU/FirebaseUtils'
-import { Children } from 'react';
 
 var Y_OFFSET = [];
 var LANES = 0;
@@ -25,8 +24,7 @@ function treeDeep(obj) {
   return h + 1;
 }
 
-function down2Up(obj, email, awarded) {
-  console.log("PATHWAYS", obj)
+function down2Up(obj, email) {
   var lvls = treeDeep(obj);
   var id = ID;
   ID++;
@@ -60,9 +58,7 @@ function down2Up_aux(level, obj, xdes, ydes, iddes) {
   let myY = getY(false);
   var id = 0;
   var found = PATHWAYOBJ["nodes"].filter(node => node.name === obj.title)
-  console.log("Found", found);
   if(found.length > 0){
-    //console.log("****************FOUND", found[0])
     id = found[0].id
   }else{
     id = ID;
@@ -85,7 +81,6 @@ function down2Up_aux(level, obj, xdes, ydes, iddes) {
   link["target"]= iddes;
   if(found.length > 0){
     var foundlink = PATHWAYOBJ["links"].filter(link => link.source === found[0].id)
-    //console.log("**************FOUND LINKS", foundlink)
     link["xori"]= foundlink[0].xori;
     link["yori"]= foundlink[0].yori;
     link["xdes"]= xdes;
@@ -114,10 +109,8 @@ function down2Up_aux(level, obj, xdes, ydes, iddes) {
 
 function getY(end){
   var pos = Y_OFFSET[0];
-  //for (let index = 0; index < lvl; index++) {
   if(end)
     Y_OFFSET[0] += 1;
-  //}
   return pos;
 }
 
@@ -133,17 +126,14 @@ const getAwarded = async(email) => {
   return resp.data.result.filter(a => a.recipient.plaintextIdentity ===  email);;
 }
 
-export function createPathway(pathway, email, awarded, pathways) {
-  var newPathway = modify(pathway, pathways)
-  console.log("NEW PATHWAY: ", newPathway)
-  down2Up(pathway, email, awarded);
+export function createPathway(pathway, email, pathways) {
+  modify(pathway, pathways)
+  down2Up(pathway, email);
 
 }
 
 function modify(pathway, pathways){
-  var newPathway = pathway;
   if(pathway){
-    console.log("Pathway title: ",pathway.title)
     var newChildren = []
     if(pathway.children){
 
@@ -153,16 +143,12 @@ function modify(pathway, pathways){
           newChildren.push(newChild)
       }
     }
-    console.log(`NEW CHILDREN OF ${pathway.title}:`, newChildren)
   }
-
-  return newPathway
 }
 
 function modifyaux(pathway, pathways){
   var newPathway = pathway;
   if(pathway){
-    console.log("Title: ",pathway.title)
     var newChildren = []
     var oldChildren = []
     if(pathway.pathwayURL && pathway.pathwayURL!==""){
@@ -173,6 +159,7 @@ function modifyaux(pathway, pathways){
         } else {
           oldChildren = newPathway.children;
           newPathway.children = childPathway[0].children;
+          newPathway = addChildrenAtDeep(oldChildren, newPathway)
         }
       }
     }
@@ -182,12 +169,9 @@ function modifyaux(pathway, pathways){
         var newChild = modifyaux(newPathway.children[index], pathways)
         if(newChild)
           newChildren.push(newChild)
-      }
+      } 
       newPathway.children = newChildren
     }
-    //console.log("New Pathway", testPathway)
-    //console.log(`NEW CHILDREN OF ${pathway.title}:`, newChildren)
-    //console.log(`OLD CHILDREN OF ${pathway.title}:`, oldChildren)
   }
 
   return newPathway
@@ -197,7 +181,6 @@ function addChildrenAtDeep(oldChildren, pathway){
   var newPathway = pathway
 
   if(newPathway){
-    console.log("pathway title: ",newPathway.title)
     if(newPathway.children && newPathway.children.length>0){
       for(let index = 0; index < newPathway.children.length; index++){
         addChildrenAtDeep_aux(oldChildren, newPathway.children[index])
@@ -214,7 +197,6 @@ function addChildrenAtDeep_aux(oldChildren, pathway){
   var newPathway = pathway
 
   if(newPathway){
-    console.log("pathway title: ",newPathway.title)
     if(newPathway.children){
       var newChildren = []
       for(let index = 0; index < newPathway.children.length; index++){
@@ -237,7 +219,6 @@ function findEarned(badge, awards) {
 }
 
 async function renderGraph(data, email) {
-  console.log("DATA",data)
   var dataAward = await getAwarded(email);
   var margin = {top: 10, right: 30, bottom: 30, left: 40},
       width = (LANES*300) - margin.left - margin.right,
