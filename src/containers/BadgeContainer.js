@@ -14,7 +14,8 @@ const customStyles = {
         right: 'auto',
         bottom: 'auto',
         marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
+        transform: 'translate(-50%, -50%)',
+        width: '40%'
     }
 };
 
@@ -27,6 +28,7 @@ class BadgeContainer extends Component {
             email: '',
             modalIsOpen: false,
             display: '',
+            evidence: '',
             isLoading: true
         }
         this.openModal = this.openModal.bind(this);
@@ -47,6 +49,10 @@ class BadgeContainer extends Component {
         window.localStorage.setItem('email', e.target.value);
     }
 
+    handleEvidence = (e) =>{
+        this.setState({evidence: e.target.value})
+    }
+
     handleEmailSubmit = async(e) => {
         e.preventDefault()
         await axios
@@ -55,7 +61,7 @@ class BadgeContainer extends Component {
                     email: this.state.email,
                     badgeToken: this.state.badgeToken,
                     badgeName: this.state.badgeData.name,
-                    tags: this.state.badgeData.tags
+                    evidence: this.state.evidence,
                 }
             )
             .then(res => {
@@ -105,10 +111,11 @@ class BadgeContainer extends Component {
                     <form onSubmit={this.handleEmailSubmit}>
                         <p>Badge Owner Text</p>
                         <input onChange={this.handleEmailChange} value={this.state.email} required type="email" className="form-control mb-3" placeholder="Email Address" />
+                        <textarea onChange={this.handleEvidence} value={this.state.evidence} required className="form-control mb-3" placeholder="Evidence for completing badge" />
                         <button className="btn btn-lg btn-primary btn-block search-button">Claim Badge</button>
                     </form>
                 </Modal>
-                <BadgeHeader imageSource={this.state.badgeData.image} buttonClass={this.state.display} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal}/>
+                <BadgeHeader imageSource={this.state.badgeData.image} buttonClass={this.state.display} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal} showButton={true}/>
                 <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} tags={this.state.badgeData.tags} />
                 <ToastsContainer store={ToastsStore}/>
             </div>

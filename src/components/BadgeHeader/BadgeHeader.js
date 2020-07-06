@@ -26,9 +26,9 @@ const BadgeHeader = props =>
                     </div>
                 </div>
                 <div className="center sections">
-                    <p className="buttonV">
+                    {props.showButton ? <p className="buttonV">
                         <a href="" onClick={props.openModal} className="btn btn-primary claim-badge-button btn-lg">Claim badge</a>
-                    </p>
+                    </p> : <p/>}
                 </div>
             </div>                    
         </div>
