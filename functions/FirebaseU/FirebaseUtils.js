@@ -14,6 +14,7 @@ const config = {
 
 const app = firebase.initializeApp(config);
 const googleProvider = new firebase.auth.GoogleAuthProvider();
+const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
 
 //SESSIONS
 const logIn = async() => {
@@ -34,25 +35,6 @@ const isLogin = async() => {
   });
 }
 
-const getAdmins = () => {
-  const promiseData = app.database().ref('/admins');
-  return promiseData;
-}
-
-//DATABASE
-
-const getPathways = () => {
-  const promiseData = app.database().ref('/pathways');
-  return promiseData;
-}
-
-const joinPathway = (pathway, usermail) => {
-  const promiseData = app.database()
-      .ref(`/pathways/${pathway.completionBadge?getID(pathway.completionBadge):getID(pathway.requiredBadge)}/users`)
-      .set(pathway.users ? pathway.users.concat([usermail]) : [usermail]);
-  return promiseData
-}
-
 const getUserEmail = () => {
   return new Promise((resolve, reject) => {
      const unsubscribe = app.auth().onAuthStateChanged(user => {
@@ -62,23 +44,9 @@ const getUserEmail = () => {
   });
 }
 
-const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
-
-const existPath = (pathwayID) => {
-  var d = new Date(); 
-  var time = d.getTime();
-
-  if(PATHWAYS[pathwayID] && (time - PATHWAYS[pathwayID][1]) < FOUR_HOURS){
-    return PATHWAYS[pathwayID][0];
-  }
-
-  return null;
-}
-
-const savePath = (pathwayID, pathway) => {
-  var d = new Date(); 
-  var time = d.getTime();
-  PATHWAYS[pathwayID] = [pathway, time];
+const getAdmins = () => {
+  const promiseData = app.database().ref('/admins');
+  return promiseData;
 }
 
 const getWebhooks = () => {
@@ -95,30 +63,13 @@ const deleteWebhook=(value)=>{
   app.database().ref(`webhooks/${value}`).remove()
 }
 
-//DRAFTS
-
-const addDraft=(id,data)=>{
-  app.database().ref(`drafts/${id}`).set(data)
-  alert("Draft saved");
+const userSubscribe = (email, ids) => {
+  app.database().ref(`/users/${email.replace(/[\.@]/ig,'')}`).set(ids);
+  alert("Subscribed!");
 }
 
-const deleteDraft=(id)=>{
-  app.database().ref(`drafts/${id}`).remove()
-}
-
-const publishDraft=(id,data)=>{
-  app.database().ref(`drafts/${id}`).set(data)
-  app.database().ref(`pathways/${id}`).set(data);
-  alert("Draft Published");
-}
-
-const getDrafts = () => {
-  const promiseData = app.database().ref('/drafts');  
-  return promiseData;
-}
-
-const getDraft = (id) => {
-  const promiseData = app.database().ref(`/drafts/${id}`);
+const getSubscritions = (email) => {
+  const promiseData = app.database().ref(`/users/${email.replace(/[\.@]/ig,'')}`);
   return promiseData;
 }
 
@@ -129,18 +80,11 @@ module.exports = {
         logIn: logIn, 
         logOut: logOut, 
         getID: getID, 
-        existPath: existPath,
-        savePath: savePath, 
         addWebhook: addWebhook, 
-        deleteWebhook: deleteWebhook, 
-        addDraft: addDraft, 
-        publishDraft: publishDraft,
-        deleteDraft: deleteDraft, 
+        deleteWebhook: deleteWebhook,  
         getUserEmail: getUserEmail,
         getAdmins: getAdmins,
-        getPathways: getPathways,
-        joinPathway: joinPathway,
         getWebhooks: getWebhooks,
-        getDrafts: getDrafts,
-        getDraft: getDraft
+        userSubscribe: userSubscribe,
+        getSubscritions: getSubscritions
 };

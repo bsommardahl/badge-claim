@@ -1,0 +1,13 @@
+{
+    "P6d_xH8jR6eqHznHx8o8bg" : {
+        "children" : [ {
+          "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/mpP6EehkQKWaLMNdlHof7A",
+          "title" : "SPA Front-End"
+        }, {
+          "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/2d_P5eloSwSxjxyhYEoF-A",
+          "title" : "REST API Back-End"
+        } ],
+        "completionBadge" : "https://acklenavenue.badgr.com/public/assertions/P6d_xH8jR6eqHznHx8o8bg",
+        "title" : "Applications"
+      }
+}

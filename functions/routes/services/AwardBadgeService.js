@@ -10,16 +10,20 @@ const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
 const findParents = async(authToken, badgeToken, data) => {
   const temp = await AwardService.listAwards(data, authToken);
   const aws = temp.result;  
+  let allPathways = [];
+  let pathways = require(`../../../pathways/pathwaysIDS.json`);
   if(aws!==undefined){
-    const awardsUser = aws.filter(a => a.recipient.plaintextIdentity === data.email)
-    await fire.getPathways().on('value', (snapshot) => {
-      Object.values(snapshot.val()).map(path => {
+    for(let x=0;x<pathways.pathways_ids.length;x++){
+      let path = Object.values(require(`../../../pathways/${pathways.pathways_ids[x]}.json`))
+      allPathways.push(path[0]);
+      const awardsUser = aws.filter(a => a.recipient.plaintextIdentity === data.email)
+      path.map(path => {
         if(path.children){
           if(getID(path.completionBadge) !== badgeToken)
-            findParentAux(badgeToken, path, awardsUser, data);
+            findParentAux(badgeToken, path, awardsUser, data)
         } 
       });
-    }) 
+    }
   }
 }
 

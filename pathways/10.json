@@ -1,0 +1,25 @@
+{
+    "10" : {
+        "children" : [ {
+            "children" : [ {
+            "children" : [ {
+                "completionBadge" : "",
+                "pathwayURL" : "http://localhost:3001/drafts/mpP6EehkQKWaLMNdlHof7A",
+                "title" : "TEST1_1_1_1"
+            } ],
+            "pathwayURL" : "http://localhost:3001/drafts/pG9FIu8VR32QEjVHvb1Yog",
+            "requiredBadge" : "11/33",
+            "title" : "TEST1_1_1"
+            } ],
+            "completionBadge" : "11/22",
+            "pathwayURL" : "",
+            "title" : "TEST1_1"
+        }, {
+            "completionBadge" : "",
+            "pathwayURL" : "bXQp-ii-SP-mdOoY9hRWvQ",
+            "title" : "TEST1_2"
+        } ],
+        "completionBadge" : "11/10",
+        "title" : "TEST1"
+    }
+}

@@ -31,15 +31,6 @@
     },{
       "source": "/pathway/*",
       "destination": "/index.html"
-    },{
-      "source": "/creations",
-      "destination": "/index.html"
-    },{
-      "source": "/drafts",
-      "destination": "/index.html"
-    },{
-      "source": "/drafts/*",
-      "destination": "/index.html"
     }],
     "ignore": [
       "firebase.json",

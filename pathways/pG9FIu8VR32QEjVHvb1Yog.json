@@ -1,0 +1,16 @@
+{
+    "pG9FIu8VR32QEjVHvb1Yog" : {
+        "children" : [ {
+          "children" : [ {
+            "pathwayURL" : "",
+            "requiredBadge" : "https://badgr.com/public/badges/J-xxphepR6C-A1mCuB4Tzg",
+            "title" : "First Order Soldier"
+          } ],
+          "completionBadge" : "https://badgr.com/public/badges/1fzG9GlBT8-pwIV3BT9TZg",
+          "pathwayURL" : "",
+          "title" : "Resistance Soldier"
+        } ],
+        "completionBadge" : "https://badgr.com/public/badges/pG9FIu8VR32QEjVHvb1Yog",
+        "title" : "Star Wars Fan"
+      }
+}

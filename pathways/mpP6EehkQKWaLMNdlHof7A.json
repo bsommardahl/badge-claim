@@ -1,0 +1,20 @@
+{
+    "mpP6EehkQKWaLMNdlHof7A" : {
+        "children" : [ {
+          "children" : [ {
+            "requiredBadge" : "11/11100",
+            "title" : "HIJO1_1"
+          }, {
+            "requiredBadge" : "11/22200",
+            "title" : "HIJO1_2"
+          } ],
+          "completionBadge" : "11/11",
+          "title" : "HIJO1"
+        }, {
+          "requiredBadge" : "22/22",
+          "title" : "HIJO2"
+        } ],
+        "completionBadge" : "https://badgr.com/public/badges/mpP6EehkQKWaLMNdlHof7A",
+        "title" : "PADRE1"
+      }
+}

@@ -1,0 +1,24 @@
+{
+    "456" : {
+        "children" : [ {
+          "children" : [ {
+            "completionBadge" : "12/12",
+            "pathwayURL" : "pG9FIu8VR32QEjVHvb1Yog",
+            "title" : "Test12"
+          }, {
+            "pathwayURL" : "P6d_xH8jR6eqHznHx8o8bg",
+            "requiredBadge" : "13/13",
+            "title" : "Test13"
+          } ],
+          "completionBadge" : "11/11",
+          "pathwayURL" : "",
+          "title" : "Test1"
+        }, {
+          "pathwayURL" : "",
+          "requiredBadge" : "22/22",
+          "title" : "Test2"
+        } ],
+        "completionBadge" : "123/456",
+        "title" : "Test123"
+    }
+}

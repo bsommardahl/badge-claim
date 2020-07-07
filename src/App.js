@@ -10,8 +10,6 @@ import LogIn from './components/Auth/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import WebhooksManagement from './components/Webhooks/WebhooksManagement';
 import AppNavbar from './AppNavbar';
-import Drafts from './components/Creation/Drafts';
-import Creations from './components/Creation/Creations';
 
 class App extends Component {
   render () {
@@ -27,9 +25,6 @@ class App extends Component {
               <PrivateRoute component={Dashboard} path='/explore' />
               <PrivateRoute component={Pathway} path="/pathway/:pathway_id" />
               <PrivateRoute component={WebhooksManagement} path='/webhooks' />
-              <PrivateRoute component={Creations} path='/creations' />
-              <PrivateRoute component={Drafts} path='/drafts/:draft_id' />
-              <PrivateRoute component={Drafts} path='/drafts' />
             </Switch>
           </div>
         </Router>

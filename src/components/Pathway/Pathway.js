@@ -1,7 +1,7 @@
 import React from 'react'
 import { createPathway } from './NodeGraph';
 import './Pathway.css'
-import {getPathways, getID, getUserEmail} from '../../../functions/FirebaseU/FirebaseUtils'
+import {getUserEmail} from '../../../functions/FirebaseU/FirebaseUtils'
 
 class Pathway extends React.Component{
     constructor(props) {
@@ -10,13 +10,21 @@ class Pathway extends React.Component{
     }
 
     async componentDidMount(){
+        var allPathways = [];
+        let pathwaysJson = require(`../../../pathways/pathwaysIDS.json`);
+        for(let x=0;x<pathwaysJson.pathways_ids.length;x++){
+            let path = Object.values(require(`../../../pathways/${pathwaysJson.pathways_ids[x]}.json`))[0]
+            allPathways.push(path);
+        }
         const { match: {params}} = this.props;
         const user = await getUserEmail();
         this.setState({userEmail: user.email});
-        getPathways().once('value', (snapshot) =>{
-            this.setState({pathway:Object.values(snapshot.val()).filter(pathway => getID(pathway.completionBadge) === params.pathway_id)[0]})
-            createPathway(this.state.pathway, this.state.userEmail, Object.values(snapshot.val()))
-        });
+        
+        let pathways = require(`../../../pathways/${params.pathway_id}.json`);
+        if(pathways!==null && pathways!==undefined)
+           createPathway(pathways[`${params.pathway_id}`], this.state.userEmail, allPathways)
+        else
+            alert("The pathway doesn't exist");
     }
 
     render() {
