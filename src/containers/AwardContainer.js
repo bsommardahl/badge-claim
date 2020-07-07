@@ -35,7 +35,6 @@ class AwardContainer extends Component {
                 }
             )
             .then(res => {
-                WebhookFire("2mE3WXrJT1KEdqousLHhFw","badge_awarded",{data: "payload"});
                 ToastsStore.success('Badge has been awarded!')
                 this.setState({
                     display: 'd-none'
@@ -68,10 +67,12 @@ class AwardContainer extends Component {
     }
 
     render() {
+        var word = window.location.href.split("/");
+        console.log(word);
         return (
             <div>
                 <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />
-                <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} display="d-none" openModal={this.openModal}/>
+                <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} display="d-none" openModal={this.openModal} showButton={false}/>
                 <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
                 <AwardSection handleAwardBadge={this.handleAwardBadge} display={this.state.display} email={this.state.query.email} evidence={this.state.query.evidence}/>
                 <ToastsContainer store={ToastsStore}/>
