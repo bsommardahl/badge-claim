@@ -1,5 +1,3 @@
-const fire = require('../../FirebaseU/FirebaseUtils');
-
 const axios = require('axios');
 const envs = require('../../env.json');
 const ISSUER_ID = envs.service.issuer_id;

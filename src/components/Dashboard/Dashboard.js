@@ -3,7 +3,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import {getUserEmail, getSubscritions, userSubscribe} from '../../../functions/FirebaseU/FirebaseUtils'
+import {getSubscritions, userSubscribe} from '../../../functions/FirebaseU/FirebaseUtils'
 import './Dashboard.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
@@ -40,10 +40,6 @@ const getAwarded = async(email) =>{
     return resp.data.result.filter(a => a.recipient.plaintextIdentity === email);
 }
 
-const isAwarded = (awards, id) => {
-    return awards.filter(a => a.badgeclass === id).length > 0 ? 1 : 0;
-}
-
 class Dashboard extends Component{
     badges = 0;
     constructor(props){
@@ -75,7 +71,7 @@ class Dashboard extends Component{
         if(obj){
             let objID = getID(obj.completionBadge ? obj.completionBadge : obj.requiredBadge ? obj.requiredBadge : "") 
             if(objID){
-                awardCount = isAwarded(awarded, objID)
+                awardCount = awarded.filter(a => a.badgeclass === objID).length > 0 ? 1 : 0;
                 if(obj.children){
                     let returnObj = {'count': obj.children.length, 'progress': 0}
     
@@ -94,16 +90,18 @@ class Dashboard extends Component{
     async componentDidMount(){
         let allPathways = [];
         let pathways = require(`../../../pathways/pathwaysIDS.json`);
-        const user = await getUserEmail();
-        const awarded = await getAwarded(user.email);
+        const user = localStorage.getItem("email");
+        console.log("USER", user)
+        const awarded = await getAwarded(user);
+        console.log("Awarded", awarded);
         for(let x=0;x<pathways.pathways_ids.length;x++){
             let path = Object.values(require(`../../../pathways/${pathways.pathways_ids[x]}.json`))[0]
             allPathways.push(path);
         }
-        this.setState({pathways: allPathways, userEmail: user.email});
+        this.setState({pathways: allPathways, userEmail: user});
         this.getAwards(this.state.pathways, awarded);
         
-        getSubscritions(user.email).on('value', (snapshot) => {
+        getSubscritions(user).on('value', (snapshot) => {
             try {
                 if(snapshot.val()){
                     this.setState({subscribe: snapshot.val()})

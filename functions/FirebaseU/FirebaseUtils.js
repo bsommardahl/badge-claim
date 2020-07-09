@@ -20,19 +20,16 @@ const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
 const logIn = async() => {
   var signin = await app.auth().signInWithPopup(googleProvider)
   
-  if(signin)
+  if(signin){
     document.location.href = '/explore';
+    localStorage.setItem("email", signin.additionalUserInfo.profile.email);
+  }
 }
 
 const logOut = () => {
   app.auth().signOut();
+  localStorage.removeItem("email");
   document.location.href = '/login';
-}
-
-const isLogin = async() => {
-  app.auth().onAuthStateChanged(function (user) {
-    return user != null;
-  });
 }
 
 const getUserEmail = () => {
@@ -75,8 +72,7 @@ const getSubscritions = (email) => {
 
 module.exports = {
         app: app, 
-        googleProvider: googleProvider, 
-        isLogin: isLogin, 
+        googleProvider: googleProvider,
         logIn: logIn, 
         logOut: logOut, 
         getID: getID, 

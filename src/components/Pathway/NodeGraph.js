@@ -1,12 +1,12 @@
-import * as d3 from 'd3'
-import axios from 'axios';
 import $ from 'jquery';
-import {getID} from '../../../functions/FirebaseU/FirebaseUtils'
+
+const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
 
 var Y_OFFSET = [];
 var LANES = 0;
 var PATHWAYOBJ = new Object();
 var ID = 0;
+var tall = 0;
 
 ///TREE FUNCTIONS
 
@@ -15,6 +15,8 @@ function treeDeep(obj) {
   var heights = [];
 
   if(obj.children){
+    if(obj.children.length>1)
+      tall += obj.children.length-1
     for (let index = 0; index < obj.children.length; index++) {
       heights.push(treeDeep(obj.children[index]));
     }
@@ -24,7 +26,7 @@ function treeDeep(obj) {
   return h + 1;
 }
 
-function down2Up(obj, email) {
+function down2Up(obj) {
   var lvls = treeDeep(obj);
   var id = ID;
   ID++;
@@ -50,7 +52,6 @@ function down2Up(obj, email) {
   node["pathwayURL"] = obj.pathwayURL ? obj.pathwayURL : "";
 
   PATHWAYOBJ["nodes"].push(node)
-  renderGraph(PATHWAYOBJ, email);
   $("h1").html(obj.title + " Pathway");
 }
 
@@ -114,22 +115,13 @@ function getY(end){
   return pos;
 }
 
-function evaluateObj(obj) {
-  return (new Function(` return  ${obj.split("=")[1]}` ));
-}
-
-const getAwarded = async(email) => {
-  var resp = await axios({
-      method: 'get',
-      url: `/award`,
-  })
-  return resp.data.result.filter(a => a.recipient.plaintextIdentity ===  email);;
-}
-
-export function createPathway(pathway, email, pathways) {
+export function createPathway(pathway, pathways) {
+  PATHWAYOBJ = {}
   modify(pathway, pathways)
-  down2Up(pathway, email);
-
+  down2Up(pathway);
+  PATHWAYOBJ["lanes"] = LANES;
+  PATHWAYOBJ["tall"] = tall+1;
+  return PATHWAYOBJ
 }
 
 function modify(pathway, pathways){
@@ -210,85 +202,4 @@ function addChildrenAtDeep_aux(oldChildren, pathway){
     }
   }
   return newPathway
-}
-
-function findEarned(badge, awards) {
-    var partbadge = String(badge.url).split('/');
-    var badgeId = partbadge[partbadge.length-1];
-    return awards.filter(a => a.badgeclass === badgeId).length > 0
-}
-
-async function renderGraph(data, email) {
-  var dataAward = await getAwarded(email);
-  var margin = {top: 10, right: 30, bottom: 30, left: 40},
-      width = (LANES*300) - margin.left - margin.right,
-      height = (Y_OFFSET[0]*75) - margin.top - margin.bottom;
-
-  var svg = d3.select("#my_dataviz")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("opacity", 0)
-      .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
-
-  var link = svg
-      .selectAll("path")
-      .data(data.links)
-      .enter()
-      .append("path")
-      .style("stroke", "#aaa")
-      .style("stroke-width", "4")
-      .attr("fill", "none");
-  
-  var node = svg
-      .selectAll("rect")
-      .data(data.nodes)
-      .enter()
-      .append("rect")
-      .attr("width", 200)
-      .attr("height", 50)
-      .attr("stroke-width", "3")
-      .attr("stroke", "#535dc8")
-      .attr("fill", "white")
-      .on("click", handleClick);
-
-  var text = svg
-      .selectAll("text")
-      .data(data.nodes)
-      .enter()
-      .append("text")
-      .text(function(d){return d.name}).
-      attr("fill", "#535dc8");
-
-  const ticked = () => {
-      node
-        .attr("x", function (d) { return d.x; })
-        .attr("y", function(d) { return d.y; })
-        .attr("stroke", function(d) { return findEarned(d, dataAward) ? "#13bf00" : d.isComplete ? "#ffdd00" : "#535dc8" });
-      text
-        .attr("x", function (d) { return d.x+10; })
-        .attr("y", function(d) { return d.y+20; })
-        .attr("fill", function(d) { return findEarned(d, dataAward) ? "#13bf00" : d.isComplete ? "#ffdd00" : "#535dc8" });
-      link.attr("d", function(d) {
-        var half = d.xori + (d.xdes - d.xori)/2
-        return "M" + 
-            d.xori + "," + d.yori + 
-            " L " + half + "," + d.yori +
-            " L " + half + "," + d.ydes +
-            " L " + d.xdes + "," + d.ydes;
-      });
-      $("div.progress-bar").css("display", "none");
-      $("div.legend").css("display", "inline-block");
-      svg.attr("opacity", 1);
-  }
-
-  function handleClick(d) {
-    if(d.url){
-      window.location = `/badgeid/${getID(d.url)}`;
-    }
-  }
-  
-  var simulation = d3.forceSimulation(data.nodes).on("end", ticked);
 }
