@@ -1,0 +1,24 @@
+{
+    "bXQp-ii-SP-mdOoY9hRWvQ" : {
+        "children" : [ {
+          "children" : [ {
+            "pathwayURL" : "",
+            "requiredBadge" : "https://badgr.com/public/badges/MKTnwpu_TaaTTd6V7o4LtQ",
+            "title" : "Self-Evaluation"
+          }, {
+            "pathwayURL" : "",
+            "requiredBadge" : "https://badgr.com/public/badges/1dPHojYCQNydNqlWwQ7hZg",
+            "title" : "English Communicator V2"
+          }, {
+            "pathwayURL" : "",
+            "requiredBadge" : "https://badgr.com/public/badges/dMIQ5JEzT4e2diO4jJ_5hA",
+            "title" : "Emotionally Intelligent"
+          } ],
+          "pathwayURL" : "",
+          "requiredBadge" : "https://badgr.com/public/badges/k5G85n4SR0ClIVmVtPxD5A",
+          "title" : "360 Feedback Receiver"
+        } ],
+        "completionBadge" : "https://acklenavenue.badgr.com/public/badges/bXQp-ii-SP-mdOoY9hRWvQ",
+        "title" : "Personal Growth"
+      }
+}

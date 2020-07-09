@@ -1,0 +1,64 @@
+{
+    "zmI_1cMZQvKnHDQpvgBVzQ" : {
+        "children" : [ {
+          "children" : [ {
+            "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/j4hIuU1mSvyk8Q1Xi0dhmw",
+            "title" : "Professional Skills"
+          } ],
+          "pathwayURL" : "pathway/bXQp-ii-SP-mdOoY9hRWvQ",
+          "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/bXQp-ii-SP-mdOoY9hRWvQ",
+          "title" : "Personal Growth"
+        }, {
+          "children" : [ {
+            "children" : [ {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/-AXf3JrPSsKZ50-qiMj2xA",
+              "title" : "Adapter Pattern"
+            }, {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/X9R3b7psSiGDA4OowV9Wpw",
+              "title" : "Strategy Pattern"
+            } ],
+            "title" : "Design Patterns"
+          }, {
+            "children" : [ {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/upn2ozyZRNmui7F4SJmsuQ",
+              "title" : "Git"
+            }, {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/hpvFRz6yTtu2VvQPyA8LFg",
+              "title" : "Code Editor"
+            }, {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/hpvFRz6yTtu2VvQPyA8LFg",
+              "title" : "Terminal"
+            }, {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/ebAZzcYNQ7iTq2Bz8C7pQA",
+              "title" : "Trello"
+            } ],
+            "title" : "Tools"
+          }, {
+            "children" : [ {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/mpP6EehkQKWaLMNdlHof7A",
+              "title" : "SPA Front-End"
+            }, {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/2d_P5eloSwSxjxyhYEoF-A",
+              "title" : "REST API Back-End"
+            } ],
+            "completionBadge" : "https://acklenavenue.badgr.com/public/assertions/F0gmp4RpSzON5J6aN8PEVg",
+            "title" : "Applications"
+          }, {
+            "children" : [ {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/okTiXkVERH-cNJ9dtg2V4Q",
+              "title" : "SQL"
+            }, {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/Qup2615jQoi0WAdyO97zPw",
+              "title" : "C#"
+            }, {
+              "requiredBadge" : "https://acklenavenue.badgr.com/public/badges/vKmoeMs2Q-2nFVhYpCufUA",
+              "title" : "Javascript"
+            } ],
+            "title" : "Languages"
+          } ],
+          "title" : "Technical Skills"
+        } ],
+        "completionBadge" : "https://acklenavenue.badgr.com/public/badges/zmI_1cMZQvKnHDQpvgBVzQ",
+        "title" : "Full-Stack Developer"
+      }
+}

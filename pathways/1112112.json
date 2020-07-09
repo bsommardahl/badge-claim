@@ -1,0 +1,27 @@
+{
+    "1112112" : {
+        "children" : [ {
+          "children" : [ {
+            "requiredBadge" : "44/44",
+            "title" : "hola4"
+          }, {
+            "requiredBadge" : "55/55",
+            "title" : "hola5"
+          } ],
+          "requiredBadge" : "22/22",
+          "title" : "hola2"
+        }, {
+          "children" : [ {
+            "requiredBadge" : "77/77",
+            "title" : "hola7"
+          }, {
+            "requiredBadge" : "88/88",
+            "title" : "hola8"
+          } ],
+          "requiredBadge" : "33/33",
+          "title" : "hola3"
+        } ],
+        "completionBadge" : "11/1112112",
+        "title" : "hola"
+      }
+}

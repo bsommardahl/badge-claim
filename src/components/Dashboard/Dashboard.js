@@ -3,21 +3,22 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import {getPathways, getUserEmail, joinPathway} from '../../../functions/FirebaseU/FirebaseUtils'
+import {getUserEmail, getSubscritions, userSubscribe} from '../../../functions/FirebaseU/FirebaseUtils'
 import './Dashboard.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
 
-const card = (pathway, userEmail, subscribed, state) => {
+const card = (pathway, state, callSub) => {
     var badgeID = getID(pathway.completionBadge);
     var percent = state.progress[badgeID] / state.badgesCount[badgeID] * 100;
+    var subscribed = state.subscribe.includes(badgeID)
     return (
         <div class="col-sm-6">
             <div className="card" style={{marginTop: "15px"}}>
                 <h5 className="card-header">{pathway.title}</h5>
                 <div className="card-body">
                     <div>
-                        {!subscribed ? <button onClick={() => joinPathway(pathway, userEmail)} 
+                        {!subscribed ? <button onClick={() => callSub(badgeID)} 
                             className="btn btn-primary"
                         >
                             Request Access
@@ -34,40 +35,6 @@ const card = (pathway, userEmail, subscribed, state) => {
     )
 }
 
-/*const subscribe = async(name, from, id) =>{
-    var to = "";
-    var issuer = "";
-
-    await axios
-        .get(`/badges/${id}`)
-        .then(res => {
-            issuer = res.data.result[0].issuer;
-        })
-        .catch(err => {
-            console.log(err)
-        });
-    await axios.get(`/issuer/${issuer}`)
-        .then(res => {
-            to = res.data.result[0].email;
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    axios.post(`/v2/pathways/${id}/subscribe`, {
-            to: to,
-            from: from,
-            pathway: name
-          })
-          .then(function (response) {
-            console.log("SENT");
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-}*/
-
-
-
 const getAwarded = async(email) =>{
     var resp = await axios.get(`/award`)
     return resp.data.result.filter(a => a.recipient.plaintextIdentity === email);
@@ -83,7 +50,8 @@ class Dashboard extends Component{
         super(props);
         this.getAwards = this.getAwards.bind(this);
         this.getAwards_aux = this.getAwards_aux.bind(this);
-        this.state = {pathways: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
+        this.subscribe = this.subscribe.bind(this);
+        this.state = {pathways: [], subscribe: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
     }
 
     getAwards = async(obj, awarded) => {
@@ -124,19 +92,33 @@ class Dashboard extends Component{
     }
 
     async componentDidMount(){
+        let allPathways = [];
+        let pathways = require(`../../../pathways/pathwaysIDS.json`);
         const user = await getUserEmail();
         const awarded = await getAwarded(user.email);
-        getPathways().on('value', (snapshot) =>
-            {
-                this.setState({pathways: Object.values(snapshot.val()), userEmail: user.email});
-
-                this.getAwards(this.state.pathways, awarded);
-                this.setState({my_pathways:
-                    this.state.pathways.filter(
-                        path => path.users && path.users.includes(user.email)
-                    )})
+        for(let x=0;x<pathways.pathways_ids.length;x++){
+            let path = Object.values(require(`../../../pathways/${pathways.pathways_ids[x]}.json`))[0]
+            allPathways.push(path);
+        }
+        this.setState({pathways: allPathways, userEmail: user.email});
+        this.getAwards(this.state.pathways, awarded);
+        
+        getSubscritions(user.email).on('value', (snapshot) => {
+            try {
+                if(snapshot.val()){
+                    this.setState({subscribe: snapshot.val()})
+                }
+            } catch (error) {
+                console.log("NO SUBS")
             }
-        );
+        })
+        
+    }
+
+    subscribe(id){
+        var sub = this.state.subscribe.filter(s => s != id);
+        this.setState({subscribe: sub.concat([id])})   
+        userSubscribe(this.state.userEmail, sub.concat([id]))
     }
 
     render(){
@@ -158,22 +140,22 @@ class Dashboard extends Component{
                                     this.state.pathways.map((pathway) => 
                                         card(
                                             pathway, 
-                                            this.state.userEmail, 
-                                            pathway.users && pathway.users.includes(this.state.userEmail), 
-                                            this.state))
+                                            this.state,
+                                            this.subscribe))
                                 }
                             </div>
                         </Tab>
                         <Tab eventKey="my_pathways" title="My Pathways">
                             <div className="row">
-                                {!this.state.my_pathways.length?
+                                {!this.state.pathways.length?
                                     <div class="col-sm-12">
                                         <br/>
                                         <span>There are currently no pathways here. Request access to one in Avaliable!</span>
                                     </div>
                                     :
-                                    this.state.my_pathways.map((pathway) => 
-                                        card(pathway, this.state.userEmail, true, this.state))
+                                    this.state.pathways.map((pathway) =>
+                                        this.state.subscribe.includes(getID(pathway.completionBadge)) ?
+                                        card(pathway, this.state, this.subscribe) : <div/>)
                                 }
                             </div>
                         </Tab>
