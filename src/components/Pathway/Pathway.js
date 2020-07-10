@@ -37,22 +37,14 @@ class Pathway extends React.Component{
     }
 
     checkForErrors(path, count){
-        if(path.children){
-        }
-        if(path[0]){
-            console.log("There is a [0]")
-        }
         if(path.children && path.children.length>0 && count<20){
             count++;
             this.checkForErrors(path.children[0], count)
         }else if(count>=20){
-            console.log("This shouldn't happen");
             const { match: {params}} = this.props;
             let pathways = require(`../../../pathways/${params.pathway_id}.json`);
             this.checkForErrors(pathways[params.pathway_id], 0)
-        }else{
-            console.log("Nice");
-        }    
+        }
     }
 
     async componentDidMount(){
@@ -61,9 +53,6 @@ class Pathway extends React.Component{
         pathways = {}
         pathways = require(`../../../pathways/${params.pathway_id}.json`);
         this.checkForErrors(pathways[params.pathway_id], 0);
-        console.log("********************")
-        console.log("PATHWAY: ",pathways[params.pathway_id]);
-        console.log("********************")
 
         this.setState({pathway: pathways[params.pathway_id]})
 
@@ -76,7 +65,7 @@ class Pathway extends React.Component{
             let path = Object.values(require(`../../../pathways/${pathwaysJson.pathways_ids[x]}.json`))[0]
             allPathways.push(path);
         }
-        const data = createPathway(this.state.pathway, allPathways);
+        const data = createPathway(this.state.pathway, allPathways, user.email, dataAward);
         this.setState({data: data})
     }
     
@@ -87,7 +76,6 @@ class Pathway extends React.Component{
     }
 
     render() {
-        console.log(this.state);
         return (
             <div>
                 <div>
@@ -101,26 +89,15 @@ class Pathway extends React.Component{
                             <li style={{color:"#13bf00"}}>Awarded</li>
                         </ul>
                     </div>
-                    <div className="pathway-div">
-                       <svg width={this.state.data.lanes*300} height={`${this.state.data.tall*20}%`} position="fixed" >
-                            <g opacity="1" transform="translate(40,10)">{
-                                this.state.data.nodes.map((node) => 
-                                    <rect width="200" height="50" strokeWidth="3" 
-                                        stroke={findEarned(node, this.state.dataAward) ? "#13bf00" : node.isComplete ? "#ffdd00" : "#535dc8" } 
-                                        fill="white" x={`${node.x}`} y={`${node.y}`} onClick={() => this.handleClick(node)}>
-                                    </rect>
-                                )
-                            }{
-                                this.state.data.links.map((link) => 
-                                    <path d={line(link)} stroke="#aaa" strokeWidth="4" fill="none"/>
-                                )
-                            }{
-                                this.state.data.nodes.map((node) => 
-                                    <text fill={findEarned(node, this.state.dataAward) ? "#13bf00" : node.isComplete ? "#ffdd00" : "#535dc8" } 
-                                    x={`${node.x+10}`} y={`${node.y+20}`}>{node.name}</text>
-                                )
-                            }</g>
-                        </svg>
+                    <div 
+                        className="pathway-div"
+                        style={{textAlign: "center", overflow: "auto", height: "500px", width: "80%"}}
+                    >
+                        <div class="progress-bar">
+                            <div class="progress-bar-value"></div>
+                        </div>
+                        <div id="my_dataviz">
+                        </div>
                     </div>
                 </div>
             </div>

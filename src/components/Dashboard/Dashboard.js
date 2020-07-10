@@ -35,11 +35,6 @@ const card = (pathway, state, callSub) => {
     )
 }
 
-const getAwarded = async(email) =>{
-    var resp = await axios.get(`/award`)
-    return resp.data.result.filter(a => a.recipient.plaintextIdentity === email);
-}
-
 class Dashboard extends Component{
     badges = 0;
     constructor(props){
@@ -50,7 +45,7 @@ class Dashboard extends Component{
         this.state = {pathways: [], subscribe: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
     }
 
-    getAwards = async(obj, awarded) => {
+    getAwards = (obj, awarded) => {
         var progress = {}
         var badgesCount = {}
 
@@ -88,18 +83,20 @@ class Dashboard extends Component{
     }
 
     async componentDidMount(){
+        window.onpopstate  = (e) => {
+            window.location.reload();
+        }
         let allPathways = [];
         let pathways = require(`../../../pathways/pathwaysIDS.json`);
         const user = localStorage.getItem("email");
-        console.log("USER", user)
-        const awarded = await getAwarded(user);
-        console.log("Awarded", awarded);
+        const awarded = await axios.get(`/award`);
+        const awardsByUser = awarded.data.result.filter(a => a.recipient.plaintextIdentity === user);
         for(let x=0;x<pathways.pathways_ids.length;x++){
             let path = Object.values(require(`../../../pathways/${pathways.pathways_ids[x]}.json`))[0]
             allPathways.push(path);
         }
         this.setState({pathways: allPathways, userEmail: user});
-        this.getAwards(this.state.pathways, awarded);
+        this.getAwards(this.state.pathways, awardsByUser);
         
         getSubscritions(user).on('value', (snapshot) => {
             try {
@@ -110,7 +107,6 @@ class Dashboard extends Component{
                 console.log("NO SUBS")
             }
         })
-        
     }
 
     subscribe(id){

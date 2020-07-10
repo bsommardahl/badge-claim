@@ -7,8 +7,6 @@ import BadgeContent from '../components/BadgeContent/BadgeContent';
 import AwardSection from '../components/AwardSection/AwardSection';
 import Loading from "react-fullscreen-loading";
 import {ToastsContainer, ToastsStore} from 'react-toasts';
-import {WebhookFire} from '../components/Webhooks/WebhookEngine'
-
 
 class AwardContainer extends Component {
     constructor(props) {
@@ -68,7 +66,6 @@ class AwardContainer extends Component {
 
     render() {
         var word = window.location.href.split("/");
-        console.log(word);
         return (
             <div>
                 <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />

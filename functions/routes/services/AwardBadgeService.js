@@ -5,8 +5,14 @@ const APP_URL = envs.service.app_url;
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1)
 
+const AWARDS ={}
+const ONE_HOUR = 60 * 60 * 1000;
+var NO_UPDATE = true;
+
 const findParents = async(authToken, badgeToken, data) => {
+  NO_UPDATE = false;
   const temp = await AwardService.listAwards(data, authToken);
+  NO_UPDATE = true;
   const aws = temp.result;  
   let allPathways = [];
   let pathways = require(`../../../pathways/pathwaysIDS.json`);
@@ -108,7 +114,15 @@ const AwardService = {
       findParents(authToken, data.badgeToken, data);
     return response.data;
   },
+
   listAwards: async (data, authToken) => {
+    var d = new Date(); 
+    var time = d.getTime();
+
+    if(AWARDS["list"] && (time - AWARDS["time"]) < ONE_HOUR && NO_UPDATE){
+      return AWARDS["list"]
+    }
+
     let response = await axios({
       headers: {
         Authorization: `Bearer ${authToken}`
@@ -116,6 +130,12 @@ const AwardService = {
       method: 'get',
       url: `/issuers/${ISSUER_ID}/assertions`,
     })
+
+    if(response.data){
+      AWARDS["list"] = response.data
+      AWARDS["time"] = time
+    }
+    
     return response.data;
   }
 }
