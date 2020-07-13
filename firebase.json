@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "acera-dev",
     "public": "build",
     "rewrites": [{
       "source": "/api/*",

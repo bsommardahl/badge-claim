@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Collapse from 'react-bootstrap/Collapse';
-import ProgressBar from 'react-bootstrap/ProgressBar';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import {getSubscritions, userSubscribe} from '../../../functions/FirebaseU/FirebaseUtils'
@@ -13,17 +12,51 @@ const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
 class PathwayCard extends Component{
     constructor(props){
         super(props);
-        this.state = {open: false};
-        this.openCollapse = this.openCollapse.bind(this)
+        this.state = {open: false, badgesCount: 0, awardsCount: 0};
+        this.openCollapse = this.openCollapse.bind(this);
+        this.getChildCount_V2 = this.getChildCount_V2.bind(this);
     }
 
     openCollapse(){
+        this.getChildCount_V2(this.props.pathway)
         this.setState({open: !this.state.open})
+    }
+
+    getChildCount_V2(pathway){
+        if(pathway){
+            if(pathway.completionBadge || pathway.requiredBadge)
+                this.setState({badgesCount: this.state.badgesCount += 1});
+
+            const id = getID(
+                pathway.completionBadge ? 
+                pathway.completionBadge : pathway.requiredBadge ? pathway.requiredBadge : "");
+            const assertion = this.props.data.awardsUser.filter(a => a.badgeclass===id);
+            if(assertion.length > 0){
+                this.setState({awardsCount: this.state.awardsCount += 1});
+            }
+            if(pathway.pathwayURL){
+                for(let x=0;x<this.props.data.pathways.length;x++){
+                    if(getID(this.props.data.pathways[x].completionBadge)===getID(pathway.pathwayURL)){
+                        if(this.props.data.pathways[x].children){
+                            for(let y=0; y < this.props.data.pathways[x].children.length; y++){
+                                this.getChildCount_V2(this.props.data.pathways[x].children[y]);
+                            }
+                        }
+                    }
+                }
+            }
+            if(pathway.children){
+                for(let i = 0; i < pathway.children.length; i++){
+                    this.getChildCount_V2(pathway.children[i]);
+                }
+            }
+
+        }
     }
 
     render(){
         var badgeID = getID(this.props.pathway.completionBadge);
-        var percent = this.props.data.progress[badgeID] / this.props.data.badgesCount[badgeID] * 100;
+        var percent = (this.state.badgesCount > 0 ? ((this.state.awardsCount/this.state.badgesCount)*100).toFixed(0)+"%" : "0%")
         var subscribed = this.props.data.subscribe.includes(badgeID)
         return (
             <div class="col-sm-6">
@@ -51,10 +84,13 @@ class PathwayCard extends Component{
                                 Progress
                             </button>
                         </div>
+                        <br/>
                         <Collapse in={this.state.open}>
-                        <div className="progress">
-  <div className="progress-bar bg-success" role="progressbar" style={{width: "25%"}} ariaValueNow="25" ariaValueMin="0" ariaValueMax="100"></div>
-</div>
+                            <div className="progress" >
+                                <div className="progress-bar bg-success" role="progressbar" 
+                                    style={{width: percent, height: "100%", position: "relative", textAlign:"center", lineHeight:"1"}} 
+                                    ariaValueNow="25" ariaValueMin="0" ariaValueMax="100">{percent}</div>
+                            </div>
                         </Collapse>
                     </div>
                 </div>
@@ -67,47 +103,8 @@ class Dashboard extends Component{
     badges = 0;
     constructor(props){
         super(props);
-        this.getAwards = this.getAwards.bind(this);
-        this.getAwards_aux = this.getAwards_aux.bind(this);
         this.subscribe = this.subscribe.bind(this);
-        this.state = {pathways: [], subscribe: [], userEmail: "", my_pathways: [], progress: {}, badgesCount: {}};
-    }
-
-    getAwards = (obj, awarded) => {
-        var progress = {}
-        var badgesCount = {}
-
-        if(obj){
-            var pathways = Object.values(obj);
-            for(let i = 0; i < pathways.length; i++){
-                var count = {};
-                count = this.getAwards_aux(pathways[i], awarded);
-                badgesCount[getID(pathways[i].completionBadge)]=count.count + 1
-                progress[getID(pathways[i].completionBadge)]=count.progress
-            }
-        }
-        this.setState({progress: progress, badgesCount: badgesCount})
-    }
-     
-    getAwards_aux = (obj, awarded) => {
-        let awardCount = 0
-        if(obj){
-            let objID = getID(obj.completionBadge ? obj.completionBadge : obj.requiredBadge ? obj.requiredBadge : "") 
-            if(objID){
-                awardCount = awarded.filter(a => a.badgeclass === objID).length > 0 ? 1 : 0;
-                if(obj.children){
-                    let returnObj = {'count': obj.children.length, 'progress': 0}
-    
-                    for(let j = 0; j <= obj.children.length; j++){
-                        returnObj.count += this.getAwards_aux(obj.children[j], awarded).count
-                        returnObj.progress += this.getAwards_aux(obj.children[j], awarded).progress
-                    }
-                    returnObj.progress += awardCount;
-                    return returnObj;
-                }
-            }
-        }
-        return {'count': 0, 'progress': awardCount};
+        this.state = {pathways: [], subscribe: [], userEmail: "", my_pathways: [], awardsUser: [] ,progress: {}, badgesCount: {}};
     }
 
     async componentDidMount(){
@@ -123,8 +120,7 @@ class Dashboard extends Component{
             let path = Object.values(require(`../../../pathways/${pathways.pathways_ids[x]}.json`))[0]
             allPathways.push(path);
         }
-        this.setState({pathways: allPathways, userEmail: user});
-        this.getAwards(this.state.pathways, awardsByUser);
+        this.setState({pathways: allPathways, userEmail: user, awardsUser: awardsByUser});
         
         getSubscritions(user).on('value', (snapshot) => {
             try {
