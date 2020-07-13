@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import Collapse from 'react-bootstrap/Collapse';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import {getSubscritions, userSubscribe} from '../../../functions/FirebaseU/FirebaseUtils'
@@ -8,31 +10,57 @@ import './Dashboard.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
 
-const card = (pathway, state, callSub) => {
-    var badgeID = getID(pathway.completionBadge);
-    var percent = state.progress[badgeID] / state.badgesCount[badgeID] * 100;
-    var subscribed = state.subscribe.includes(badgeID)
-    return (
-        <div class="col-sm-6">
-            <div className="card" style={{marginTop: "15px"}}>
-                <h5 className="card-header">{pathway.title}</h5>
-                <div className="card-body">
-                    <div>
-                        {!subscribed ? <button onClick={() => callSub(badgeID)} 
-                            className="btn btn-primary"
-                        >
-                            Request Access
-                        </button> : <div/>}
-                        <Link style={{marginLeft: !subscribed ? "20px" : ""}} className="btn btn-primary" to={`/pathway/${badgeID}`}>View</Link>
-                    </div>
-                    <div id="myProgress">
-                        <div id="myBar" 
-                            style={{width: `${percent}%`}}>{percent ? `${Math.floor(percent)}%` : ""}</div>
+class PathwayCard extends Component{
+    constructor(props){
+        super(props);
+        this.state = {open: false};
+        this.openCollapse = this.openCollapse.bind(this)
+    }
+
+    openCollapse(){
+        this.setState({open: !this.state.open})
+    }
+
+    render(){
+        var badgeID = getID(this.props.pathway.completionBadge);
+        var percent = this.props.data.progress[badgeID] / this.props.data.badgesCount[badgeID] * 100;
+        var subscribed = this.props.data.subscribe.includes(badgeID)
+        return (
+            <div class="col-sm-6">
+                <div className="card" style={{marginTop: "15px"}}>
+                    <h5 className="card-header">{this.props.pathway.title}</h5>
+                    <div className="card-body">
+                        <div>
+                            {!subscribed ? <button onClick={() => this.props.callSub(badgeID)} 
+                                className="btn btn-primary btn-sm"
+                            >
+                                Request Access
+                            </button> : <div/>}
+                            <Link 
+                                style={{marginLeft: !subscribed ? "20px" : ""}} 
+                                className="btn btn-primary btn-sm" 
+                                to={`/pathway/${badgeID}`}
+                            >
+                                View
+                            </Link>
+                            <button
+                                style={{marginLeft: "20px"}}
+                                className="btn btn-primary btn-sm"
+                                onClick={() => this.openCollapse()} 
+                            >
+                                Progress
+                            </button>
+                        </div>
+                        <Collapse in={this.state.open}>
+                        <div className="progress">
+  <div className="progress-bar bg-success" role="progressbar" style={{width: "25%"}} ariaValueNow="25" ariaValueMin="0" ariaValueMax="100"></div>
+</div>
+                        </Collapse>
                     </div>
                 </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 class Dashboard extends Component{
@@ -132,10 +160,7 @@ class Dashboard extends Component{
                                     </div>
                                     :
                                     this.state.pathways.map((pathway) => 
-                                        card(
-                                            pathway, 
-                                            this.state,
-                                            this.subscribe))
+                                        <PathwayCard pathway={pathway} data={this.state} callSub={this.subscribe}/>)
                                 }
                             </div>
                         </Tab>
@@ -149,7 +174,7 @@ class Dashboard extends Component{
                                     :
                                     this.state.pathways.map((pathway) =>
                                         this.state.subscribe.includes(getID(pathway.completionBadge)) ?
-                                        card(pathway, this.state, this.subscribe) : <div/>)
+                                        <PathwayCard pathway={pathway} data={this.state} callSub={this.subscribe}/> : <div/>)
                                 }
                             </div>
                         </Tab>

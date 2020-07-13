@@ -13,10 +13,12 @@ const line = (d) => {
 }
 
 const getAwarded = async(email) => {
+   
     var resp = await axios({
         method: 'get',
         url: `/award`,
     })
+     console.log("correo", email, resp)
     return resp.data.result.filter(a => a.recipient.plaintextIdentity ===  email);;
 }
 
@@ -58,14 +60,15 @@ class Pathway extends React.Component{
 
         var allPathways = [];
         const user = localStorage.getItem("email");
-        var dataAward = await getAwarded(user.email);
+        var dataAward = await getAwarded(user);
         this.setState({userEmail: user.email, dataAward: dataAward});
         let pathwaysJson = require(`../../../pathways/pathwaysIDS.json`);
         for(let x=0;x<pathwaysJson.pathways_ids.length;x++){
             let path = Object.values(require(`../../../pathways/${pathwaysJson.pathways_ids[x]}.json`))[0]
             allPathways.push(path);
         }
-        const data = createPathway(this.state.pathway, allPathways, user.email, dataAward);
+        console.log("******DATA**********", dataAward)
+        const data = createPathway(this.state.pathway, allPathways, user, dataAward);
         this.setState({data: data})
     }
     
