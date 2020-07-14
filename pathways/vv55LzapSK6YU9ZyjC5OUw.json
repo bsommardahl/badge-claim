@@ -1,0 +1,46 @@
+{
+    "vv55LzapSK6YU9ZyjC5OUw":{
+        "title" : "Boarding Pass",
+        "completionBadge": "https://api.badgr.io/public/badges/vv55LzapSK6YU9ZyjC5OUw",
+        "children": [{
+            "title": "Who We Are",
+            "children":[{
+                "title": "Meet the Team",
+                "requiredBadge": "https://api.badgr.io/public/badges/VCQM9csRTNGKKkQU_DaSSw",
+                "children": [{
+                    "title": "Building Community",
+                    "requiredBadge": "https://api.badgr.io/public/badges/G5QMrpYdRRCr-Yv8_SMu6A",
+                    "children": [{
+                        "title": "Welcome to Our Family",
+                        "requiredBadge": "https://api.badgr.io/public/badges/KvfjtW2QQH63DtgWpwULbg"
+                    }]
+                }]
+            },{
+                "title": "Culture Champion",
+                "requiredBadge": "https://api.badgr.io/public/badges/jhsREQiaRWqOM7J0OeL8aA"
+            },{
+                "title": "Our Vision and Values",
+                "requiredBadge": "https://api.badgr.io/public/badges/hKZ2PgMXQEyVVegcw0aVNg"
+            }]
+        },{
+            "title": "Meeting with Guild Master",
+            "requiredBadge": "https://api.badgr.io/public/badges/_pO-ETR0SVyB-y7GMh5mCA",
+            "children": [{
+                "title": "Operations",
+                "children": [{
+                    "title": "Introduction to Client Expectations",
+                    "requiredBadge": "https://api.badgr.io/public/badges/GPM-Orr-QHCV_9S0aX-_SQ"
+                },{
+                    "title": "Remote Professional",
+                    "requiredBadge": "https://api.badgr.io/public/badges/tOF9eApiR664olfo5lfeVg"
+                },{
+                    "title": "Tool Box",
+                    "requiredBadge": "https://api.badgr.io/public/badges/eF_cwwamSLyP0WkeTRDRrA"
+                },{
+                    "title": "Atmosphere of Creativity",
+                    "requiredBadge": "https://api.badgr.io/public/badges/wIizrBoYQ16gJZxq2y9Aqw"
+                }]
+            }]
+        }]
+    }
+}
