@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import QueryString from 'query-string';
@@ -48,8 +49,7 @@ class AwardContainer extends Component {
         this.setState({
             query: QueryString.parse(this.props.location.search),
             badgeToken: params.badge_token
-        })
-
+        })  
         axios
             .get(`/badges/${params.badge_token}`)
             .then(res => {
@@ -61,11 +61,10 @@ class AwardContainer extends Component {
             .catch(err => {
                 console.log(err)
             })
-        
+        //$('#text95').html($('#text95').html().replace(/((http:|https:)[^\s]+[\w])/g, '<a href="$1" target="_blank">$1</a>'));
     }
 
     render() {
-        var word = window.location.href.split("/");
         return (
             <div>
                 <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />
