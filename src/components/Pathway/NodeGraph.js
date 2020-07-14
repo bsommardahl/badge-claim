@@ -1,5 +1,4 @@
 import * as d3 from 'd3'
-import axios from 'axios';
 import $ from 'jquery';
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
@@ -28,7 +27,7 @@ function treeDeep(obj) {
   return h + 1;
 }
 
-function down2Up(obj, email, dataAward) {
+function down2Up(obj) {
   var lvls = treeDeep(obj);
   var id = ID;
   ID++;
@@ -54,7 +53,7 @@ function down2Up(obj, email, dataAward) {
   node["pathwayURL"] = obj.pathwayURL ? obj.pathwayURL : "";
 
   PATHWAYOBJ["nodes"].push(node)
-  renderGraph(PATHWAYOBJ, email, dataAward);
+  renderGraph(PATHWAYOBJ);
   $("h1").html(obj.title + " Pathway");
 }
 
@@ -118,13 +117,12 @@ function getY(end){
   return pos;
 }
 
-export function createPathway(pathway, pathways, email, dataAward) {
+export function createPathway(pathway, pathways) {
   PATHWAYOBJ = {}
   modify(pathway, pathways)
-  down2Up(pathway, email, dataAward);
+  down2Up(pathway);
   PATHWAYOBJ["lanes"] = LANES;
   PATHWAYOBJ["tall"] = tall+1;
-  return PATHWAYOBJ
 }
 
 function modify(pathway, pathways){
@@ -207,16 +205,7 @@ function addChildrenAtDeep_aux(oldChildren, pathway){
   return newPathway
 }
 
-function findEarned(badge, awards) {
-  console.log("Badge: ", badge);
-  console.log("Awards", awards);
-  var partbadge = String(badge.url).split('/');
-  var badgeId = partbadge[partbadge.length-1];
-  return awards.filter(a => a.badgeclass === badgeId).length > 0
-}
-
-async function renderGraph(data, email, dAward) {
-  var dataAward = dAward;
+async function renderGraph(data) {
   var margin = {top: 10, right: 30, bottom: 30, left: 40},
       width = (LANES*300) - margin.left - margin.right,
       height = (Y_OFFSET[0]*75) - margin.top - margin.bottom;
@@ -256,9 +245,10 @@ async function renderGraph(data, email, dAward) {
       .attr("stroke-width", "3")
       .attr("stroke", "#535dc8")
       .attr("fill", "white")
+      .attr("id", function (d) { return d.url ? getID(d.url) : ""; })
       .attr("x", function (d) { return d.x; })
       .attr("y", function(d) { return d.y; })
-      .attr("stroke", function(d) { return findEarned(d, dataAward) ? "#13bf00" : d.isComplete ? "#ffdd00" : "#535dc8" })  
+      .attr("stroke", function(d) { return d.isComplete ? "#ffdd00" : "#535dc8" })  
       .on("click", handleClick);
 
   var text = svg
@@ -269,7 +259,7 @@ async function renderGraph(data, email, dAward) {
       .text(function(d){return d.name})
       .attr("x", function (d) { return d.x+10; })
       .attr("y", function(d) { return d.y+20; })
-      .attr("fill", function(d) { return findEarned(d, dataAward) ? "#13bf00" : d.isComplete ? "#ffdd00" : "#535dc8" })
+      .attr("fill", function(d) { return d.isComplete ? "#ffdd00" : "#535dc8" })
       .attr("fill", "#535dc8");
 
   
@@ -283,6 +273,4 @@ async function renderGraph(data, email, dAward) {
       window.location = `/badgeid/${getID(d.url)}`;
     }
   }
-  
-  //var simulation = d3.forceSimulation(data.nodes).on("end", ticked);
 }
