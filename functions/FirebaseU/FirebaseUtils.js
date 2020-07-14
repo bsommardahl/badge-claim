@@ -22,13 +22,11 @@ const logIn = async() => {
   
   if(signin){
     document.location.href = '/explore';
-    localStorage.setItem("email", signin.additionalUserInfo.profile.email);
   }
 }
 
 const logOut = () => {
   app.auth().signOut();
-  localStorage.removeItem("email");
   document.location.href = '/login';
 }
 

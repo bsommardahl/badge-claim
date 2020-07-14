@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { getUserEmail } from '../../../functions/FirebaseU/FirebaseUtils'
 
 const PrivateRoute = ({component: Component, ...rest}) => {
     const [user, setUser] = useState('');
@@ -11,7 +12,7 @@ const PrivateRoute = ({component: Component, ...rest}) => {
     }, []);
 
     const getUser = async () => {
-        const msg = localStorage.getItem("email");
+        const msg = await getUserEmail();
         setUser(msg);
     };
 

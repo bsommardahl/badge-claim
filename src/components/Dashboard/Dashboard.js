@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { Link } from "react-router-dom";
-import {getSubscritions, userSubscribe} from '../../../functions/FirebaseU/FirebaseUtils'
+import {getSubscritions, userSubscribe, getUserEmail} from '../../../functions/FirebaseU/FirebaseUtils'
 import './Dashboard.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
@@ -54,13 +54,14 @@ class Dashboard extends Component{
         }
         let allPathways = [];
         let pathways = require(`../../../pathways/pathwaysIDS.json`);
-        const user = localStorage.getItem("email");
         for(let x=0;x<pathways.pathways_ids.length;x++){
             let path = Object.values(require(`../../../pathways/${pathways.pathways_ids[x]}.json`))[0]
             allPathways.push(path);
         }
-        this.setState({pathways: allPathways, userEmail: user});
-        getSubscritions(user).on('value', (snapshot) => {
+        this.setState({pathways: allPathways})
+        const user = await getUserEmail();
+        this.setState({userEmail: user.email});
+        getSubscritions(user.email).on('value', (snapshot) => {
             try {
                 if(snapshot.val()){
                     this.setState({subscribe: snapshot.val()})
