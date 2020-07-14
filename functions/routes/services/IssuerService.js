@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-var ONE_HOUR = 60 * 60 * 1000;
+const ONE_HOUR = 60 * 60 * 1000;
 const issuers = {};
 
 const IssuerService = {
