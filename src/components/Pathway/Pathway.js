@@ -36,7 +36,7 @@ class Pathway extends React.Component{
         const user = await getUserEmail();
         this.setState({userEmail: user.email});
         const getAwarded = resp.data.result.filter(a => a.recipient.plaintextIdentity ===  this.state.userEmail);
-        console.log("AWARDS: ", getAwarded);
+
         this.checkAwarded(this.state.pathway,getAwarded);
     }
 

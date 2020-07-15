@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import QueryString from 'query-string';
@@ -23,25 +22,24 @@ class AwardContainer extends Component {
 
     handleAwardBadge = async(e) => {
         e.preventDefault();
-        await axios
-            .post(
-                `/award`, 
-                {
-                    email: this.state.query.email,
-                    authToken: this.state.query.token,
-                    badgeToken: this.state.badgeToken,
-                    badgeName: this.state.badgeData.name
-                }
-            )
-            .then(res => {
-                ToastsStore.success('Badge has been awarded!')
-                this.setState({
-                    display: 'd-none'
-                })
+        await axios.post(
+            `/award`, 
+            {
+                email: this.state.query.email,
+                authToken: this.state.query.token,
+                badgeToken: this.state.badgeToken,
+                badgeName: this.state.badgeData.name
+            }
+        )
+        .then(res => {
+            ToastsStore.success('Badge has been awarded!')
+            this.setState({
+                display: 'd-none'
             })
-            .catch(err => {
-                console.log(err)
-            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     componentDidMount() {
@@ -50,18 +48,16 @@ class AwardContainer extends Component {
             query: QueryString.parse(this.props.location.search),
             badgeToken: params.badge_token
         })  
-        axios
-            .get(`/badges/${params.badge_token}`)
-            .then(res => {
-                this.setState({
-                    badgeData: res.data.result[0],
-                    isLoading: false
-                })
+        axios.get(`/badges/${params.badge_token}`)
+        .then(res => {
+            this.setState({
+                badgeData: res.data.result[0],
+                isLoading: false
             })
-            .catch(err => {
-                console.log(err)
-            })
-        //$('#text95').html($('#text95').html().replace(/((http:|https:)[^\s]+[\w])/g, '<a href="$1" target="_blank">$1</a>'));
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     render() {
