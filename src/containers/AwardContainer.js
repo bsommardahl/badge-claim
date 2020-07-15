@@ -13,6 +13,7 @@ class AwardContainer extends Component {
         super(props)
         this.state = {
             badgeToken: '',
+            issuerData: {},
             badgeData: {},            
             query: {},
             display: '',
@@ -42,31 +43,31 @@ class AwardContainer extends Component {
         })
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { match: {params}} = this.props
         this.setState({
             query: QueryString.parse(this.props.location.search),
             badgeToken: params.badge_token
         })  
-        axios.get(`/badges/${params.badge_token}`)
-        .then(res => {
-            this.setState({
-                badgeData: res.data.result[0],
-                isLoading: false
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
+        let dataBadge = await axios.get(`/badges/${params.badge_token}`)
+        this.setState({badgeData: dataBadge.data.result[0]})
+        let dataIssuer = await axios.get(`/issuer/${dataBadge.data.result[0].issuer}`)
+        if(dataIssuer.data)
+            this.setState({issuerData: dataIssuer.data.result[0], isLoading: false})
     }
 
     render() {
         return (
             <div>
                 <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />
-                <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} display="d-none" openModal={this.openModal} showButton={false}/>
-                <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} />
-                <AwardSection handleAwardBadge={this.handleAwardBadge} display={this.state.display} email={this.state.query.email} evidence={this.state.query.evidence}/>
+                <BadgeHeader imageSource={this.state.badgeData.image} badgeName={this.state.badgeData.name}
+                    badgeDescription={this.state.badgeData.description} issuerURL={this.state.badgeData.issuerOpenBadgeId} 
+                    issuerName={this.state.issuerData?this.state.issuerData.name:""} 
+                    display="d-none" openModal={this.openModal} showButton={false}/>
+                <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} 
+                    criteriaURL={this.state.badgeData.criteriaUrl} />
+                <AwardSection handleAwardBadge={this.handleAwardBadge} display={this.state.display} email={this.state.query.email} 
+                    evidence={this.state.query.evidence}/>
                 <ToastsContainer store={ToastsStore}/>
             </div>
         )

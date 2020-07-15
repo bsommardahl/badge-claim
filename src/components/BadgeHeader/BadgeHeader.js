@@ -14,7 +14,7 @@ const BadgeHeader = props =>
                             Issued by:
                         </hi>
                         <br/>
-                        <a href="https://badgr.io/public/issuers/KhURuSXqSNaxI5tS6YytfA" className="issuer-link">Actually Agile</a>
+                        <a href={props.issuerURL} className="issuer-link">{props.issuerName}</a>
                     </div>
                 </div>
                 <div className="column center info sections">
