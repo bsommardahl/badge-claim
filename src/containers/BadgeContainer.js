@@ -24,6 +24,7 @@ class BadgeContainer extends Component {
         super(props)
         this.state = {
             badgeToken: '',
+            dataIssuer: {},
             badgeData: {},
             email: '',
             modalIsOpen: false,
@@ -78,23 +79,17 @@ class BadgeContainer extends Component {
             })
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { match: {params}} = this.props
         this.setState({
             badgeToken: params.badge_token,
             email: window.localStorage.getItem('email') || ''
         })
-        axios
-            .get(`/badges/${params.badge_token}`)
-            .then(res => {
-                this.setState({
-                    badgeData: res.data.result[0],
-                    isLoading: false
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        let dataBadge = await axios.get(`/badges/${params.badge_token}`)
+        this.setState({badgeData: dataBadge.data.result[0]})
+        let dataIssuer = await axios.get(`/issuer/${dataBadge.data.result[0].issuer}`)
+        if(dataIssuer.data)
+            this.setState({issuerData: dataIssuer.data.result[0], isLoading: false})
     }
 
     render() {
@@ -115,8 +110,13 @@ class BadgeContainer extends Component {
                         <button className="btn btn-lg btn-primary btn-block search-button">Claim Badge</button>
                     </form>
                 </Modal>
-                <BadgeHeader imageSource={this.state.badgeData.image} buttonClass={this.state.display} badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} openModal={this.openModal} showButton={true}/>
-                <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} criteriaURL={this.state.badgeData.criteriaUrl} tags={this.state.badgeData.tags} />
+                <BadgeHeader imageSource={this.state.badgeData.image} buttonClass={this.state.display} 
+                badgeName={this.state.badgeData.name} badgeDescription={this.state.badgeData.description} 
+                issuerURL={this.state.badgeData.issuerOpenBadgeId} 
+                issuerName={this.state.issuerData?this.state.issuerData.name:""}
+                openModal={this.openModal} showButton={true}/>
+                <BadgeContent criteriaNarrative={this.state.badgeData.criteriaNarrative} 
+                criteriaURL={this.state.badgeData.criteriaUrl} tags={this.state.badgeData.tags} />
                 <ToastsContainer store={ToastsStore}/>
             </div>
         )
