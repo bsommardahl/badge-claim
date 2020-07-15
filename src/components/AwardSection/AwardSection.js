@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactHtmlParser from 'react-html-parser';
 import './AwardSection.css'
 
 function replaceMulti(str, findings, replacings) {
@@ -19,10 +20,10 @@ const AwardSection = props =>
                 <p>Email: {props.email}</p>
                 <p>Evidence:</p>
                 <p className="justify">{
-                    unescape(replaceMulti(
+                    ReactHtmlParser(unescape(replaceMulti(
                     props.evidence+"",
                     ['%40','%2D','%5F','%2F','%2E','%2A'],
-                    ['@','-','_','/','.','*']))
+                    ['@','-','_','/','.','*'])).replace(/((http:|https:)[^\s]+[\w])/g, '<a href="$1" target="_blank">$1</a>'))
                 }</p>
                 <p>
                     <a href="" onClick={props.handleAwardBadge} className="btn btn-primary award-badge-button btn-lg">Award Badge</a>
