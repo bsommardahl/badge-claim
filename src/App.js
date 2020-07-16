@@ -19,7 +19,7 @@ class App extends Component {
             <AppNavbar/>
             <Switch>
               <Route exact path='/' component={LandingContainer} />
-              <Route path='/badgeid/:badge_token' component={BadgeContainer}/>
+              <Route path='/badges/:badge_token' component={BadgeContainer}/>
               <Route path='/award/:badge_token' component={AwardContainer}/>
               <Route path='/login' component={LogIn}/>
               <PrivateRoute component={Dashboard} path='/explore' />
