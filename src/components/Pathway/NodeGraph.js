@@ -270,7 +270,7 @@ async function renderGraph(data) {
 
   function handleClick(d) {
     if(d.url){
-      window.location = `/badgeid/${getID(d.url)}`;
+      window.location = `/badges/${getID(d.url)}`;
     }
   }
 }
