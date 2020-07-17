@@ -9,6 +9,7 @@ import PrivateRoute from './components/Auth/PrivateRoute'
 import LogIn from './components/Auth/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import WebhooksManagement from './components/Webhooks/WebhooksManagement';
+import Backpack from './components/Backpack/Backpack';
 import AppNavbar from './AppNavbar';
 
 class App extends Component {
@@ -25,6 +26,7 @@ class App extends Component {
               <PrivateRoute component={Dashboard} path='/explore' />
               <PrivateRoute component={Pathway} path="/pathway/:pathway_id" />
               <PrivateRoute component={WebhooksManagement} path='/webhooks' />
+              <PrivateRoute component={Backpack} path='/backpack' />
             </Switch>
           </div>
         </Router>

@@ -15,6 +15,7 @@ const badgeController = require('./functions/routes/controllers/BadgeController'
 const ClaimBadgeController = require('./functions/routes/controllers/ClaimBadgeController');
 const awardBadgeController = require('./functions/routes/controllers/AwardBadgeController');
 const issuerController = require('./functions/routes/controllers/IssuerController');
+const userController = require('./functions/routes/controllers/UserAuthController');
 
 axios.defaults.baseURL = "https://api.badgr.io/v2";
 
@@ -31,6 +32,8 @@ app.use('/api/claim', ClaimBadgeController);
 app.use('/api/issuer', issuerController);
 
 app.use('/api/award', awardBadgeController);
+
+app.use('/api/users', userController);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
