@@ -69,11 +69,11 @@ class Backpack extends Component{
             alert("Your credentials are incorrect, please type them again");
             window.location.reload();
         }
+        console.log("LOG: ",log.data.access_token);
         const badges = await axios.post(
             `/users/backpack`, 
             {
-                email: this.state.email,
-                data: log
+                token: log.data.access_token
             }
         )
         if(badges && badges!=={}){
@@ -86,18 +86,19 @@ class Backpack extends Component{
         this.setState({email: email.email})
         var data;
         getTokenData(email.email, email.email).on('value', (snapshot) => {
-            this.postMount(snapshot.val());
+            this.postMount(snapshot.val(), email);
         });
     }
 
-    async postMount(token){
+    async postMount(token, email){
         const isLogged = await axios.post(
             `/users/logged`, 
             {
                 data: token
             }
         )
-        if(isLogged.data===true){ //check is the request is OK
+        if(isLogged.data===true){ //check if the request is OK
+            this.setState({ isAuthenticated: true})
             const badges = await axios.post(
                 `/users/backpack`, 
                 {
@@ -107,16 +108,27 @@ class Backpack extends Component{
             if(badges && badges!=={}){
                 this.setState({ backpackBadges: badges })            
             }
-        }else{
-            const badges = await axios.post(
-                `/users/backpack`, 
+        }else if(isLogged.data===false){
+            const new_access = await axios.post(
+                `/users/refresh`, 
                 {
                     token: token.data.refresh_token
                 }
             )
+            saveBackpackToken(email.email, new_access.data, this.state.email);
+            this.setState({ isAuthenticated: true})
+            const badges = await axios.post(
+                `/users/backpack`, 
+                {
+                    token: new_access.data.access_token
+                }
+            )
             if(badges && badges!=={}){
-                this.setState({ backpackBadges: badges })            
+                this.setState({ backpackBadges: badges})            
             }
+        }
+        else{
+            alert("Please register your Badgr account");
         }
 
     }
@@ -169,7 +181,7 @@ class Backpack extends Component{
                                     <BackpackBadge badge={badge}></BackpackBadge>
                                 ):
                                 <div>
-                                    <p>You have no badges or a problem occurred</p>
+                                    <p>Loading</p>
                                 </div>
                             }
                         </div>

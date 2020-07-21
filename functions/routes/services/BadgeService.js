@@ -9,29 +9,14 @@ const BadgeService = {
         console.log("BADGESERVICE AUTH: ",authToken);
         let response;
 
-        await axios.get(`/v2/badgeclasses/${badgeToken}`,{
+        await axios.get(`/badgeclasses/${badgeToken}`,{
             headers: {
                 'Authorization': `Bearer ${authToken}`
             }
-
-
-
-
-
-        //HERE I'M STUCK
-
-
-
-
-
-
-        
-        }).then(res => {     
-            console.log("IT WORKED");        
+        }).then(res => {           
             response = res.data
         }).catch(err => {
-            console.log("IT DIDNT WORK");
-            //console.log(err)
+            console.log(err);
         })
         
         return response
