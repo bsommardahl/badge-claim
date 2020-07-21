@@ -21,6 +21,8 @@ const logIn = async() => {
   var signin = await app.auth().signInWithPopup(googleProvider)
   
   if(signin){
+    app.database().ref(`/users/${signin.additionalUserInfo.profile.email.replace(/[\.@]/ig,'')}/profile`)
+    .set({"name": signin.additionalUserInfo.profile.name, "email": signin.additionalUserInfo.profile.email})
     document.location.href = '/explore';
   }
 }
@@ -28,6 +30,13 @@ const logIn = async() => {
 const logOut = () => {
   app.auth().signOut();
   document.location.href = '/login';
+}
+
+const saveBackpackToken = (email, data, email2) => {
+  var d = new Date();
+  var n = d.getTime();
+  app.database().ref(`/users/${email.replace(/[\.@]/ig,'')}/backpacks/${email2.replace(/[\.@]/ig,'')}`)
+    .set({data, "issuedOn": n});
 }
 
 const getUserEmail = () => {
@@ -59,12 +68,17 @@ const deleteWebhook=(value)=>{
 }
 
 const userSubscribe = (email, ids) => {
-  app.database().ref(`/users/${email.replace(/[\.@]/ig,'')}`).set(ids);
+  app.database().ref(`/users/${email.replace(/[\.@]/ig,'')}/pathways`).set(ids);
   alert("Subscribed!");
 }
 
 const getSubscritions = (email) => {
-  const promiseData = app.database().ref(`/users/${email.replace(/[\.@]/ig,'')}`);
+  const promiseData = app.database().ref(`/users/${email.replace(/[\.@]/ig,'')}/pathways`);
+  return promiseData;
+}
+
+const getTokenData = (email, email2)=>{
+  const promiseData = app.database().ref(`users/${email.replace(/[\.@]/ig,'')}/backpacks/${email2.replace(/[\.@]/ig,'')}`);
   return promiseData;
 }
 
@@ -72,7 +86,8 @@ module.exports = {
         app: app, 
         googleProvider: googleProvider,
         logIn: logIn, 
-        logOut: logOut, 
+        logOut: logOut,
+        saveBackpackToken: saveBackpackToken, 
         getID: getID, 
         addWebhook: addWebhook, 
         deleteWebhook: deleteWebhook,  
@@ -80,5 +95,6 @@ module.exports = {
         getAdmins: getAdmins,
         getWebhooks: getWebhooks,
         userSubscribe: userSubscribe,
-        getSubscritions: getSubscritions
+        getSubscritions: getSubscritions,
+        getTokenData: getTokenData,
 };

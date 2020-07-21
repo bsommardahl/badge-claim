@@ -6,3 +6,20 @@
     flex-direction: column;
 }
 
+.badge-image{
+    max-width: 20%;
+    max-height: 20%;
+
+}
+
+.card-header{
+    word-wrap: break-word;
+}
+
+.row{
+    margin: 0;
+}
+
+.container-fluid{
+    margin: 0;
+}

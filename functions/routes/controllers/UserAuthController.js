@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const userService = require('../services/UserAuthService');
+const authenticate = require('../middleware/Authenticate')
 const asyncMiddleware = require('../middleware/AsyncMiddleware');
 
 router.post('/', asyncMiddleware(async (req, res, next) => {
@@ -11,13 +12,13 @@ router.post('/', asyncMiddleware(async (req, res, next) => {
     res.send(response)
 }))
 
-router.get('/', asyncMiddleware(async (req, res, next) => {
+router.post('/logged', asyncMiddleware(async (req, res, next) => {
     const data = req.body
     const response = await userService.isLogged(data)
     res.send(response)
 }))
 
-router.post('/backpack', asyncMiddleware(async (req, res, next) => {
+router.post('/backpack', asyncMiddleware(authenticate), asyncMiddleware(async (req, res, next) => {
     const data = req.body
     const response = await userService.getBackpack(data)
     res.send(response)

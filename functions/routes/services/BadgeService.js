@@ -3,32 +3,35 @@ const envs = require('../../env.json');
 
 const ISSUER_ID = envs.service.issuer_id
 
-var ONE_HOUR = 60 * 60 * 1000;
-const badges = {};
-
 const BadgeService = {
     getBadgeData: async(badgeToken, authToken) => {
-        var d = new Date(); 
-        var time = d.getTime();
-
-        if(badges[badgeToken] && (time - badges[badgeToken][1]) < ONE_HOUR){
-            return badges[badgeToken][0];
-        }
-
+        console.log("BADGESERVICE TOKEN: ", badgeToken);
+        console.log("BADGESERVICE AUTH: ",authToken);
         let response;
 
-        await axios({
+        await axios.get(`/v2/badgeclasses/${badgeToken}`,{
             headers: {
                 'Authorization': `Bearer ${authToken}`
-            },
-            method: 'get',
-            url: `/badgeclasses/${badgeToken}`,
+            }
 
-        }).then(res => {             
+
+
+
+
+        //HERE I'M STUCK
+
+
+
+
+
+
+        
+        }).then(res => {     
+            console.log("IT WORKED");        
             response = res.data
-            badges[badgeToken] = [response, time];
         }).catch(err => {
-            console.log(err)
+            console.log("IT DIDNT WORK");
+            //console.log(err)
         })
         
         return response
@@ -46,6 +49,23 @@ const BadgeService = {
         }).then(res => {                   
             response = res.data
         }).catch(err => {  
+            console.log(err)
+        })
+
+        return response
+    },
+    getAllBadges: async(issuerToken, authToken)=>{
+        let response;
+
+        await axios({
+            headers:{
+                'Authorization': `Bearer ${authToken}`
+            },
+            method:'get',
+            url: '/badgeclasses'
+        }).then(res => {     
+            console.log("SEE RES: ",res);        
+        }).catch(err => {
             console.log(err)
         })
 
