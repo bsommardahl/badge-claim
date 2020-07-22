@@ -25,6 +25,7 @@ class AppNavbar extends Component {
                     <Nav className="mr-auto">
                         <Nav.Link href="/">Badges</Nav.Link>
                         <Nav.Link href="/explore">Explore</Nav.Link>
+                        <Nav.Link href="/groups">Groups</Nav.Link>
                         <Nav.Link href="/webhooks">Webhooks</Nav.Link>
                     </Nav>
                     <div>{isLogged ? 

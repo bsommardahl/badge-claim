@@ -68,6 +68,26 @@ const getSubscritions = (email) => {
   return promiseData;
 }
 
+//GROUPS
+
+const addGroup=(name, desc)=>{
+  app.database().ref(`groups`).push().set({"name":name,"description":desc})
+}
+
+const editGroup = (id,name,desc) => {
+  app.database().ref(`groups/${id}`).set({"name":name,"description":desc})
+}
+
+const getOneGroup = (id) => {
+  const promiseData = app.database().ref(`groups/${id}`)
+  return promiseData;
+}
+
+const getGroups = () => {
+  const promiseData = app.database().ref('/groups');
+  return promiseData;
+}
+
 module.exports = {
         app: app, 
         googleProvider: googleProvider,
@@ -80,5 +100,9 @@ module.exports = {
         getAdmins: getAdmins,
         getWebhooks: getWebhooks,
         userSubscribe: userSubscribe,
-        getSubscritions: getSubscritions
+        getSubscritions: getSubscritions,
+        addGroup: addGroup,
+        editGroup: editGroup,
+        getGroups: getGroups,
+        getOneGroup: getOneGroup
 };

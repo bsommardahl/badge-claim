@@ -10,6 +10,8 @@ import LogIn from './components/Auth/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import WebhooksManagement from './components/Webhooks/WebhooksManagement';
 import AppNavbar from './AppNavbar';
+import ListGroup from './components/Groups/ListGroup';
+import NewGroup from './components/Groups/NewGroup';
 
 class App extends Component {
   render () {
@@ -25,6 +27,9 @@ class App extends Component {
               <PrivateRoute component={Dashboard} path='/explore' />
               <PrivateRoute component={Pathway} path="/pathway/:pathway_id" />
               <PrivateRoute component={WebhooksManagement} path='/webhooks' />
+              <PrivateRoute  exact strict component={ListGroup} path='/groups' />
+              <PrivateRoute  exact strict component={NewGroup} path='/groups/new' />
+              <PrivateRoute  exact strict component={NewGroup} path='/groups/edit/:id' />
             </Switch>
           </div>
         </Router>
