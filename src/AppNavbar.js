@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom'
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
@@ -23,10 +24,10 @@ class AppNavbar extends Component {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link href="/">Badges</Nav.Link>
-                        <Nav.Link href="/explore">Explore</Nav.Link>
-                        <Nav.Link href="/groups">Groups</Nav.Link>
-                        <Nav.Link href="/webhooks">Webhooks</Nav.Link>
+                        <Nav.Link as={Link} to="/">Badges</Nav.Link>
+                        <Nav.Link as={Link} to="/explore">Explore</Nav.Link>
+                        <Nav.Link as={Link} to="/groups">Groups</Nav.Link>
+                        <Nav.Link as={Link} to="/webhooks">Webhooks</Nav.Link>
                     </Nav>
                     <div>{isLogged ? 
                         <Button variant="outline-info" onClick={() => logIn()}>Log In</Button> :  

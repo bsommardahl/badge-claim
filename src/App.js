@@ -12,6 +12,7 @@ import WebhooksManagement from './components/Webhooks/WebhooksManagement';
 import AppNavbar from './AppNavbar';
 import ListGroup from './components/Groups/ListGroup';
 import NewGroup from './components/Groups/NewGroup';
+import IndividualGroup from './components/Groups/IndividualGroup';
 
 class App extends Component {
   render () {
@@ -24,12 +25,14 @@ class App extends Component {
               <Route path='/badges/:badge_token' component={BadgeContainer}/>
               <Route path='/award/:badge_token' component={AwardContainer}/>
               <Route path='/login' component={LogIn}/>
-              <PrivateRoute component={Dashboard} path='/explore' />
-              <PrivateRoute component={Pathway} path="/pathway/:pathway_id" />
-              <PrivateRoute component={WebhooksManagement} path='/webhooks' />
-              <PrivateRoute  exact strict component={ListGroup} path='/groups' />
-              <PrivateRoute  exact strict component={NewGroup} path='/groups/new' />
-              <PrivateRoute  exact strict component={NewGroup} path='/groups/edit/:id' />
+              <PrivateRoute admin={false} component={Dashboard} path='/explore' />
+              <PrivateRoute admin={false} component={Pathway} path="/pathway/:pathway_id" />
+              {/*</Switch><PrivateRoute admin={true} component={WebhooksManagement} path='/webhooks' />*/}
+              <Route component={WebhooksManagement} path='/webhooks'/>
+              <PrivateRoute  exact strict admin={true} component={ListGroup} path='/groups' />
+              <PrivateRoute  exact strict admin={true} component={NewGroup} path='/groups/new' />
+              <PrivateRoute  exact strict admin={true} component={NewGroup} path='/groups/edit/:id' />
+              <PrivateRoute  exact strict admin={true} component={IndividualGroup} path='/groups/:id' />
             </Switch>
           </div>
         </Router>

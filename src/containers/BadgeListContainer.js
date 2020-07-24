@@ -28,18 +28,14 @@ class BadgeListContainer extends Component {
 
     render() {
         const badgeList = this.state.badges.map((badge) =>
-            <li>
-                <BadgeListItem badge={badge} />
-            </li>
+                <BadgeListItem badge={badge} /> 
         )
 
         return (
             <div>
                 <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />
-                <div className="container-fluid">
-                    <ul style={{listStyle:'none'}}>
+                <div className="container-fluid d-flex flex-wrap">
                         {badgeList}
-                    </ul>
                 </div>
             </div>
         )
