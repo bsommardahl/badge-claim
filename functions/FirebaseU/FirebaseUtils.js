@@ -1,5 +1,4 @@
 const firebase = require("firebase");
-const functions = require("firebase-functions");
 const envs = require("../config");
 
 const config = {
@@ -39,6 +38,12 @@ const getUserEmail = () => {
     }, reject);
   });
 };
+
+const getUserProfile = (email) => {
+  console.log("data", email);
+  const promiseData = app.database().ref(`/users/${email.replace(/[\.@]/gi, "")}`);
+  return promiseData;
+}
 
 const getAdmins = () => {
   const promiseData = app.database().ref("/admins");
@@ -126,6 +131,7 @@ module.exports = {
   addWebhook: addWebhook,
   deleteWebhook: deleteWebhook,
   getUserEmail: getUserEmail,
+  getUserProfile: getUserProfile,
   getAdmins: getAdmins,
   getWebhooks: getWebhooks,
   userSubscribe: userSubscribe,

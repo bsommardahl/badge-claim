@@ -3,6 +3,7 @@ import $ from 'jquery';
 import axios from 'axios';
 import { createPathway } from './NodeGraph';
 import { getUserEmail } from '../../../functions/FirebaseU/FirebaseUtils'
+import {Link} from 'react-router-dom'
 import './Pathway.css'
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
@@ -79,6 +80,12 @@ class Pathway extends React.Component{
                 <div>
                     <div className="badge-summary jumbotron">
                         <h1></h1>
+                        <Link
+                            to={`/explore`}
+                            className="btn btn-primary"
+                        >
+                         Back
+                        </Link>
                     </div>
                     <div style={{marginLeft: '10%'}}>
                         <ul>

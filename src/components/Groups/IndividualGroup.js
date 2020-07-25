@@ -87,6 +87,13 @@ class IndividualGroup extends React.Component {
             >
               Edit
             </Link>
+
+            <Link
+              to={`/groups`}
+              className="btn btn-primary"
+            >
+              Back
+            </Link>
           </div>
         </div>
         <div className="body-app">

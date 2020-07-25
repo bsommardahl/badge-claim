@@ -1,51 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import {
-  getUserEmail,
-  getAdmins,
-} from "../../../functions/FirebaseU/FirebaseUtils";
+import { app } from "../../../functions/FirebaseU/FirebaseUtils";
+import { useObject } from "react-firebase-hooks/database";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const PrivateRoute = ({ component: Component, admin: admin, ...rest }) => {
-  const [user, setUser] = useState("");
-  const [isAdmin, setAdmin] = useState("");
+  const [users, usersLoading, userError] = useObject(
+    app.database().ref("/users/")
+  );
+  const [user, loading, error] = useAuthState(app.auth());
 
-  useEffect(() => {
-    if (!user) {
-      getUser();
-    }
-    if (!admin) {
-      getAdmin();
-    }
-  }, []);
-
-  const getUser = async () => {
-    const msg = await getUserEmail();
-    setUser(msg);
-  };
-
-  const getAdmin = async () => {
-    var msg;
-    const email = await getUserEmail();
-    getAdmins().on("value", (snapshot) => {
-      console.log(snapshot.val());
-      for (let x = 0; x < snapshot.val().length; x++) {
-        if (email.email == snapshot.val()[x]) {
-          console.log("ADMIN!", email.email);
-          setAdmin(snapshot.val()[x]);
-          break;
-        }
-      }
-    });
-  };
-
-  return (
+  return !loading && !usersLoading ? (
     <Route
       {...rest}
       render={(props) =>
-        admin? isAdmin? <Component {...props} /> : <Redirect to="/login" />:
-        user != null ? <Component {...props} /> : <Redirect to="/login" />
+        admin ? (
+          Object.values(users.val()).filter(
+            (item) => item.profile.email === user.email
+          )[0].permission.isAdmin === 1 ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to="/" />
+          )
+        ) : user != null ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
       }
     />
+  ) : (
+    <div />
   );
 };
 

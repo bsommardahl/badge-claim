@@ -3,6 +3,7 @@ const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const envs = require('./functions/env.json');
+const APP_URL=envs.service.app_url
 
 const PRIVATE_KEY=envs.service.private_key
 const DOMAIN=envs.service.domain
@@ -95,6 +96,8 @@ app.post('/api/invite', (req, res) => {
           
           You were added to the group:
           <p>Group: ${req.body.payload.name}</p>
+          <br><br>
+          ${APP_URL}/explore
           <br><br>
 
           Welcome,
