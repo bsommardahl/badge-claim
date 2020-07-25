@@ -294,8 +294,8 @@ class WebhooksManagement extends React.Component {
           >
             Add Webhook
           </Button>
-          <Table striped bordered>
-            <thead>
+          <table  className="table mt-3">
+            <thead class="thead-dark">
               <tr>
                 <th>Issuer ID</th>
                 <th>Name</th>
@@ -338,7 +338,7 @@ class WebhooksManagement extends React.Component {
                 <div />
               )}
             </tbody>
-          </Table>
+          </table>
           <Modal show={this.state.show} onHide={this.handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>

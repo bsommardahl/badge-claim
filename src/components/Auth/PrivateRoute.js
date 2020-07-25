@@ -9,6 +9,7 @@ const PrivateRoute = ({ component: Component, admin: admin, ...rest }) => {
     app.database().ref("/users/")
   );
   const [user, loading, error] = useAuthState(app.auth());
+  
 
   return !loading && !usersLoading ? (
     <Route

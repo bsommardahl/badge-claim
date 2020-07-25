@@ -18,7 +18,7 @@ class App extends Component {
   render () {
       return (
         <Router>
-          <div>
+          <div className="h-100">
             <AppNavbar/>
             <Switch>
               <Route exact path='/' component={LandingContainer} />
@@ -28,10 +28,10 @@ class App extends Component {
               <PrivateRoute admin={false} component={Dashboard} path='/explore' />
               <PrivateRoute admin={false} component={Pathway} path="/pathway/:pathway_id" />
               <PrivateRoute admin={true} component={WebhooksManagement} path='/webhooks' />
-              <PrivateRoute admin={true} component={ListGroup} path='/groups' />
-              <PrivateRoute admin={true} component={NewGroup} path='/groups/new' />
-              <PrivateRoute admin={true} component={NewGroup} path='/groups/edit/:id' />
-              <PrivateRoute admin={true} component={IndividualGroup} path='/groups/:id' />
+              <PrivateRoute admin={true} strict exact component={ListGroup} path='/groups' />
+              <PrivateRoute admin={true} strict exact component={NewGroup} path='/groups/new'/>
+              <PrivateRoute admin={true} strict exact component={NewGroup} path='/groups/edit/:id' />
+              <PrivateRoute admin={true} strict exact component={IndividualGroup} path='/groups/:id' />
             </Switch>
           </div>
         </Router>

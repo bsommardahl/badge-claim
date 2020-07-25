@@ -2,6 +2,7 @@ import React from "react";
 import {
   getOneGroup,
   addUserToGroup,
+  getPathways,
 } from "../../../functions/FirebaseU/FirebaseUtils";
 import { Link } from "react-router-dom";
 import { WebhookFire } from "../Webhooks/WebhookEngine";
@@ -18,7 +19,9 @@ class IndividualGroup extends React.Component {
       desc: "",
       users: null,
       pathways: [],
+      allPathways: [],
       open: false,
+      openPath: false,
       email: "",
     };
     this.handleModal = this.handleModal.bind(this);
@@ -30,6 +33,9 @@ class IndividualGroup extends React.Component {
     this.setState({ open: !this.state.open });
   }
 
+  handleModalPath() {
+    this.setState({ openPath: !this.state.openPath });
+  }
   componentDidMount() {
     const {
       match: { params },
@@ -50,6 +56,19 @@ class IndividualGroup extends React.Component {
         console.log("NO GROUP", error);
       }
     });
+    getPathways()
+      .once("value")
+      .then((snapshot) => {
+        try {
+          if (snapshot.val()) {
+            this.setState({
+              allPathways: Object.values(snapshot.val()),
+            });
+          }
+        } catch (error) {
+          console.log("NO PATHWAY", error);
+        }
+      });
   }
 
   onChangeText = (e) => {
@@ -62,14 +81,17 @@ class IndividualGroup extends React.Component {
 
   addUser() {
     addUserToGroup(this.state.id, this.state.email);
-    WebhookFire("2mE3WXrJT1KEdqousLHhFw","group_invitation",{email: this.state.email, name: this.state.name});
+    WebhookFire("2mE3WXrJT1KEdqousLHhFw", "group_invitation", {
+      email: this.state.email,
+      name: this.state.name,
+    });
   }
 
   render() {
     return (
       <div>
         <div className="badge-summary jumbotron row d-flex justify-content-around">
-          <div>
+          <div className="text-left">
             <h1>{this.state.name}</h1>
             <p>{this.state.desc}</p>
           </div>
@@ -83,22 +105,25 @@ class IndividualGroup extends React.Component {
                   id: this.state.id,
                 },
               }}
-              className="btn btn-primary"
+              className="btn btn-primary mr-3"
             >
               Edit
             </Link>
 
-            <Link
-              to={`/groups`}
-              className="btn btn-primary"
-            >
+            <Link to={`/groups`} className="btn btn-primary">
               Back
             </Link>
           </div>
         </div>
         <div className="body-app">
           <button
-            className="btn btn-secondary"
+            className="btn btn-primary"
+            onClick={() => this.handleModalPath()}
+          >
+            Add Pathway to Group
+          </button>
+          <button
+            className="btn btn-secondary ml-3"
             onClick={() => this.handleModal()}
           >
             Add user to Group
@@ -138,6 +163,29 @@ class IndividualGroup extends React.Component {
                 onClick={() => this.addUser()}
               >
                 Add User
+              </button>
+            </Modal.Footer>
+          </Modal>
+          <Modal show={this.state.openPath} onHide={this.handleModalPath}>
+            <Modal.Header>
+              <h4 class="modal-title">Add new Pathway to group</h4>
+            </Modal.Header>
+            <Modal.Body className="d-flex flex-column">
+              {this.state.allPathways.map((item) => {
+                return (
+                  <div className="d-flex flex-row m-2 shadow p-4 align-middle justify-content-between align-content-center align-items-center">
+                    <span className="font-weight-bold">{item.title}</span>
+                    <button className="btn btn-primary ml-3">suscribe</button>
+                  </div>
+                );
+              })}
+            </Modal.Body>
+            <Modal.Footer>
+              <button
+                className="btn btn-secondary"
+                onClick={() => this.handleModalPath()}
+              >
+                Close
               </button>
             </Modal.Footer>
           </Modal>

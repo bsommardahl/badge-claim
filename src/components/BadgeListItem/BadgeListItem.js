@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 
 const BadgeListItem = props => 
     <div onClick = {() => props.history.push(`/badges/${props.badge.entityId}`)}>
-        <div>
+        <div className="w-100">
             <img alt="Badge Image" className="badge-image img-fluid" src={props.badge.image}/> 
         </div>
         <div>

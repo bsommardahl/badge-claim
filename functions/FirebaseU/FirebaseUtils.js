@@ -71,8 +71,7 @@ const deleteWebhook = (value) => {
 const userSubscribe = (email, ids) => {
   app
     .database()
-    .ref(`/users/${email.replace(/[\.@]/gi, "")}`)
-    .set(ids);
+    .ref(`/users/${email.replace(/[\.@]/gi, "")}/pathways`).update(ids);
   alert("Subscribed!");
 };
 
@@ -122,6 +121,12 @@ const deleteUserFromGroup = (value, user) => {
   app.database().ref(`groups/${value}/${user}`).remove();
 };
 
+//PATHWAYS
+const getPathways = () =>{
+  const promiseData = app.database().ref("/pathways");
+  return promiseData
+}
+
 module.exports = {
   app: app,
   googleProvider: googleProvider,
@@ -143,4 +148,5 @@ module.exports = {
   addUserToGroup: addUserToGroup,
   addPathwayToGroup: addPathwayToGroup,
   deleteUserFromGroup: deleteUserFromGroup,
+  getPathways:getPathways,
 };
