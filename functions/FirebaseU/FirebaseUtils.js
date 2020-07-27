@@ -121,12 +121,6 @@ const deleteUserFromGroup = (value, user) => {
   app.database().ref(`groups/${value}/${user}`).remove();
 };
 
-//PATHWAYS
-const getPathways = () =>{
-  const promiseData = app.database().ref("/pathways");
-  return promiseData
-}
-
 module.exports = {
   app: app,
   googleProvider: googleProvider,
@@ -147,6 +141,5 @@ module.exports = {
   getOneGroup: getOneGroup,
   addUserToGroup: addUserToGroup,
   addPathwayToGroup: addPathwayToGroup,
-  deleteUserFromGroup: deleteUserFromGroup,
-  getPathways:getPathways,
+  deleteUserFromGroup: deleteUserFromGroup
 };

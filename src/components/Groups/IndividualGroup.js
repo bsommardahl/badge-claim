@@ -1,14 +1,18 @@
 import React from "react";
 import {
+  getID,
   getOneGroup,
-  addUserToGroup,
-  getPathways,
+  addUserToGroup
 } from "../../../functions/FirebaseU/FirebaseUtils";
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 import { Link } from "react-router-dom";
 import { WebhookFire } from "../Webhooks/WebhookEngine";
 import Modal from "react-bootstrap/Modal";
 import { UserTable } from "../UserTable";
 import { Loader } from "../Loader";
+import './IndividualGroup.css';
+import { isUndefined } from "lodash";
 
 class IndividualGroup extends React.Component {
   constructor(props) {
@@ -18,7 +22,7 @@ class IndividualGroup extends React.Component {
       name: "",
       desc: "",
       users: null,
-      pathways: [],
+      pathways: undefined,
       allPathways: [],
       open: false,
       openPath: false,
@@ -36,11 +40,14 @@ class IndividualGroup extends React.Component {
   handleModalPath() {
     this.setState({ openPath: !this.state.openPath });
   }
+
   componentDidMount() {
     const {
       match: { params },
     } = this.props;
+
     this.setState({ id: params.id });
+
     getOneGroup(params.id).on("value", (snapshot) => {
       try {
         if (snapshot.val()) {
@@ -56,19 +63,18 @@ class IndividualGroup extends React.Component {
         console.log("NO GROUP", error);
       }
     });
-    getPathways()
-      .once("value")
-      .then((snapshot) => {
-        try {
-          if (snapshot.val()) {
-            this.setState({
-              allPathways: Object.values(snapshot.val()),
-            });
-          }
-        } catch (error) {
-          console.log("NO PATHWAY", error);
-        }
-      });
+
+    let allPathways = [];
+    let pathways = require(`../../../pathways/pathwaysIDS.json`);
+    
+    for(let x=0;x<pathways.pathways_ids.length;x++){
+        let path = Object.values(require(`../../../pathways/${pathways.pathways_ids[x]}.json`))[0]
+        allPathways.push(path);
+    }
+    
+    this.setState({
+      allPathways
+    });
   }
 
   onChangeText = (e) => {
@@ -85,6 +91,12 @@ class IndividualGroup extends React.Component {
       email: this.state.email,
       name: this.state.name,
     });
+  }
+
+  addPathway(id){
+    if(isUndefined(this.state.pathways)){
+      this.setState({pathways: [id]})
+    }
   }
 
   render() {
@@ -126,15 +138,26 @@ class IndividualGroup extends React.Component {
             className="btn btn-secondary ml-3"
             onClick={() => this.handleModal()}
           >
-            Add user to Group
+            Add User to Group
           </button>
           <div>
-            <div>
-              {this.state.users ? (
-                <UserTable users={Object.entries(this.state.users)} />
-              ) : (
-                <Loader />
-              )}
+            <div style={{marginTop: "3%"}}>
+              <Tabs style={{width: "100%"}}>
+                  <Tab eventKey="available" title="Users">
+                    {this.state.users ? (
+                      <UserTable users={Object.entries(this.state.users)} />
+                    ) : (
+                      <Loader />
+                    )}
+                  </Tab>
+                  <Tab eventKey="pathways" title="Pathways">
+                    {!isUndefined(this.state.pathways) ? (
+                      <UserTable users={Object.entries(this.state.users)} />
+                    ) : (
+                      <Loader />
+                    )}
+                  </Tab>
+              </Tabs>
             </div>
           </div>
           <Modal show={this.state.open} onHide={this.handleModal}>
@@ -168,17 +191,17 @@ class IndividualGroup extends React.Component {
           </Modal>
           <Modal show={this.state.openPath} onHide={this.handleModalPath}>
             <Modal.Header>
-              <h4 class="modal-title">Add new Pathway to group</h4>
+              <h4 class="modal-title">Add New Pathway to Group</h4>
             </Modal.Header>
             <Modal.Body className="d-flex flex-column">
-              {this.state.allPathways.map((item) => {
-                return (
-                  <div className="d-flex flex-row m-2 shadow p-4 align-middle justify-content-between align-content-center align-items-center">
+              <div className="pathwaysModal">
+                {this.state.allPathways.map((item) => 
+                  <div className=" d-flex flex-row m-2 shadow p-4 align-middle justify-content-between align-content-center align-items-center">
                     <span className="font-weight-bold">{item.title}</span>
-                    <button className="btn btn-primary ml-3">suscribe</button>
+                    <button className="btn btn-primary ml-3">Add</button>
                   </div>
-                );
-              })}
+                )}
+              </div>
             </Modal.Body>
             <Modal.Footer>
               <button
