@@ -4,12 +4,22 @@ const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const envs = require('./env.json');
+const cors = require('cors')
 
 const PRIVATE_KEY=envs.service.private_key
 const DOMAIN=envs.service.domain
 const APP_URL=envs.service.app_url
 
 const app = express();
+//Add as a middleware
+//Options permission is for axios
+const corsOptions = {
+  origin:['*',"http://localhost:3001"],
+  methods:['GET','POST','DELETE','UPDATE','OPTIONS'],
+  credentials:true
+}
+
+app.use(cors(corsOptions))
 
 axios.defaults.baseURL = envs.service.base_url;
 
@@ -17,7 +27,6 @@ const badgeController = require('./routes/controllers/BadgeController');
 const ClaimBadgeController = require('./routes/controllers/ClaimBadgeController');
 const awardBadgeController = require('./routes/controllers/AwardBadgeController');
 const issuerController = require('./routes/controllers/IssuerController');
-const groupController = require('./routes/controllers/GroupController');
 
 const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
 
@@ -32,7 +41,6 @@ app.use('/api/issuer', issuerController);
 
 app.use('/api/award', awardBadgeController);
 
-app.use('/api/group', groupController);
 
 app.post('/api/pathways/:pathwayId/subscribe', (req, res) => {
   var data = {
@@ -93,10 +101,33 @@ app.post('/api/invite', (req, res) => {
           You were added to the group:
           <p>Group: ${req.body.payload.name}</p>
           <br><br>
-          ${APP_URL}/explore
+          ${APP_URL}explore
           <br><br>
 
           Welcome,
+          <br><br>
+
+          Acera`
+  };
+  
+  mailgun.messages().send(data, function (error, body) {
+    res.status(200).send('OK');
+  });
+})
+
+app.post('/api/newpathway', (req, res) => {
+  var data = {
+    from: EMAIL,
+    to: req.body.payload.email,
+    subject: `New pathway available in ${req.body.payload.groupname} Group`,
+    html: `Hello, 
+          <br><br>
+          
+          <p>Path: ${req.body.payload.pathname}</p>
+          <p>Link: ${APP_URL}pathway/${req.body.payload.pathwayid}</p>
+          <br><br>
+
+          Greetings,
           <br><br>
 
           Acera`
@@ -151,3 +182,4 @@ functions.database.ref(`/groups/`).onUpdate((snap, context) => {
 
 
 exports.app = functions.https.onRequest(app)
+exports.appdev= functions.https.onRequest(app)

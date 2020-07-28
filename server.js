@@ -97,10 +97,33 @@ app.post('/api/invite', (req, res) => {
           You were added to the group:
           <p>Group: ${req.body.payload.name}</p>
           <br><br>
-          ${APP_URL}/explore
+          ${APP_URL}explore
           <br><br>
 
           Welcome,
+          <br><br>
+
+          Acera`
+  };
+  
+  mailgun.messages().send(data, function (error, body) {
+    res.status(200).send('OK');
+  });
+})
+
+app.post('/api/newpathway', (req, res) => {
+  var data = {
+    from: EMAIL,
+    to: req.body.payload.email,
+    subject: `New pathway available in ${req.body.payload.groupname} Group`,
+    html: `Hello, 
+          <br><br>
+          
+          <p>Path: ${req.body.payload.pathname}</p>
+          <p>Link: ${APP_URL}pathway/${req.body.payload.pathwayid}</p>
+          <br><br>
+
+          Greetings,
           <br><br>
 
           Acera`

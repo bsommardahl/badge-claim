@@ -89,7 +89,7 @@ const addGroup = (name, desc) => {
 };
 
 const editGroup = (id, name, desc) => {
-  app.database().ref(`groups/${id}`).set({ name: name, description: desc });
+  app.database().ref(`groups/${id}`).update({ name: name, description: desc});
 };
 
 const getOneGroup = (id) => {
@@ -112,9 +112,7 @@ const addUserToGroup = (id, email) => {
 };
 
 const addPathwayToGroup = (id, pathway) => {
-  app.database().ref(`groups/${id}`).update({
-    pathway: pathway,
-  });
+  app.database().ref(`groups/${id}/pathways`).push(pathway);
 };
 
 const deleteUserFromGroup = (value, user) => {

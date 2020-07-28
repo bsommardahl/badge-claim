@@ -5,6 +5,8 @@ import {
   editGroup,
   getGroups,
 } from "../../../functions/FirebaseU/FirebaseUtils";
+import { Link,withRouter } from "react-router-dom";
+
 class NewGroup extends React.Component {
   constructor(props) {
     super(props);
@@ -48,7 +50,7 @@ class NewGroup extends React.Component {
             values[x].name === this.state.name &&
             values[x].description === this.state.desc
           ) {
-            window.location.replace(`/groups/${keys[x]}`);
+            this.props.history.push(`/groups/${keys[x]}`);
           }
         }
       });
@@ -58,7 +60,7 @@ class NewGroup extends React.Component {
   edit() {
     if (this.state.name == "") alert("Please type in a name");
     else editGroup(this.state.id, this.state.name, this.state.desc);
-    window.location.replace("/groups");
+    this.props.history.push(`/groups/${this.state.id}`);
   }
 
   onChangeText = (e) => {
@@ -74,6 +76,9 @@ class NewGroup extends React.Component {
       <div>
         <div className="badge-summary jumbotron">
           <h1>{this.state.id ? "Edit Group" : "Create Group"}</h1>
+          <Link to={this.state.id?`/groups/${this.state.id}`:`/groups`} className="btn btn-primary">
+              Back
+          </Link>
         </div>
         <div className="body-app d-flex flex-column center text-left ">
           <div className="min-800 mw-800 shadow p-4 rounded">
@@ -108,4 +113,4 @@ class NewGroup extends React.Component {
     );
   }
 }
-export default NewGroup;
+export default withRouter(NewGroup);
