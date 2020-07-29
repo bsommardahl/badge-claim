@@ -65,9 +65,22 @@ class IndividualGroup extends React.Component {
   };
 
   addUser() {
-    addUserToGroup(this.state.id, this.state.email);
-    WebhookFire("2mE3WXrJT1KEdqousLHhFw","group_invitation",{email: this.state.email, name: this.state.name});
+    const exist = Object.values(this.state.users).filter((value) => value.email === this.state.email).length == 0;
+    if(exist){
+      addUserToGroup(this.state.id, this.state.email);
+      WebhookFire("2mE3WXrJT1KEdqousLHhFw", "group_invitation", {
+        email: this.state.email,
+        name: this.state.name,
+      });
+      this.setState({email: ""});
+      document.getElementById("userEmail").focus();
+    }else{
+      this.setState({
+        userError:"The user is already in the group"
+      })
+    }
   }
+  
 
   render() {
     return (
@@ -121,6 +134,7 @@ class IndividualGroup extends React.Component {
               <input
                 placeholder="Email"
                 name="email"
+                id="userEmail"
                 value={this.state.email}
                 onChange={this.onChangeText}
                 type="email"

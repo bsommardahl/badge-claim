@@ -5,7 +5,7 @@ import {
   editGroup,
   getGroups,
 } from "../../../functions/FirebaseU/FirebaseUtils";
-import {withRouter} from 'react-router-dom'
+import { Link,withRouter } from "react-router-dom";
 class NewGroup extends React.Component {
   constructor(props) {
     super(props);
@@ -75,6 +75,9 @@ class NewGroup extends React.Component {
       <div>
         <div className="badge-summary jumbotron">
           <h1>{this.state.id ? "Edit Group" : "Create Group"}</h1>
+          <Link to={this.state.id?`/groups/${this.state.id}`:`/groups`} className="btn btn-primary">
+              Back
+          </Link>
         </div>
         <div className="body-app d-flex flex-column center text-left ">
           <div className="min-800 mw-800 shadow p-4 rounded">
