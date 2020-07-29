@@ -93,7 +93,7 @@ app.post('/api/invite', (req, res) => {
           You were added to the group:
           <p>Group: ${req.body.payload.name}</p>
           <br><br>
-          ${APP_URL}/explore
+          ${APP_URL}explore
           <br><br>
 
           Welcome,

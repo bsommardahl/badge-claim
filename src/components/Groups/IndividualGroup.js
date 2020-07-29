@@ -8,6 +8,7 @@ import { WebhookFire } from "../Webhooks/WebhookEngine";
 import Modal from "react-bootstrap/Modal";
 import { UserTable } from "../UserTable";
 import { Loader } from "../Loader";
+import { isUndefined } from "lodash";
 
 class IndividualGroup extends React.Component {
   constructor(props) {
@@ -45,6 +46,9 @@ class IndividualGroup extends React.Component {
             users: users,
             pathways: pathways,
           });
+          if (users === null || isUndefined(users)) {
+            this.setState({ users: [] });
+          }
         }
       } catch (error) {
         console.log("NO GROUP", error);
@@ -69,7 +73,7 @@ class IndividualGroup extends React.Component {
     return (
       <div>
         <div className="badge-summary jumbotron row d-flex justify-content-around">
-          <div>
+          <div className="text-left">
             <h1>{this.state.name}</h1>
             <p>{this.state.desc}</p>
           </div>
@@ -83,15 +87,12 @@ class IndividualGroup extends React.Component {
                   id: this.state.id,
                 },
               }}
-              className="btn btn-primary"
+              className="btn btn-primary mr-3"
             >
               Edit
             </Link>
 
-            <Link
-              to={`/groups`}
-              className="btn btn-primary"
-            >
+            <Link to={`/groups`} className="btn btn-primary">
               Back
             </Link>
           </div>
@@ -101,10 +102,10 @@ class IndividualGroup extends React.Component {
             className="btn btn-secondary"
             onClick={() => this.handleModal()}
           >
-            Add user to Group
+            Add User to Group
           </button>
           <div>
-            <div>
+            <div style={{marginTop: "3%"}}>
               {this.state.users ? (
                 <UserTable users={Object.entries(this.state.users)} />
               ) : (

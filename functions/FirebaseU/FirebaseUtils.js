@@ -71,10 +71,10 @@ const deleteWebhook = (value) => {
 const userSubscribe = (email, ids) => {
   app
     .database()
-    .ref(`/users/${email.replace(/[\.@]/gi, "")}`)
-    .set(ids);
+    .ref(`/users/${email.replace(/[\.@]/gi, "")}/pathways`).update(ids);
   alert("Subscribed!");
 };
+
 
 const getSubscritions = (email) => {
   const promiseData = app

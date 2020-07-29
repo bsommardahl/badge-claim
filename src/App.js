@@ -16,27 +16,27 @@ import IndividualGroup from './components/Groups/IndividualGroup';
 
 class App extends Component {
   render () {
-      return (
-        <Router>
-          <div>
-            <AppNavbar/>
-            <Switch>
-              <Route exact path='/' component={LandingContainer} />
-              <Route path='/badges/:badge_token' component={BadgeContainer}/>
-              <Route path='/award/:badge_token' component={AwardContainer}/>
-              <Route path='/login' component={LogIn}/>
-              <PrivateRoute admin={false} component={Dashboard} path='/explore' />
-              <PrivateRoute admin={false} component={Pathway} path="/pathway/:pathway_id" />
-              <PrivateRoute admin={true} component={WebhooksManagement} path='/webhooks' />
-              <PrivateRoute admin={true} component={ListGroup} path='/groups' />
-              <PrivateRoute admin={true} component={NewGroup} path='/groups/new' />
-              <PrivateRoute admin={true} component={NewGroup} path='/groups/edit/:id' />
-              <PrivateRoute admin={true} component={IndividualGroup} path='/groups/:id' />
-            </Switch>
-          </div>
-        </Router>
-      );
-    }
+    return (
+      <Router>
+        <div>
+          <AppNavbar/>
+          <Switch>
+            <Route exact path='/' component={LandingContainer} />
+            <Route path='/badges/:badge_token' component={BadgeContainer}/>
+            <Route path='/award/:badge_token' component={AwardContainer}/>
+            <Route path='/login' component={LogIn}/>
+            <PrivateRoute admin={false} component={Dashboard} path='/explore' />
+            <PrivateRoute admin={false} component={Pathway} path="/pathway/:pathway_id" />
+            <PrivateRoute admin={true} component={WebhooksManagement} path='/webhooks' />
+            <PrivateRoute admin={true} component={ListGroup} path='/groups' />
+            <PrivateRoute admin={true} component={NewGroup} path='/groups/new'/>
+            <PrivateRoute admin={true} component={NewGroup} path='/groups/edit/:id' />
+            <PrivateRoute admin={true} component={IndividualGroup} path='/groups/:id' />
+          </Switch>
+        </div>
+      </Router>
+    );
+  }
 }
 
 export default App;
