@@ -59,7 +59,7 @@ class NewGroup extends React.Component {
   edit() {
     if (this.state.name == "") alert("Please type in a name");
     else editGroup(this.state.id, this.state.name, this.state.desc);
-    this.props.history.push("/groups");
+    this.props.history.push(`/groups/${this.state.id}`);
   }
 
   onChangeText = (e) => {

@@ -32,6 +32,15 @@
       "source": "/pathway/*",
       "destination": "/index.html"
     },{
+      "source": "/groups",
+      "destination": "/index.html"
+    },{
+      "source": "/groups/new",
+      "destination": "/index.html"
+    },{
+      "source": "/groups/edit/*",
+      "destination": "/index.html"
+    },{
       "source": "/groups/*",
       "destination": "/index.html"
     }],

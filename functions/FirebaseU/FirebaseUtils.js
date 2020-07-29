@@ -90,7 +90,7 @@ const addGroup = (name, desc) => {
 };
 
 const editGroup = (id, name, desc) => {
-  app.database().ref(`groups/${id}`).set({ name: name, description: desc });
+  app.database().ref(`groups/${id}`).update({ name: name, description: desc});
 };
 
 const getOneGroup = (id) => {
