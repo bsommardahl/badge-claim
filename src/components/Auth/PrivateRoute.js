@@ -15,7 +15,7 @@ const PrivateRoute = ({ component: Component, admin: admin, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        admin ? (
+        admin && user != null ? (
           Object.values(users.val()).filter(
             (item) => item.profile.email === user.email
           )[0].permission.isAdmin === 1 ? (

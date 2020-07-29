@@ -75,6 +75,7 @@ const userSubscribe = (email, ids) => {
   alert("Subscribed!");
 };
 
+
 const getSubscritions = (email) => {
   const promiseData = app
     .database()

@@ -106,12 +106,14 @@ class IndividualGroup extends React.Component {
         name: this.state.name,
       });
       this.setState({email: ""});
+      document.getElementById("userEmail").focus();
     }else{
       this.setState({
         userError:"The user is already in the group"
       })
     }
   }
+  
 
   pathwayAdded(item) {
     addPathwayToGroup(this.state.id, getID(item.completionBadge));
@@ -206,6 +208,7 @@ class IndividualGroup extends React.Component {
               <input
                 placeholder="Email"
                 name="email"
+                id="userEmail"
                 value={this.state.email}
                 onChange={this.onChangeText}
                 type="email"
