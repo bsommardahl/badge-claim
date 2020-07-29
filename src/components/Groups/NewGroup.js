@@ -5,6 +5,7 @@ import {
   editGroup,
   getGroups,
 } from "../../../functions/FirebaseU/FirebaseUtils";
+import {withRouter} from 'react-router-dom'
 class NewGroup extends React.Component {
   constructor(props) {
     super(props);
@@ -48,7 +49,7 @@ class NewGroup extends React.Component {
             values[x].name === this.state.name &&
             values[x].description === this.state.desc
           ) {
-            window.location.replace(`/groups/${keys[x]}`);
+            this.props.history.push(`/groups/${keys[x]}`);
           }
         }
       });
@@ -58,7 +59,7 @@ class NewGroup extends React.Component {
   edit() {
     if (this.state.name == "") alert("Please type in a name");
     else editGroup(this.state.id, this.state.name, this.state.desc);
-    window.location.replace("/groups");
+    this.props.history.push("/groups");
   }
 
   onChangeText = (e) => {
@@ -108,4 +109,4 @@ class NewGroup extends React.Component {
     );
   }
 }
-export default NewGroup;
+export default withRouter(NewGroup);

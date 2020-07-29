@@ -1,0 +1,60 @@
+[debug] [2020-07-29T02:52:26.024Z] ----------------------------------------------------------------------
+[debug] [2020-07-29T02:52:26.027Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only hosting:acera-dev
+[debug] [2020-07-29T02:52:26.027Z] CLI Version:   8.6.0
+[debug] [2020-07-29T02:52:26.027Z] Platform:      darwin
+[debug] [2020-07-29T02:52:26.027Z] Node Version:  v12.6.0
+[debug] [2020-07-29T02:52:26.030Z] Time:          Tue Jul 28 2020 21:52:26 GMT-0500 (Peru Standard Time)
+[debug] [2020-07-29T02:52:26.030Z] ----------------------------------------------------------------------
+[debug] [2020-07-29T02:52:26.030Z] 
+[debug] [2020-07-29T02:52:26.040Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-29T02:52:26.040Z] > authorizing via signed-in user
+[debug] [2020-07-29T02:52:26.041Z] [iam] checking project bagde-claim for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-07-29T02:52:26.045Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/bagde-claim:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-07-29T02:52:27.745Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 29 Jul 2020 02:52:27 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=1042","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-07-29T02:52:27.747Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/bagde-claim  
+ 
+[debug] [2020-07-29T02:52:28.889Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 29 Jul 2020 02:52:29 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'bagde-claim'...
+[info] 
+[info] i  deploying hosting 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/bagde-claim/overview
+[debug] [2020-07-29T02:52:31.936Z] TypeError: Cannot read property 'deploys' of undefined
+    at /usr/local/lib/node_modules/firebase-tools/lib/deploy/index.js:84:36
+    at processTicksAndRejections (internal/process/task_queues.js:85:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2020-07-29T02:53:11.765Z] ----------------------------------------------------------------------
+[debug] [2020-07-29T02:53:11.767Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only hosting:acera-dev
+[debug] [2020-07-29T02:53:11.768Z] CLI Version:   8.6.0
+[debug] [2020-07-29T02:53:11.768Z] Platform:      darwin
+[debug] [2020-07-29T02:53:11.768Z] Node Version:  v12.6.0
+[debug] [2020-07-29T02:53:11.771Z] Time:          Tue Jul 28 2020 21:53:11 GMT-0500 (Peru Standard Time)
+[debug] [2020-07-29T02:53:11.771Z] ----------------------------------------------------------------------
+[debug] [2020-07-29T02:53:11.771Z] 
+[debug] [2020-07-29T02:53:11.781Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-29T02:53:11.781Z] > authorizing via signed-in user
+[debug] [2020-07-29T02:53:11.781Z] [iam] checking project bagde-claim for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-07-29T02:53:11.785Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/bagde-claim:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-07-29T02:53:12.972Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 29 Jul 2020 02:53:13 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=871","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-07-29T02:53:12.974Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/bagde-claim  
+ 
+[debug] [2020-07-29T02:53:14.050Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 29 Jul 2020 02:53:14 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'bagde-claim'...
+[info] 
+[info] i  deploying hosting 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/bagde-claim/overview
+[debug] [2020-07-29T02:53:16.961Z] TypeError: Cannot read property 'deploys' of undefined
+    at /usr/local/lib/node_modules/firebase-tools/lib/deploy/index.js:84:36
+    at processTicksAndRejections (internal/process/task_queues.js:85:5)
+[error] 
+[error] Error: An unexpected error has occurred.
