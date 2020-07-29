@@ -8,6 +8,7 @@ const envs = require('./env.json');
 const PRIVATE_KEY=envs.service.private_key
 const DOMAIN=envs.service.domain
 const APP_URL=envs.service.app_url
+const EMAIL=envs.service.badge_owner_email
 
 const app = express();
 
