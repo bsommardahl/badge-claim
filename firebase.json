@@ -31,6 +31,9 @@
     },{
       "source": "/pathway/*",
       "destination": "/index.html"
+    },{
+      "source": "/backpack",
+      "destination": "/index.html"
     }],
     "ignore": [
       "firebase.json",

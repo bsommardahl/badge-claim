@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link,withRouter } from "react-router-dom";
 import './Backpack.css'
 import { getUserEmail, saveBackpackToken, getTokenData } from '../../../functions/FirebaseU/FirebaseUtils';
+
+const clientID = process.env.REACT_APP_CLIENT_ID || "RANDOM";
+const clientSecret = process.env.REACT_APP_SECRET || "RANDOM";
+const returnURL = "http://localhost:3001/backpack"
+
+
 
 const getID = (str) => str.substring(str.lastIndexOf('/') + 1);
 
@@ -54,6 +60,16 @@ class Backpack extends Component{
     }
 
     async validateCredentials(){
+        //
+        //console.log("ID", clientID)
+        //console.log("Secret", clientSecret)
+        window.location.replace(`https://badgr.io/auth/oauth2/authorize?client_id=${clientID}&redirect_uri=${returnURL}&scope=r:profile r:backpack`)
+        
+        // await axios.get('https://badgr.io/auth/oauth2/authorize?client_id=DhPGPJM6k6DNluhmfPYkifyjC6KcFoDX9QtFTRUh&redirect_uri=http://localhost:3001/backpack&scope=r:profile r:backpack',
+        //     {headers: {"Access-Control-Allow-Origin": "*"}
+        // })
+
+        /*
         const log = await axios.post(
             `/users`, 
             {
@@ -79,6 +95,7 @@ class Backpack extends Component{
         if(badges && badges!=={}){
             this.setState({ backpackBadges: badges })            
         }
+        */
     }
 
     async componentDidMount(){
@@ -88,6 +105,21 @@ class Backpack extends Component{
         getTokenData(email.email, email.email).on('value', (snapshot) => {
             this.postMount(snapshot.val(), email);
         });
+        //console.log("This props", this.props?this.props:"NONE")
+        //console.log("This props location", this.props.location?this.props.location:"NONE")
+        //console.log("This props location search",this.props.location.search?this.props.location.search:"NONE")
+        const code=(this.props.location.search?this.props.location.search:null).replace("?code=","");
+        if(code){
+            console.log("CODE DID MOUNT: ",code);
+            //Axios Request
+            const res = await axios.post(
+                `https://api.badgr.io/o/tokengrant_type=authorization_code&code=${code}&client_id=${clientID}&client_secret=${clientSecret}&redirect_uri=${returnURL}`,
+            {
+                headers: {"Access-Control-Allow-Origin": "*"}
+            }               
+            )
+            console.log("RES: ", res);
+        }
     }
 
     async postMount(token, email){
@@ -150,29 +182,11 @@ class Backpack extends Component{
                 <div className="body-app">
                     {!this.state.isAuthenticated?
                         <div className="Credentials">
-                            <p>Please enter with your Badgr user to access your Backpack</p>
-                            <br/>
-                            <input
-                                type="text" 
-                                name="email"
-                                placeholder="email" 
-                                onChange={this.onChangeText} 
-                                value={this.state.email}
-                            />
-                            <br/>
-                            <input
-                                type="password" 
-                                name="password"
-                                placeholder="password" 
-                                onChange={this.onChangeText} 
-                                value={this.state.password}
-                            />
-                            <br/>
                             <button 
                                 className="btn btn-primary btn-sm" 
                                 onClick={() => this.validateCredentials()}
                             >
-                                Enter
+                                Login with Badgr's OAuth
                             </button>
                         </div>:
                         <div className="row">
@@ -191,5 +205,4 @@ class Backpack extends Component{
         )
     }
 }
-
-export default Backpack;
+export default withRouter(Backpack);
