@@ -42,7 +42,6 @@ app.use('/api/issuer', issuerController);
 
 app.use('/api/award', awardBadgeController);
 
-
 app.post('/api/pathways/:pathwayId/subscribe', (req, res) => {
   var data = {
     from: req.body.from,
