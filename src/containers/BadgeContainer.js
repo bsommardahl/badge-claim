@@ -95,7 +95,6 @@ class BadgeContainer extends Component {
     render() {
         return (
             <div>
-                <Loading loading={this.state.isLoading} background="#d8d8e6" loaderColor="#525dc7" />
                 <Modal
                     isOpen={this.state.modalIsOpen}                    
                     onRequestClose={this.closeModal}

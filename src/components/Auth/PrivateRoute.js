@@ -1,28 +1,37 @@
-import React, {useEffect, useState} from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { getUserEmail } from '../../../functions/FirebaseU/FirebaseUtils'
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
+import { app } from "../../../functions/FirebaseU/FirebaseUtils";
+import { useObject } from "react-firebase-hooks/database";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-const PrivateRoute = ({component: Component, ...rest}) => {
-    const [user, setUser] = useState('');
+const PrivateRoute = ({ component: Component, admin: admin, ...rest }) => {
+  const [users, usersLoading, userError] = useObject(
+    app.database().ref("/users/")
+  );
+  const [user, loading, error] = useAuthState(app.auth());
 
-    useEffect(() => {
-        if (!user) {
-            getUser();
-        }
-    }, []);
-
-    const getUser = async () => {
-        const msg = await getUserEmail();
-        setUser(msg);
-    };
-
-    return (
-        <Route {...rest} render={props => (
-            user != null ?
-                <Component {...props}/>
-            : <Redirect to="/login" />
-        )} />
-    );
+  return !loading && !usersLoading ? (
+    <Route
+      {...rest}
+      render={(props) =>
+        admin && user != null ? (
+          Object.values(users.val()).filter(
+            (item) => item.profile.email === user.email
+          )[0].permission.isAdmin === 1 ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to="/" />
+          )
+        ) : user != null ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+  ) : (
+    <div />
+  );
 };
 
 export default PrivateRoute;

@@ -3,9 +3,11 @@ const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const envs = require('./functions/env.json');
+const APP_URL=envs.service.app_url
 
 const PRIVATE_KEY=envs.service.private_key
 const DOMAIN=envs.service.domain
+const EMAIL=envs.service.badge_owner_email
 
 axios.defaults.baseURL = envs.service.base_url;
 
@@ -82,6 +84,62 @@ app.post('/api/v2/pathways/:pathwayId/subscribe', (req, res) => {
   mailgun.messages().send(data, function (error, body) {
     res.status(200).send('OK');
   });
+})
+
+app.post('/api/invite', (req, res) => {
+  var data = {
+    from: EMAIL,
+    to: req.body.payload.email,
+    subject: `Invitation to ${req.body.payload.name} Group`,
+    html: `Hello, 
+          <br><br>
+          
+          You were added to the group:
+          <p>Group: ${req.body.payload.name}</p>
+          <br><br>
+          ${APP_URL}explore
+          <br><br>
+
+          Welcome,
+          <br><br>
+
+          Acera`
+  };
+  
+  mailgun.messages().send(data, function (error, body) {
+    res.status(200).send('OK');
+  });
+})
+
+app.post('/api/users/getToken', async (req, response) =>{
+  var res;
+  try {
+    res = await axios({
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+        },
+        method: 'post',
+        url: 'https://api.badgr.io/o/token',
+        data: req.body.data
+    })
+  } catch (error) {
+    console.log("An error ocurred", error);
+  }
+
+  var res1 = [];
+  
+  if (res.status == 200) {
+    res1 = await axios({
+      headers: {
+          'Authorization': `Bearer ${res.data.access_token}`
+      },
+      method: 'get',
+      url: `https://api.badgr.io/v2/issuers`,
+    })
+    response.status(200).send(JSON.stringify(res1.data));
+  }else{
+    response.status(400).send("NO ISSUERS");
+  }
 })
 
 const PORT = process.env.PORT || 3001;
