@@ -6,6 +6,7 @@ import {
   getGroups,
 } from "../../../functions/FirebaseU/FirebaseUtils";
 import { Link,withRouter } from "react-router-dom";
+
 class NewGroup extends React.Component {
   constructor(props) {
     super(props);

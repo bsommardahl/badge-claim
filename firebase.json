@@ -14,6 +14,18 @@
       "source": "/api/*/*",
       "function": "app"
     },{
+      "source": "/api/*",
+      "function": "appdev"
+    },{
+      "source": "/api/pathways/*/*",
+      "function": "appdev"
+    },{
+      "source": "/api/v2/pathways/*/*",
+      "function": "appdev"
+    },{
+      "source": "/api/*/*",
+      "function": "appdev"
+    },{
       "source": "/login",
       "destination": "/index.html"
     },{
@@ -50,4 +62,4 @@
       "**/node_modules/**"
     ]
   }
-}
+} 

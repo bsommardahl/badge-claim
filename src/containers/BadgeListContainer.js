@@ -36,7 +36,13 @@ class BadgeListContainer extends Component {
         {this.state.isLoading ? (
           <Loader />
         ) : (
-          <div className="container-fluid d-flex flex-wrap">{badgeList}</div>
+          <>
+             <div className="badge-summary jumbotron">
+          <h1>Welcome to Acera! ❤️</h1>
+        </div>
+        <div className="badged-grid">{badgeList}
+          </div>
+          </>
         )}
       </div>
     );

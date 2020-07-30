@@ -113,9 +113,7 @@ const addUserToGroup = (id, email) => {
 };
 
 const addPathwayToGroup = (id, pathway) => {
-  app.database().ref(`groups/${id}`).update({
-    pathway: pathway,
-  });
+  app.database().ref(`groups/${id}/pathways`).push(pathway);
 };
 
 const deleteUserFromGroup = (value, user) => {
@@ -142,5 +140,5 @@ module.exports = {
   getOneGroup: getOneGroup,
   addUserToGroup: addUserToGroup,
   addPathwayToGroup: addPathwayToGroup,
-  deleteUserFromGroup: deleteUserFromGroup,
+  deleteUserFromGroup: deleteUserFromGroup
 };

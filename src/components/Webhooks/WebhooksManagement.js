@@ -26,6 +26,8 @@ const name2event = (key) => {
       return "pathway_join_requested";
     case "Group Invitation":
       return "group_invitation";
+    case "New Pathway":
+      return "new_pathway";
   }
   return "Unknown";
 };
@@ -42,6 +44,8 @@ const event2name = (key) => {
       return "Pathway Join Requested";
     case "group_invitation":
       return "Group Invitation";
+    case "new_pathway":
+      return "New Pathway";
   }
   return "Unknown";
 };
@@ -386,9 +390,10 @@ class WebhooksManagement extends React.Component {
                   >
                     <option>Badge Awarded</option>
                     <option>Badge Requested</option>
-                    <option>New Pathway Member</option>
-                    <option>Pathway Join Requested</option>
                     <option>Group Invitation</option>
+                    <option>Pathway Join Requested</option>
+                    <option>New Pathway</option>
+                    <option>New Pathway Member</option>
                   </Form.Control>
                 </Form.Group>
               </Form>
