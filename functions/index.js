@@ -18,7 +18,6 @@ const badgeController = require('./routes/controllers/BadgeController');
 const ClaimBadgeController = require('./routes/controllers/ClaimBadgeController');
 const awardBadgeController = require('./routes/controllers/AwardBadgeController');
 const issuerController = require('./routes/controllers/IssuerController');
-const groupController = require('./routes/controllers/GroupController');
 
 const mailgun = require('mailgun-js')({apiKey: PRIVATE_KEY, domain: DOMAIN});
 
@@ -32,8 +31,6 @@ app.use('/api/claim', ClaimBadgeController);
 app.use('/api/issuer', issuerController);
 
 app.use('/api/award', awardBadgeController);
-
-app.use('/api/group', groupController);
 
 app.post('/api/pathways/:pathwayId/subscribe', (req, res) => {
   var data = {
