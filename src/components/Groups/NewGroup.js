@@ -75,9 +75,6 @@ class NewGroup extends React.Component {
       <div>
         <div className="badge-summary jumbotron">
           <h1>{this.state.id ? "Edit Group" : "Create Group"}</h1>
-          <Link to={this.state.id?`/groups/${this.state.id}`:`/groups`} className="btn btn-primary">
-              Back
-          </Link>
         </div>
         <div className="body-app d-flex flex-column center text-left ">
           <div className="min-800 mw-800 shadow p-4 rounded">
@@ -100,8 +97,11 @@ class NewGroup extends React.Component {
               placeholder="Description"
               onChange={this.onChangeText}
             />
+            <Link to={this.state.id?`/groups/${this.state.id}`:`/groups`} className="btn btn-secondary mt-3 ">
+              Cancel
+            </Link>
             <button
-              className="btn btn-primary mt-3"
+              className="btn btn-primary mt-3 ml-2"
               onClick={() => (this.state.id ? this.edit() : this.create())}
             >
               {this.state.id ? "Edit" : "Create"}
