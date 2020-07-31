@@ -1,15 +1,14 @@
 const axios = require("axios");
-const qs = require('querystring');
+const qs = require("querystring");
 const envs = require("../../env.json");
 const badgeService = require("./BadgeService");
-const fire = require("../../FirebaseU/FirebaseUtils");
 const { data } = require("jquery");
-const APP_URL = envs.service.app_url;
 const SECRET = envs.service.secret;
 const CLIENT_ID = envs.service.client_id;
 const RETURN_URL = envs.service.return_url;
+const fetch = require("node-fetch")
 
-const ONE_DAY = 86400 * 1000; //86400s to ms
+const ONE_DAY = 86400 * 1; //86400s to ms
 const ONE_HOUR = 3600 * 1000; //3600s to ms
 
 const userToken = {};
@@ -61,14 +60,16 @@ const UserAuthService = {
     }
   },
   updateToken: async (initialData) => {
-    console.log("BODY", initialData);
-    console.log("REFRESH", initialData.token);
+    //console.log("BODY", initialData);
+    //console.log("REFRESH", initialData.token);
     let response;
     var dataRef = qs.stringify({
       refresh_token: initialData.token,
       grant_type: "refresh_token",
+      client_id: CLIENT_ID,
+      client_secret: SECRET
     });
-    console.log("dataRef: ", dataRef);
+    //console.log("dataRef: ", dataRef);
     var config = {
       method: "post",
       url: "https://api.badgr.io/o/token",
@@ -81,7 +82,7 @@ const UserAuthService = {
     await axios(config)
       .then(function (res) {
         response = res.data;
-        console.log("RESPONSE USERAUTHSERV", JSON.stringify(response));
+        //console.log("RESPONSE USERAUTHSERV", JSON.stringify(response));
       })
       .catch(function (error) {
         console.log("Error");
@@ -90,58 +91,43 @@ const UserAuthService = {
 
     return response;
   },
-  oAuthGetToken: async (data, authToken) => {
-    console.log("Data", data);
+  oAuthGetToken: async (data) => {
     const { code } = data.body;
 
-    const url = `https://api.badgr.io/o/token?grant_type=authorization_code&code=${code}&client_id=${CLIENT_ID}&client_secret=${SECRET}&redirect_uri=${encodeURIComponent(RETURN_URL)}`;
-
-    //const url = 'https://api.badgr.io/o/token';
-
-    console.log("URL: ", url);
-    console.log("DATA: ", code);
-
-    var config = {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      }
-    };
+    const url = `https://api.badgr.io/o/token?grant_type=authorization_code&code=${code}&client_id=${CLIENT_ID}&client_secret=${SECRET}&redirect_uri=${encodeURIComponent(
+      RETURN_URL
+    )}`;
 
     var body = {
-        grant_type: "authorization_code",
-        code: code,
-        client_id: CLIENT_ID,
-        client_secret: SECRET,
-        redirect_uri: RETURN_URL
-    }
-
-    let response;
-    // await axios.post(url,qs.stringify(body),config)
-    //   .then(function (res) {
-    //     response = res.data;
-    //     console.log("RESPONSE: ", JSON.stringify(response));
-    //   })
-    //   .catch(function (error) {
-    //     console.log("Error", error);
-    //   });
-
-
+      grant_type: "authorization_code",
+      code: code,
+      client_id: CLIENT_ID,
+      client_secret: SECRET,
+      redirect_uri: RETURN_URL,
+    };
 
     var formBody = [];
     for (var property in body) {
-        var encodedKey = encodeURIComponent(property);
-        var encodedValue = encodeURIComponent(body[property]);
-        formBody.push(encodedKey + "=" + encodedValue);
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(body[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
     }
     formBody = formBody.join("&");
 
-    fetch('https://api.badgr.io/o/token', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    },
-    body: formBody
-    }).then(res=>res.json()).then(res => console.log(res)).catch(error=>console.log("ERROR",error))
+    var response;
+    await fetch("https://api.badgr.io/o/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: formBody,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        response = res;
+        console.log(res);
+      })
+      .catch((error) => console.log("ERROR", error));
 
     return response;
   },
@@ -150,7 +136,7 @@ const UserAuthService = {
 
     let response;
 
-    console.log("DATA: ", data);
+    //console.log("DATA: ", data);
 
     await axios({
       headers: {
@@ -160,15 +146,16 @@ const UserAuthService = {
       method: "get",
     })
       .then((res) => {
-        console.log("IT WORKED!!!");
+        //console.log("RES", res);
         response = res.data.result;
       })
       .catch((err) => {
         console.log(err);
       });
 
+    //console.log("AuthToken", authToken);
     //get the badgedata and return it
-    console.log("RESPONSE: ", response);
+    //console.log("RESPONSE: ", response);
     var a = await axios({
       headers: {
         Authorization: `Bearer ${authToken}`,
@@ -176,6 +163,22 @@ const UserAuthService = {
       url: `https://api.badgr.io/v2/badgeclasses`,
       method: "get",
     });
+    //console.log("A",a.data.result);
+    for (let i = 0; i < response.length; i++) {
+      const badge = await badgeService.getBadgeData(
+        response[i].badgeclass,
+        authToken
+      );
+      //console.log("Badge", badge);
+      if (badge) {
+        if (badge.result) {
+          if (badge.result.length > 0) {
+            userBackpack.badges.push(badge.result[0]);
+          }
+        }
+      }
+    }
+    return userBackpack;
   },
 };
 

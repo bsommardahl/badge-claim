@@ -34,8 +34,7 @@ router.post('/backpack', asyncMiddleware(authenticate), asyncMiddleware(async (r
 
 router.post('/oauthToken', asyncMiddleware(authenticate), asyncMiddleware(async (req, res, next) => {
     const data = req.body
-    const authToken = req.authData.access_token
-    const response = await userService.oAuthGetToken(data, authToken)
+    const response = await userService.oAuthGetToken(data)
     res.send(response)
 }))
 
