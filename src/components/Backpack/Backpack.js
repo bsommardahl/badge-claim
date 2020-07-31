@@ -8,6 +8,7 @@ import {
   saveBackpackToken,
   getTokenData,
 } from "../../../functions/FirebaseU/FirebaseUtils";
+import { Loader } from "../Loader";
 
 const clientID = process.env.REACT_APP_CLIENT_ID || "RANDOM";
 const clientSecret = process.env.REACT_APP_SECRET || "RANDOM";
@@ -21,6 +22,7 @@ class Backpack extends Component {
       email: "",
       password: "",
       backpackBadges: null,
+      isLoaded: false,
     };
     this.validateCredentials = this.validateCredentials.bind(this);
     this.onChangeText = this.onChangeText.bind(this);
@@ -43,14 +45,13 @@ class Backpack extends Component {
     var data;
     getTokenData(email.email, email.email).on("value", async (snapshot) => {
       data = snapshot.val();
-      //console.log("Data", data);
       this.postMount(snapshot.val(), email);
       if (!data) await this.getCode(email);
     });
+    this.setState({isLoaded: true});
   }
 
   async isLogged(token) {
-    //console.log("Entering ISLOGGEd");
     const isLogged = await axios.post(`/users/logged`, {
       data: token,
     });
@@ -58,7 +59,6 @@ class Backpack extends Component {
   }
 
   async getBadges(token) {
-    //console.log("ENtering GET BADGES");
     this.setState({ isAuthenticated: true });
     const badges = await axios.post(`/users/backpack`, {
       token: token.data.access_token,
@@ -69,21 +69,19 @@ class Backpack extends Component {
   }
 
   async getCode(email) {
-    //console.log("Entering GET CODE")
     const code = (this.props.location.search
       ? this.props.location.search
       : null
     ).replace("?code=", "");
     if (code) {
-      //console.log("CODE DID MOUNT: ", code);
       var res = await axios.post("/users/oauthToken", { body: { code: code } });
       console.log("RES", res);
       if (res.data && res.data.access_token) await this.postMount(res, email);
     }
   }
 
+
   async getNewToken(email, token) {
-    //console.log("Entering getNewToken");
     const new_access = await axios.post(`/users/refresh`, {
       token: token.data.refresh_token,
     });
@@ -123,7 +121,7 @@ class Backpack extends Component {
           <h1>Backpack</h1>
         </div>
         <div className="body-app">
-          {!this.state.isAuthenticated ? (
+          {!this.state.isAuthenticated && this.state.isLoaded ? (
             <div className="Credentials">
               <button
                 className="btn btn-primary btn-sm"
@@ -140,7 +138,7 @@ class Backpack extends Component {
                 ))
               ) : (
                 <div>
-                  <p>Loading</p>
+                  <Loader/>
                 </div>
               )}
             </div>
