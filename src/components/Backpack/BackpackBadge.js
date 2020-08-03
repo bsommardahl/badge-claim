@@ -15,7 +15,6 @@ class BackpackBadge extends Component {
         <div className="card" style={{ marginTop: "15px" }}>
           <div className="card-header row">
             <img
-              //className="badge-image container-fluid"
               className="badge-image img-fluid"
               src={this.props.badge.image}
               alt="This is a badge"

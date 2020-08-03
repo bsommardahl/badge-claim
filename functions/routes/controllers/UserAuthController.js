@@ -20,7 +20,6 @@ router.post('/logged', asyncMiddleware(async (req, res, next) => {
 
 router.post('/refresh', asyncMiddleware(authenticate), asyncMiddleware(async (req, res, next) => {
     const data = req.body
-    //const authToken = req.authData.access_token
     const response = await userService.updateToken(data)
     res.send(response)
 }))

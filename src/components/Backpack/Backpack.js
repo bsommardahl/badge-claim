@@ -11,7 +11,6 @@ import {
 import { Loader } from "../Loader";
 
 const clientID = process.env.REACT_APP_CLIENT_ID || "RANDOM";
-const clientSecret = process.env.REACT_APP_SECRET || "RANDOM";
 const returnURL = "http://localhost:3001/backpack";
 
 class Backpack extends Component {
@@ -48,7 +47,6 @@ class Backpack extends Component {
       this.postMount(snapshot.val(), email);
       if (!data) await this.getCode(email);
     });
-    this.setState({isLoaded: true});
   }
 
   async isLogged(token) {
@@ -69,15 +67,18 @@ class Backpack extends Component {
   }
 
   async getCode(email) {
-    const code = (this.props.location.search
-      ? this.props.location.search
-      : null
-    ).replace("?code=", "");
+    var code = false;
+    if(this.props.location.search){
+      code = (this.props.location.search
+        ? this.props.location.search
+        : null
+      ).replace("?code=", "");        
+    }
     if (code) {
       var res = await axios.post("/users/oauthToken", { body: { code: code } });
-      console.log("RES", res);
       if (res.data && res.data.access_token) await this.postMount(res, email);
     }
+    this.setState({isLoaded: true});
   }
 
 

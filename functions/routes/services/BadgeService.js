@@ -5,8 +5,6 @@ const ISSUER_ID = envs.service.issuer_id
 
 const BadgeService = {
     getBadgeData: async(badgeToken, authToken) => {
-        console.log("BADGESERVICE TOKEN: ", badgeToken);
-        console.log("BADGESERVICE AUTH: ",authToken);
         let response;
 
         await axios.get(`/badgeclasses/${badgeToken}`,{
